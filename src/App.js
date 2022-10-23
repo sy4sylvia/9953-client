@@ -1,23 +1,40 @@
-import logo from './logo.svg';
+import React, { useState, useEffect} from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+import { Layout } from 'antd';
+
 import './App.css';
+
+import AuthService from './services/auth.service';
+import Login from './components/Login';
+import Register from './components/Register';
+import Home from './components/Home';
+import Test from './components/Test';
+import Navbar from './components/Navbar';
+
+
+const { Footer } = Layout;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className='App'>
+        <Navbar />
+        <div>
+            <Routes>
+                <Route exact path={'/'} element={<Home />} />
+                <Route exact path={'/home'} element={<Home />} />
+                <Route exact path='/login' element={<Login />} />
+                <Route exact path='/register' element={<Register />} />
+                <Route exact path='/test' element={<Test />} />
+            </Routes>
+        </div>
+        <Footer
+            style={{
+                textAlign: 'center',
+            }}
         >
-          Learn React
-        </a>
-      </header>
+            Awesome E-commerce ©{new Date().getFullYear()}
+        </Footer>
+
     </div>
   );
 }
