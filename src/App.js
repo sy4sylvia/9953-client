@@ -10,6 +10,8 @@ import Register from './components/Register';
 import Home from './components/Home';
 import Test from './components/Test';
 import Navbar from './components/Navbar';
+import Testv2 from "./components/Testv2";
+import SignUpModal from "./components/SignUpModal";
 
 
 const { Footer } = Layout;
@@ -25,6 +27,7 @@ function App() {
                 <Route exact path='/login' element={<Login />} />
                 <Route exact path='/register' element={<Register />} />
                 <Route exact path='/test' element={<Test />} />
+                <Route exact path='/sign-up' element={<SignUpModal />} />
             </Routes>
         </div>
         <Footer
