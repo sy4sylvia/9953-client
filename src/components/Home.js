@@ -7,7 +7,6 @@ import 'antd/dist/antd.css';
 function Home(){
     return (
         <div>
-            <FontColorsOutlined />
             <h1>
                 Home page - content sample
             </h1>

@@ -1,8 +1,7 @@
-import {Button, Form, Input, Modal, Select, Row, Col } from 'antd';
-import React, { useState } from 'react';
+import {Col, Form, Input, Modal, Row, Select} from 'antd';
+import React from 'react';
 
-
-const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
+const SignUpForm = ({ open, onCreate, onCancel }) => {
     const [form] = Form.useForm();
 
     // used for the select on security question
@@ -75,10 +74,6 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
                         </Form.Item>
                     </Col>
                 </Row>
-
-                {/*<Form.Item>*/}
-                {/*    */}
-                {/*</Form.Item>*/}
 
                 <Form.Item
                     label='Email'
@@ -156,31 +151,4 @@ const CollectionCreateForm = ({ open, onCreate, onCancel }) => {
     );
 };
 
-const SignUpModal = () => {
-    const [open, setOpen] = useState(false);
-    const onCreate = (values) => {
-        console.log('Received values of form: ', values);
-        setOpen(false);
-    };
-    return (
-        <div>
-            <Button
-                type='primary'
-                onClick={() => {
-                    setOpen(true);
-                }}
-            >
-                Sign Up
-            </Button>
-            <CollectionCreateForm
-                open={open}
-                onCreate={onCreate}
-                onCancel={() => {
-                    setOpen(false);
-                }}
-            />
-        </div>
-    );
-};
-
-export default SignUpModal;
+export default SignUpForm;

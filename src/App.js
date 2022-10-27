@@ -5,13 +5,10 @@ import { Layout } from 'antd';
 import './App.css';
 
 import AuthService from './services/auth.service';
-import Login from './components/Login';
-import Register from './components/Register';
 import Home from './components/Home';
 import Test from './components/Test';
 import Navbar from './components/Navbar';
 import Testv2 from "./components/Testv2";
-import SignUpModal from "./components/SignUpModal";
 
 
 const { Footer } = Layout;
@@ -24,10 +21,8 @@ function App() {
             <Routes>
                 <Route exact path={'/'} element={<Home />} />
                 <Route exact path={'/home'} element={<Home />} />
-                <Route exact path='/login' element={<Login />} />
-                <Route exact path='/register' element={<Register />} />
                 <Route exact path='/test' element={<Test />} />
-                <Route exact path='/sign-up' element={<SignUpModal />} />
+                <Route exact path='/testv2' element={<Testv2 />} />
             </Routes>
         </div>
         <Footer

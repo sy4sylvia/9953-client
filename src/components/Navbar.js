@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React,  { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Row, Col, Typography, Layout, Menu, Input, Form, Modal, Select, Button} from 'antd';
-import { MenuOutlined, ShoppingCartOutlined, UserOutlined, DownOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import {Row, Col, Typography, Layout, Menu, Input, Select } from 'antd';
+import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
 import 'antd/dist/antd.css';
+import SignUpForm from './SignUpForm';
+import SignInForm from './SignInForm';
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -12,64 +14,70 @@ const { Option } = Select;
 
 
 function Navbar(NavBarProps) {
-    // following states are for the pop-up window
-    // sign up
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    // sign in
-    // const [isSignInModelOpen, setSignInModelOpen] = useState(false);
 
-    const showModal = () => {
-        setIsModalOpen(true);
+    const [openSignUpWindow, setOpenSignUpWindow] = useState(false);
+    const [openSignInWindow, setOpenSignInWindow] = useState(false);
+
+    const showSignUpModal = () => {
+        setOpenSignUpWindow(() => true);
+        console.log('show sign up modal', openSignUpWindow);
     };
 
-    const handleOk = () => {
-        setIsModalOpen(false);
+    const showSignInModal = () => {
+        setOpenSignInWindow(() => true);
+        console.log('show sign in modal', openSignInWindow);
     };
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
-        console.log('set to false')
+    const SignUpModal = () => {
+        // const [openSignUpWindow, setOpenSignUpWindow] = useState(true); //moved up
+        const onCreate = (values) => {
+            console.log('Received values of form: ', values);
+            setOpenSignUpWindow(false);
+        };
+        return (
+            <div>
+                <SignUpForm
+                    open={openSignUpWindow}
+                    onCreate={onCreate}
+                    onCancel={(e) => {
+                        e.stopPropagation();
+                        setOpenSignUpWindow(false);
+                    }}
+                />
+            </div>
+        );
     };
 
-    // const showSignInModal = () => {
-    //     setSignInModelOpen(true);
-    // };
-    //
-    // const handleSignInOk = () => {
-    //     setSignInModelOpen(false);
-    // };
-    //
-    // const handleSignInCancel = () => {
-    //     setSignInModelOpen(false);
-    // };
-
-    // states for the form
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const SignInModal = () => {
+        const onCreateSignIn = (values) => {
+            console.log('Received values of form: ', values);
+            setOpenSignInWindow(false);
+        };
+        return (
+            <div>
+                <SignInForm
+                    open={openSignInWindow}
+                    onCreate={onCreateSignIn}
+                    onCancel={(e) => {
+                        e.stopPropagation();
+                        setOpenSignInWindow(false);
+                    }}
+                />
+            </div>
+        );
     };
 
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    // direct to other pages
+    const navigate = useNavigate();
 
-    const children = [];
-    // TODO: these items should be retrieved from the database
-    children.push(<Option>{"What is your mother's maiden name?"}</Option>);
-        const handleSelectChange = (value) => {
-        console.log(`Selected: ${value}`);
-    };
-
-        // direct to other pages
-        const navigate = useNavigate();
-
-        const gotoPage = (path) => {
-        //GO TO MENU ITEM PAGE
+    const gotoPage = (path) => {
+        // go to menu item page
         navigate(path);
     };
 
-        const onSearch = (value) => console.log(value);
+    const onSearch = (value) => console.log(value);
 
-        return (
+    return (
         <Row justify='center'>
             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <Header className='header-fixed'>
@@ -95,6 +103,7 @@ function Navbar(NavBarProps) {
                                     enterButton
                                     style={{paddingTop: '2%', paddingRight: '5.5%'}}
                                 />
+
                                 {/*TODO：style the icons: move down a bit*/}
                                 {/*TODO: icon show or not depends on the token*/}
 
@@ -104,15 +113,17 @@ function Navbar(NavBarProps) {
                                     icon={<UserOutlined style={{fontSize: '1.6rem'}} />}>
                                     <Menu.Item
                                         key='sign-in'
-                                        // onClick = {showSignInModal}
+                                        onClick = {showSignInModal}
                                     >
                                         Sign In
+                                        { openSignInWindow?  <SignInModal /> : null}
                                     </Menu.Item>
                                     <Menu.Item
                                         key='sign-up'
-                                        onClick={showModal}
+                                        onClick={showSignUpModal}
                                     >
                                         Sign Up
+                                        { openSignUpWindow?  <SignUpModal /> : null}
                                     </Menu.Item>
                                 </Menu.SubMenu>
 
@@ -133,6 +144,6 @@ function Navbar(NavBarProps) {
                 <Content>{NavBarProps.items}</Content>
             </Col>
         </Row>
-        )}
+    )}
 
 export default Navbar;
