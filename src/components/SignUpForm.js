@@ -127,7 +127,7 @@ const SignUpForm = ({ open, onCreate, onCancel }) => {
                 >
                     <Select
                         size={'middle'}
-                        defaultValue='Where are you now?'
+                        defaultValue='Security Question'
                         onChange={handleSelectChange}
                     >
                         {children}

@@ -17,7 +17,6 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
         navigate(path);
     };
 
-
     const children = [];
     // TODO: these items should be retrieved from the database
     children.push(<Option value="Where are you now?">Where are you now?</Option>); //dummy example
@@ -93,7 +92,7 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
                 >
                     <Select
                         size={'middle'}
-                        defaultValue='Where are you now?'
+                        defaultValue='Security Question'
                         onChange={handleSelectChange}
                     >
                         {children}
@@ -112,10 +111,12 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
                 >
                     <Input type='textarea' />
                 </Form.Item>
+
                 <a className={'forget-password-link'}
                    onClick={() => gotoPage('/reset-password')}>
                     Forget Password
                 </a>
+
             </Form>
         </Modal>
     );
