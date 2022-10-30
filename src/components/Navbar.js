@@ -100,7 +100,7 @@ function Navbar(NavBarProps) {
             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <Header className='header-fixed'>
                     <Row>
-                        <Col xl={12} lg={12} md={12} sm={20} xs={20}>
+                        <Col xl={6} lg={6} md={6} sm={10} xs={10}>
                             <Title level={3} code id='title-button'>
                                 <a className={'navbar-title'}
                                    onClick={() => gotoPage('')}>
@@ -108,7 +108,7 @@ function Navbar(NavBarProps) {
                                 </a>
                             </Title>
                         </Col>
-                        <Col xl={12} lg={12} md={12} sm={4} xs={4}>
+                        <Col xl={18} lg={18} md={18} sm={14} xs={14}>
                             <Menu
                                 theme='dark'
                                 mode='horizontal'
