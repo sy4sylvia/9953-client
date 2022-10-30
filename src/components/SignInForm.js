@@ -1,21 +1,38 @@
 import { Form, Input, Modal, Select} from 'antd';
-import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, {useState} from 'react';
+import ResetPasswordForm from './ResetPasswordForm';
 
 
 const SignInForm = ({ open, onCreate, onCancel }) => {
     const [form] = Form.useForm();
-
-    // used for the select on security question
     const { Option } = Select;
 
-    // direct to other pages
-    const navigate = useNavigate();
+    const [openResetPasswordWindow, setOpenResetPasswordWindow] = useState(false);
 
-    const gotoPage = (path) => {
-        // go to menu item page
-        navigate(path);
+    const showResetPasswordModal = () => {
+        setOpenResetPasswordWindow(() => true);
+        console.log('show reset password modal', openResetPasswordWindow);
     };
+
+    const ResetPasswordModal = () => {
+        const onCreateReset = (values) => {
+            console.log('Received values of form: ', values);
+            setOpenResetPasswordWindow(false);
+        };
+        return (
+            <div>
+                <ResetPasswordForm
+                    open={openResetPasswordWindow}
+                    onCreate={onCreateReset}
+                    onCancel={(e) => {
+                        e.stopPropagation();
+                        setOpenResetPasswordWindow(false);
+                    }}
+                />
+            </div>
+        );
+    }
+
 
     const children = [];
     // TODO: these items should be retrieved from the database
@@ -113,10 +130,10 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
                 </Form.Item>
 
                 <a className={'forget-password-link'}
-                   onClick={() => gotoPage('/reset-password')}>
+                   onClick={showResetPasswordModal}>
                     Forget Password
+                    {openResetPasswordWindow? <ResetPasswordModal /> : null}
                 </a>
-
             </Form>
         </Modal>
     );

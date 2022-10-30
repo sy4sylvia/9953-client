@@ -20,8 +20,8 @@ const ResetPasswordForm = ({ open, onCreate, onCancel }) => {
     return (
         <Modal
             open={open}
-            title='Sign Up'
-            okText='Continue to add address'
+            title='Reset Password'
+            okText='Reset Password'
             cancelText='Cancel'
             onCancel={onCancel}
             onOk={() => {
@@ -69,7 +69,8 @@ const ResetPasswordForm = ({ open, onCreate, onCancel }) => {
                 >
                     <Select
                         size={'middle'}
-                        defaultValue='Where are you now?'
+                        // TODO: the default value should be extracted from backend
+                        defaultValue='Security Question'
                         onChange={handleSelectChange}
                     >
                         {children}

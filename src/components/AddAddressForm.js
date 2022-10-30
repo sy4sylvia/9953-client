@@ -1,18 +1,15 @@
-import { Form, Input, Modal, Select} from 'antd';
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
+import { Form, Input, Modal, Select} from 'antd';
 
 
 const AddAddressForm = ({ open, onCreate, onCancel }) => {
     const [form] = Form.useForm();
-
     const { Option } = Select;
 
-    // direct to other pages
     const navigate = useNavigate();
 
     const gotoPage = (path) => {
-        // go to menu item page
         navigate(path);
     };
 
@@ -21,11 +18,12 @@ const AddAddressForm = ({ open, onCreate, onCancel }) => {
     const regionChildren = [];
     const countryChildren = [];
     const stateChildren = [];
+
     // TODO: these items should be retrieved from the database
     marketChildren.push(<Option value="dummy">dummy</Option>); //dummy example
     regionChildren.push(<Option value="lucy">lucy</Option>); //dummy example
     countryChildren.push(<Option value='Australia'>Australia</Option>);
-    stateChildren.push(<Option value='California'>What is your mother's maiden name?</Option>);
+    stateChildren.push(<Option value='California'>California</Option>);
 
     const handleSelectChange = (value) => {
         console.log(`Selected: ${value}`);

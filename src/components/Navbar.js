@@ -1,6 +1,6 @@
 import React,  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Row, Col, Typography, Layout, Menu, Input, Select } from 'antd';
+import {Row, Col, Typography, Layout, Menu, Input } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
 import 'antd/dist/antd.css';
@@ -17,7 +17,6 @@ function Navbar(NavBarProps) {
     const [openSignUpWindow, setOpenSignUpWindow] = useState(false);
     const [openSignInWindow, setOpenSignInWindow] = useState(false);
     const [openAddAddressWindow, setOpenAddAddressWindow] = useState(false);
-    const [openResetPasswordWindow, setOpenResetPasswordWindow] = useState(false);
 
     const showSignUpModal = () => {
         setOpenSignUpWindow(() => true);
@@ -25,15 +24,6 @@ function Navbar(NavBarProps) {
 
     const showSignInModal = () => {
         setOpenSignInWindow(() => true);
-    };
-
-    const showAddAddressModal = () => {
-        setOpenAddAddressWindow(() => true);
-    };
-
-    const showResetPasswordModal = () => {
-        setOpenResetPasswordWindow(() => true);
-        console.log('show reset password modal', openResetPasswordWindow);
     };
 
     const SignUpModal = () => {
@@ -52,25 +42,6 @@ function Navbar(NavBarProps) {
                     onCancel={(e) => {
                         e.stopPropagation();
                         setOpenSignUpWindow(false);
-                    }}
-                />
-            </div>
-        );
-    };
-
-    const SignInModal = () => {
-        const onCreateSignIn = (values) => {
-            console.log('Received values of form: ', values);
-            setOpenSignInWindow(false);
-        };
-        return (
-            <div>
-                <SignInForm
-                    open={openSignInWindow}
-                    onCreate={onCreateSignIn}
-                    onCancel={(e) => {
-                        e.stopPropagation();
-                        setOpenSignInWindow(false);
                     }}
                 />
             </div>
@@ -97,31 +68,28 @@ function Navbar(NavBarProps) {
         );
     };
 
-    const ResetPasswordModal = () => {
-        const onCreateReset = (values) => {
+    const SignInModal = () => {
+        const onCreateSignIn = (values) => {
             console.log('Received values of form: ', values);
-            setOpenResetPasswordWindow(false);
             setOpenSignInWindow(false);
         };
         return (
             <div>
-                <AddAddressForm
-                    open={openAddAddressWindow}
-                    onCreate={onCreateReset}
+                <SignInForm
+                    open={openSignInWindow}
+                    onCreate={onCreateSignIn}
                     onCancel={(e) => {
                         e.stopPropagation();
-                        setOpenAddAddressWindow(false);
+                        setOpenSignInWindow(false);
                     }}
                 />
             </div>
         );
-    }
+    };
 
-    // direct to other pages
     const navigate = useNavigate();
 
     const gotoPage = (path) => {
-        // go to menu item page
         navigate(path);
     };
 
@@ -174,8 +142,8 @@ function Navbar(NavBarProps) {
                                     >
                                         Sign Up
                                         { openSignUpWindow?  <SignUpModal /> : null}
-                                        { openAddAddressWindow? <AddAddressModal />: null}
                                     </Menu.Item>
+                                    { openAddAddressWindow? <AddAddressModal />: null}
                                 </Menu.SubMenu>
 
                                 <Menu.Item
