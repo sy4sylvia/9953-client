@@ -89,3 +89,5 @@ const TECHNOLOGY = [
         key: 'Phones',
     }
 ]
+
+export {FURNITURE, OFFICE, TECHNOLOGY};
