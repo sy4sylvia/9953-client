@@ -6,9 +6,11 @@ import './App.css';
 
 import AuthService from './services/auth.service';
 import Home from './components/Home';
-import Test from './components/Test';
 import Navbar from './components/Navbar';
+import SearchResults from './components/SearchResults';
 import Testv2 from "./components/Testv2";
+import Test from './components/Test';
+
 
 
 const { Footer } = Layout;
@@ -21,6 +23,7 @@ function App() {
             <Routes>
                 <Route exact path={'/'} element={<Home />} />
                 <Route exact path={'/home'} element={<Home />} />
+                <Route exact path = '/search' element={<SearchResults />} />
                 <Route exact path='/test' element={<Test />} />
                 <Route exact path='/testv2' element={<Testv2 />} />
             </Routes>

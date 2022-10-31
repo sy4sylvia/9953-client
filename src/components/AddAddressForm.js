@@ -2,7 +2,6 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Form, Input, Modal, Select} from 'antd';
 
-
 const AddAddressForm = ({ open, onCreate, onCancel }) => {
     const [form] = Form.useForm();
     const { Option } = Select;

@@ -10,7 +10,6 @@ import AddAddressForm from './AddAddressForm';
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
-const { Search } = Input;
 
 function Navbar(NavBarProps) {
 
