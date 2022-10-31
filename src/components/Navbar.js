@@ -1,6 +1,6 @@
 import React,  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Row, Col, Typography, Layout, Menu, Input } from 'antd';
+import {Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
 import 'antd/dist/antd.css';
@@ -13,6 +13,15 @@ const { Title } = Typography;
 const { Search } = Input;
 
 function Navbar(NavBarProps) {
+
+    const mockColors = ['red', 'black', 'blue'];
+
+    const mockData = (str, colorIdx = 0) => ({
+        value: str.concat(', ').concat(mockColors[colorIdx]),
+    });
+
+    const [searchVal, setSearchVal] = useState('');
+    const [searchOptions, setSearchOptions] = useState([]);
 
     const [openSignUpWindow, setOpenSignUpWindow] = useState(false);
     const [openSignInWindow, setOpenSignInWindow] = useState(false);
@@ -93,7 +102,17 @@ function Navbar(NavBarProps) {
         navigate(path);
     };
 
-    const onSearch = (value) => console.log(value);
+    const onSearch = (searchText) => {
+        setSearchOptions(
+            !searchText ? [] : [mockData(searchText), mockData(searchText, 1), mockData(searchText, 2)],
+        );
+    };
+
+    const onSelect = (value) => console.log(value);
+
+    const onChange = (data) => {
+        setSearchVal(data);
+    };
 
     return (
         <Row justify='center'>
@@ -115,12 +134,19 @@ function Navbar(NavBarProps) {
                                 defaultSelectedKeys={['account']}
                                 overflowedIndicator={<MenuOutlined />}
                             >
-                                <Search
-                                    placeholder='input search text'
+                                <AutoComplete
+                                    value={searchVal}
+                                    options={searchOptions}
+                                    style={{
+                                        width: '50%',
+                                        paddingTop: '2%',
+                                        paddingRight: '5.5%'
+                                    }}
+                                    onSelect={onSelect}
                                     onSearch={onSearch}
-                                    enterButton
-                                    style={{paddingTop: '2%', paddingRight: '5.5%'}}
-                                />
+                                    onChange={onChange} >
+                                    <Input.Search placeholder='input search text' enterButton />
+                                </AutoComplete>
 
                                 {/*TODO：style the icons: move down a bit*/}
                                 {/*TODO: icon show or not depends on the token*/}
