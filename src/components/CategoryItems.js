@@ -21,7 +21,7 @@ const FURNITURE = [
     {
         label: 'Tables',
         key: 'Tables',
-    }
+    },
 ]
 
 const OFFICE = [
@@ -87,7 +87,7 @@ const TECHNOLOGY = [
     {
         label: 'Phones',
         key: 'Phones',
-    }
+    },
 ]
 
 export {FURNITURE, OFFICE, TECHNOLOGY};

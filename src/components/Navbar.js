@@ -137,7 +137,7 @@ function Navbar(NavBarProps) {
                                     value={searchVal}
                                     options={searchOptions}
                                     style={{
-                                        width: '50%',
+                                        width: '70%',
                                         paddingTop: '2%',
                                         paddingRight: '5.5%'
                                     }}

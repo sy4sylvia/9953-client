@@ -77,4 +77,5 @@ const CategoryDropdown = () => (
 
     </div>
 );
+
 export default CategoryDropdown;
