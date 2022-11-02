@@ -144,7 +144,7 @@ function Navbar(NavBarProps) {
                                     onSelect={onSelect}
                                     onSearch={onSearch}
                                     onChange={onChange} >
-                                    <Input.Search placeholder='input search text' enterButton />
+                                    <Input.Search placeholder='Search for a product' enterButton />
                                 </AutoComplete>
 
                                 {/*TODO：style the icons: move down a bit*/}
