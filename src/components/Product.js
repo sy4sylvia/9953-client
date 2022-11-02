@@ -3,12 +3,11 @@ import {Typography, Select, Button, Row, Col, Divider} from 'antd';
 
 import 'antd/dist/antd.css';
 
+import { QUANTITY } from './Options';
+
 const { Title } = Typography;
-const _ = require('lodash');
 
 const Product = () => {
-
-    const quantityOptions = [];
 
     const contentStyle = {
         height: '240px',
@@ -21,13 +20,6 @@ const Product = () => {
     const handleChange = (value) => {
         console.log(`selected ${value}`);
     };
-
-    for (let i = 1; i <= 10; i++) {
-        quantityOptions.push({
-            value: _.toString(i),
-            label: _.toString(i),
-        });
-    }
 
     return (
         <div style={{padding: '120px 120px'}} >
@@ -75,7 +67,7 @@ const Product = () => {
                                 width: 120,
                             }}
                             onChange={handleChange}
-                            options={quantityOptions}
+                            options={QUANTITY}
                         />
                         <Divider />
                     </div>

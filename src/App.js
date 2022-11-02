@@ -9,9 +9,9 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import SearchResults from './components/SearchResults';
 import Product from './components/Product';
+import Cart from './components/Cart';
 import Testv2 from "./components/Testv2";
 import Test from './components/Test';
-
 
 
 const { Footer } = Layout;
@@ -26,6 +26,8 @@ function App() {
                 <Route exact path={'/home'} element={<Home />} />
                 <Route exact path = '/search' element={<SearchResults />} />
                 <Route exact path = '/product' element={<Product/>} />
+                <Route exact path = '/cart' element={<Cart />} />
+                <Route exact path = '/checkout' element={<Cart />} />
                 <Route exact path='/test' element={<Test />} />
                 <Route exact path='/testv2' element={<Testv2 />} />
             </Routes>
