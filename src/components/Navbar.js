@@ -1,6 +1,6 @@
 import React,  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
+import { Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
 import 'antd/dist/antd.css';
@@ -171,16 +171,23 @@ function Navbar(NavBarProps) {
                                     { openAddAddressWindow? <AddAddressModal />: null}
                                 </Menu.SubMenu>
 
-                                <Menu.Item
-                                    icon={
-                                    <ShoppingCartOutlined
-                                            style={{fontSize: '1.6rem'}}
-                                        />
-                                    }
-                                key={'cart'}
-                                onClick={() => gotoPage('cart')}
-                                >
-                                </Menu.Item>
+                                <Menu.SubMenu
+                                    key='cartMenu'
+                                    title=''
+                                    icon={<ShoppingCartOutlined style={{fontSize: '1.6rem'}} />}>
+                                    <Menu.Item
+                                        key='cart'
+                                        onClick={() => gotoPage('cart')}
+                                    >
+                                       View Cart
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        key={'checkout'}
+                                        onClick={() => gotoPage('checkout')}
+                                    >
+                                        Checkout
+                                    </Menu.Item>
+                                </Menu.SubMenu>
                             </Menu>
                         </Col>
                     </Row>

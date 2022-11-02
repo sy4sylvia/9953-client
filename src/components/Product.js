@@ -58,6 +58,7 @@ const Product = () => {
 
                     <div>
                         <Title level = {3}>
+                            {/*TODO: if on sale, change color to red*/}
                             $200
                         </Title>
                     </div>
