@@ -11,8 +11,10 @@ import SearchResults from './components/SearchResults';
 import Product from './components/Product';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
+import ShippingMode from './components/ShippingMode';
 import Testv2 from "./components/Testv2";
 import Test from './components/Test';
+
 
 
 const { Footer } = Layout;
@@ -29,6 +31,7 @@ function App() {
                 <Route exact path = '/product' element={<Product/>} />
                 <Route exact path = '/cart' element={<Cart />} />
                 <Route exact path = '/checkout' element={<Checkout />} />
+                <Route exact path = '/shipping-mode' element={<ShippingMode />} />
                 <Route exact path='/test' element={<Test />} />
                 <Route exact path='/testv2' element={<Testv2 />} />
             </Routes>

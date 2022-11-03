@@ -1,10 +1,11 @@
 import React  from 'react';
-import { Typography, Select, Button, Row, Col, Divider } from 'antd';
+import {Typography, Select, Button, Row, Col, Divider, Breadcrumb} from 'antd';
+import {useNavigate} from 'react-router-dom';
 
 import 'antd/dist/antd.css';
 
 import { QUANTITY } from './Options';
-import {useNavigate} from "react-router-dom";
+
 
 const { Title } = Typography;
 
@@ -28,7 +29,14 @@ const Cart = () => {
     };
 
     return (
+        <div>
+            <div  style={{padding: '40px 60px 0 60px'}}>
+                <Breadcrumb separator=">">
+                    <Breadcrumb.Item href='/cart' >Cart</Breadcrumb.Item>
+                </Breadcrumb>
+            </div>
         <div style={{padding: '120px 120px'}} >
+
             <Row
                 gutter={{
                     xs: 8,
@@ -135,7 +143,7 @@ const Cart = () => {
                         <Title level = {4}>
                             Subtotal:
                             <Divider dashed />
-                            Shipping:
+                            Shipping: TBD
                         </Title>
                     </div>
 
@@ -143,12 +151,10 @@ const Cart = () => {
 
                     <div>
                         <Title level = {3}>
-                            Estimated Total
+                            Estimated Total:
                         </Title>
                     </div>
                     <Divider />
-
-
                     <Button
                         block
                         type='primary'
@@ -159,6 +165,7 @@ const Cart = () => {
                     <Divider />
                 </Col>
             </Row>
+        </div>
         </div>
     )
 };

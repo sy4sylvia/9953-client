@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Breadcrumb, Button, Card, Col, Divider, Radio, Row, Space, Typography} from 'antd';
-import { ProfileOutlined  } from '@ant-design/icons';
+import {useNavigate} from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -12,6 +12,11 @@ const Checkout = () => {
         setRadioVal(e.target.value);
     };
 
+    const navigate = useNavigate();
+
+    const gotoPage = (path) => {
+        navigate(path);
+    };
     return (
         <div>
             <div style={{padding: '40px 60px 0 60px'}} >
@@ -37,7 +42,7 @@ const Checkout = () => {
                         <Row>
                             <Col span={8}>
                                 <Title level={3}>
-                                    Shipping Address <ProfileOutlined />
+                                    Shipping Address
                                 </Title>
 
                             </Col>
@@ -48,7 +53,7 @@ const Checkout = () => {
                                 <Radio.Group onChange={onChangeRadio} value={radioVal}>
                                     <Space direction='vertical'>
                                         <Radio value={1}>
-                                            <Title level={5}>Primary Address</Title>
+                                            <Title level={5}>Same Day</Title>
                                         </Radio>
 
                                         <Card
@@ -67,17 +72,40 @@ const Checkout = () => {
                                         </Card>
 
                                         <Radio value={2}>
-                                            <Title level={5}>Add New  Address</Title>
+                                            <Title level={5}>Add New Address</Title>
+                                            {/*TODO: add the new address modal here*/}
                                         </Radio>
                                     </Space>
                                 </Radio.Group>
                             </Col>
 
-                            <Col span={6}>
-                            </Col>
-                            <Col span={4} />
+                            <Col span={6} />
+                            <Col span={4}>
+
+                                <Button
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                    }}
+                                    type='default'
+                                    onClick={() => gotoPage('/cart')}
+                                >
+                                    Return to cart
+                                </Button>
+                                </Col>
                             <Col span={8}>
-                            </Col>
+                                <Button
+                                    type='primary'
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                    }}
+                                    onClick={() => gotoPage('/shipping-mode')}
+                                >
+                                    Continue to shipping
+                                </Button>
+
+                            < /Col>
                         </Row>
                         <Divider />
                     </Col>
@@ -87,7 +115,7 @@ const Checkout = () => {
                             <Title level = {4}>
                                 Subtotal:
                                 <Divider dashed />
-                                Shipping:
+                                Shipping: TBD
                             </Title>
                         </div>
 
@@ -99,22 +127,9 @@ const Checkout = () => {
                             </Title>
                         </div>
                         <Divider />
-
-
-                        <Button
-                            block
-                            type='primary'
-                            // onClick={() => gotoPage('/checkout')}
-                        >
-                            Checkout
-                        </Button>
-                        <Divider />
                     </Col>
                 </Row>
             </div>
-
-
-
         </div>
 
     );
