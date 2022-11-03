@@ -6,7 +6,6 @@ import 'antd/dist/antd.css';
 
 import { QUANTITY } from './Options';
 
-
 const { Title } = Typography;
 
 const Cart = () => {

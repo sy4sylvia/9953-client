@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Breadcrumb, Button, Card, Col, Divider, Radio, Row, Space, Typography} from 'antd';
+import {Breadcrumb, Button, Col, Divider, Radio, Row, Space, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
 
 const { Title } = Typography;
@@ -160,8 +160,6 @@ const ShippingMode = () => {
                     </Col>
                 </Row>
             </div>
-
-
         </div>
 
     );
