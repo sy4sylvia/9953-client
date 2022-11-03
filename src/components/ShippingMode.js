@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Breadcrumb, Button, Col, Divider, Radio, Row, Space, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -46,7 +47,7 @@ const ShippingMode = () => {
                 >
                     <Col className="gutter-row" span={16}>
                         <Row>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <Row>
                                     <Title level={3}>
                                         Shipping Mode
@@ -81,7 +82,7 @@ const ShippingMode = () => {
                                 <Divider dashed />
                                 <Row>
                                     <Title level={3}>
-                                        Order Priority
+                                        Order Priority <ExclamationCircleFilled />
                                     </Title>
                                 </Row>
 
@@ -110,7 +111,7 @@ const ShippingMode = () => {
                                 </Radio.Group>
                             </Col>
 
-                            <Col span={6} />
+                            <Col span={4} />
                             <Col span={4}>
 
                                 <Button

@@ -13,6 +13,7 @@ import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import ShippingMode from './components/ShippingMode';
 import Payment from './components/Payment';
+import Order from './components/Order';
 import Testv2 from "./components/Testv2";
 import Test from './components/Test';
 
@@ -34,6 +35,7 @@ function App() {
                 <Route exact path = '/checkout' element={<Checkout />} />
                 <Route exact path = '/shipping-mode' element={<ShippingMode />} />
                 <Route exact path = '/payment' element={<Payment />} />
+                <Route exact path = '/order' element={<Order />} />
                 <Route exact path='/test' element={<Test />} />
                 <Route exact path='/testv2' element={<Testv2 />} />
             </Routes>

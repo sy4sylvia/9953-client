@@ -129,16 +129,12 @@ const Payment = () => {
                                             top:30,
                                             bottom: 0,
                                         }}
-                                        onClick={() => gotoPage('/payment')}
+                                        onClick={() => gotoPage('/order')}
                                     >
                                         Place Order
                                     </Button>
-
                                 < /Col>
-
                             </Col>
-
-                            {/*<Col span={6} />*/}
                         </Row>
                     </Col>
 
@@ -161,10 +157,7 @@ const Payment = () => {
                     </Col>
                 </Row>
             </div>
-
-
         </div>
-
     );
 }
 
