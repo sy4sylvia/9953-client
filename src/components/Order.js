@@ -11,7 +11,7 @@ const Order = () => {
                 <Title><SmileOutlined/></Title>
                 <Title level={4}>Thank you!</Title>
                 {/*TODO: add link to the specific order with number*/}
-                <Title level={4}>Order Number: dummy-d-u-m-m-y</Title>
+                <Title level={4}>Order Number: IN-2014-JR162107-41675 </Title>
                 <Divider />
                 <Title level = {5}>Your order is confirmed and we're getting it ready by SHIP DATE </Title>
                 <Divider />

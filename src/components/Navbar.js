@@ -117,7 +117,7 @@ function Navbar(NavBarProps) {
         <Row justify='center'>
             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <Header className='header-fixed'>
-                    <Row>
+                    <Row >
                         <Col xl={6} lg={6} md={6} sm={10} xs={10}>
                             <Title level={3} code id='title-button'>
                                 <a className={'navbar-title'}
