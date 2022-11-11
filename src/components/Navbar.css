@@ -1,0 +1,11 @@
+.awesome-icon {
+    top: 15px;
+    position:fixed;
+}
+
+.searchbar-nav {
+    width: 70%;
+    padding-left: 0;
+    padding-right: 15px;
+    padding-top: 15px;
+}

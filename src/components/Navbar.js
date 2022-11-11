@@ -4,6 +4,8 @@ import { Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
 import 'antd/dist/antd.css';
+import './Navbar.css';
+
 import SignUpForm from './SignUpForm';
 import SignInForm from './SignInForm';
 import AddAddressForm from './AddAddressForm';
@@ -117,9 +119,14 @@ function Navbar(NavBarProps) {
         <Row justify='center'>
             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <Header className='header-fixed'>
-                    <Row >
+                    <Row>
                         <Col xl={6} lg={6} md={6} sm={10} xs={10}>
-                            <Title level={3} code id='title-button'>
+                            <Title
+                                   className='awesome-icon'
+                                   code
+                                   level={3}
+                                   id='title-button'
+                            >
                                 <a className={'navbar-title'}
                                    onClick={() => gotoPage('')}>
                                     Awesome
@@ -134,26 +141,22 @@ function Navbar(NavBarProps) {
                                 overflowedIndicator={<MenuOutlined />}
                             >
                                 <AutoComplete
+                                    className='searchbar-nav'
                                     value={searchVal}
                                     options={searchOptions}
-                                    style={{
-                                        width: '70%',
-                                        paddingTop: '2%',
-                                        paddingRight: '5.5%'
-                                    }}
                                     onSelect={onSelect}
                                     onSearch={onSearch}
                                     onChange={onChange} >
                                     <Input.Search placeholder='Search for a product' enterButton />
                                 </AutoComplete>
 
-                                {/*TODO：style the icons: move down a bit*/}
                                 {/*TODO: icon show or not depends on the token*/}
 
                                 <Menu.SubMenu
+                                    className='submenu-navbar'
                                     key='SubMenu'
                                     title='Sign In / Sign Up'
-                                    icon={<UserOutlined style={{fontSize: '1.6rem'}} />}>
+                                    icon={<UserOutlined style={{fontSize: '1.3rem'}} />}>
                                     <Menu.Item
                                         key='sign-in'
                                         onClick = {showSignInModal}
@@ -174,7 +177,7 @@ function Navbar(NavBarProps) {
                                 <Menu.SubMenu
                                     key='cartMenu'
                                     title=''
-                                    icon={<ShoppingCartOutlined style={{fontSize: '1.6rem'}} />}>
+                                    icon={<ShoppingCartOutlined style={{fontSize: '1.3rem'}} />}>
                                     <Menu.Item
                                         key='cart'
                                         onClick={() => gotoPage('cart')}
