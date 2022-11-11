@@ -10,13 +10,13 @@ const getPublicContent = () => {
     return axios.get(API_URL + 'all');
 }
 
-const getUserBoard = () => {
+const getUserAccount = () => {
     return axios.get(API_URL + 'user');
 }
 
 const UserService = {
     getPublicContent,
-    getUserBoard,
+    getUserAccount,
 }
 
 export default UserService;

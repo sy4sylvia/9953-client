@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {Button, Card, Divider, Typography} from 'antd';
 
+import UserService from '../services/user.service';
 const { Title } = Typography;
 
 const Account = () => {
+
+    const [content, setContent] = useState('');
+    useEffect(() => {
+        UserService.getUserAccount().then(
+            (response) => {
+                setContent(response.data);
+            },
+            (error) => {
+                const _content =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+
+                setContent(_content);
+            }
+        );
+    }, []);
+
     return (
         <div>
             <div style={{padding: '80px 120px'}}>
@@ -14,6 +35,8 @@ const Account = () => {
                 >
                     Welcome back!
                 </Title>
+                {/*TODO: change the hard-coded data to content*/}
+                {/*{content}*/}
                 <Card>
                     Account Info
                     <Divider />
