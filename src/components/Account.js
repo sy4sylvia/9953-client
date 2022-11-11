@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {Button, Card, Divider, Typography} from 'antd';
 
 import UserService from '../services/user.service';
+import EventBus from '../common/EventBus';
+
 const { Title } = Typography;
 
 const Account = () => {
@@ -21,6 +23,10 @@ const Account = () => {
                     error.toString();
 
                 setContent(_content);
+
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
+                }
             }
         );
     }, []);

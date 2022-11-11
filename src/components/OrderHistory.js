@@ -3,6 +3,7 @@ import {Table, Button, Typography } from 'antd';
 
 import { COLUMNS, DATA } from './OrderTable'
 import UserService from "../services/user.service";
+import EventBus from "../common/EventBus";
 
 const { Title } = Typography;
 
@@ -22,6 +23,10 @@ const OrderHistory = () => {
                     error.toString();
 
                 setContent(_content);
+
+                if (error.response && error.response.status === 401) {
+                    EventBus.dispatch("logout");
+                }
             }
         );
     }, []);
