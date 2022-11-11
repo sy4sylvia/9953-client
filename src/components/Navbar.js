@@ -156,6 +156,7 @@ function Navbar(NavBarProps) {
                                     className='submenu-navbar'
                                     key='SubMenu'
                                     title='Sign In / Sign Up'
+                                    // TODO: change the user icon to have other menu items
                                     icon={<UserOutlined style={{fontSize: '1.3rem'}} />}>
                                     <Menu.Item
                                         key='sign-in'

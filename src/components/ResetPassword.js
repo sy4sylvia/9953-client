@@ -1,7 +1,7 @@
 import React, {useState } from 'react';
 import ResetPasswordForm from './ResetPasswordForm';
 
-
+// TODO:change to input link only and send email
 const ResetPassword = () => {
     const [openResetPassword, setOpenResetPassword] = useState(true); //moved up
     const onCreate = (values) => {
