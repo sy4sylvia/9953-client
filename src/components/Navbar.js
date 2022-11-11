@@ -84,7 +84,20 @@ function Navbar(NavBarProps) {
         const onCreateSignIn = (values) => {
             console.log("handle login");
             console.log('Received values of form: ', values);
-            // axios.post
+            axios.post('localhost:8080/api/auth/customer/login', {
+                values
+            }).then(function (response) {
+                console.log(response);
+                if (response.status === 200) {
+                    navigate('/');
+                } else {
+                    alert("Wrong account or password.");
+                }
+            }).catch(function (error) {
+                console.log(error);
+                alert(error);
+            });
+
             setOpenSignInWindow(false);
         };
         return (

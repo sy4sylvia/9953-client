@@ -99,7 +99,7 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
 
                 <Form.Item
                     label='Security Question'
-                    name='question'
+                    name='securityQuestion'
                     rules={[
                         {
                             required: true,
@@ -118,7 +118,7 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
 
                 <Form.Item
                     label='Security Answer'
-                    name='answer'
+                    name='securityAnswer'
                     rules={[
                         {
                             required: true,
