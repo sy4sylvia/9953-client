@@ -1,7 +1,7 @@
-import { Form, Input, Modal, Select} from 'antd';
+import { Form, Input, Modal } from 'antd';
 import React from 'react';
 
-const ResetPasswordForm = ({ open, onCreate, onCancel }) => {
+const ForgotPasswordForm = ({ open, onCreate, onCancel }) => {
     const [form] = Form.useForm();
 
     const handleSelectChange = (value) => {
@@ -11,7 +11,7 @@ const ResetPasswordForm = ({ open, onCreate, onCancel }) => {
     return (
         <Modal
             open={open}
-            title='Reset Password'
+            title='Forgot Password'
             okText='Send Link to Email'
             cancelText='Cancel'
             onCancel={onCancel}
@@ -53,4 +53,4 @@ const ResetPasswordForm = ({ open, onCreate, onCancel }) => {
     );
 };
 
-export default ResetPasswordForm;
+export default ForgotPasswordForm;

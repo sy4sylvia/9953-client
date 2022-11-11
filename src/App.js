@@ -6,6 +6,7 @@ import './App.css';
 
 import AuthService from './services/auth.service';
 import Home from './components/Home';
+import ChangePassword from './components/ChangePassword';
 import Navbar from './components/Navbar';
 import SearchResults from './components/SearchResults';
 import Product from './components/Product';
@@ -31,6 +32,7 @@ function App() {
             <Routes>
                 <Route exact path={'/'} element={<Home />} />
                 <Route exact path={'/home'} element={<Home />} />
+                <Route exact path = '/change-password' element={<ChangePassword />} />
                 <Route exact path = '/search' element={<SearchResults />} />
                 <Route exact path = '/product' element={<Product/>} />
                 <Route exact path = '/cart' element={<Cart />} />

@@ -1,6 +1,6 @@
 import { Form, Input, Modal, Select} from 'antd';
 import React, {useState} from 'react';
-import ResetPasswordForm from './ResetPasswordForm';
+import ForgotPasswordForm from './ForgotPasswordForm';
 
 
 const SignInForm = ({ open, onCreate, onCancel }) => {
@@ -21,7 +21,7 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
         };
         return (
             <div>
-                <ResetPasswordForm
+                <ForgotPasswordForm
                     open={openResetPasswordWindow}
                     onCreate={onCreateReset}
                     onCancel={(e) => {

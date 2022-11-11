@@ -1,8 +1,8 @@
 import React, {useState } from 'react';
-import ResetPasswordForm from './ResetPasswordForm';
+import ForgotPasswordForm from './ForgotPasswordForm';
 
 // TODO:change to input link only and send email
-const ResetPassword = () => {
+const ForgotPassword = () => {
     const [openResetPassword, setOpenResetPassword] = useState(true); //moved up
     const onCreate = (values) => {
         console.log('Received values of form: ', values);
@@ -10,7 +10,7 @@ const ResetPassword = () => {
     };
     return (
         <div>
-            <ResetPasswordForm
+            <ForgotPasswordForm
                 open={openResetPassword}
                 onCreate={onCreate}
                 onCancel={(e) => {
@@ -22,4 +22,4 @@ const ResetPassword = () => {
     );
 };
 
-export default ResetPassword;
+export default ForgotPassword;
