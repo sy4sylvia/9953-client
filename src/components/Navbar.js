@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
+import axios from 'axios';
+
 import 'antd/dist/antd.css';
 import './Navbar.css';
 
@@ -80,7 +82,9 @@ function Navbar(NavBarProps) {
 
     const SignInModal = () => {
         const onCreateSignIn = (values) => {
+            console.log("handle login");
             console.log('Received values of form: ', values);
+            // axios.post
             setOpenSignInWindow(false);
         };
         return (
