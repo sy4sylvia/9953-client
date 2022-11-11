@@ -1,10 +1,28 @@
 import { Button, Card, Form, Input } from 'antd';
 import React from 'react';
 
+import axios from 'axios';
+import changePasswordURL from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const ChangePassword = () => {
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const navigate = useNavigate();
+
+    // TODO: grab the token from the URL and add it as part of the JSON and send back to backend
+    const onChangePassword = (values) => {
+        axios.post(changePasswordURL, values).then(function (response) {
+            console.log(response);
+            if (response.status === 200) {
+                // TODO: get the lastName and firstName from the backend and display on the frontend
+                // TODO: get the customer ID and retrieve token
+                navigate('/');
+            } else {
+                alert("Wrong account or password.");
+            }
+        }).catch(function (error) {
+            console.log(error);
+            alert(error);
+        });
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -26,7 +44,7 @@ const ChangePassword = () => {
             initialValues={{
                 remember: true,
             }}
-            onFinish={onFinish}
+            onFinish={onChangePassword}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
         >

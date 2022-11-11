@@ -4,6 +4,7 @@ import { Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
 import axios from 'axios';
+import loginURL from '../services/api';
 
 import 'antd/dist/antd.css';
 import './Navbar.css';
@@ -82,13 +83,11 @@ function Navbar(NavBarProps) {
 
     const SignInModal = () => {
         const onCreateSignIn = (values) => {
-            console.log("handle login");
-            console.log('Received values of form: ', values);
-            axios.post('localhost:8080/api/auth/customer/login', {
-                values
-            }).then(function (response) {
+            axios.post(loginURL, values).then(function (response) {
                 console.log(response);
                 if (response.status === 200) {
+                    // TODO: get the lastName and firstName from the backend and display on the frontend
+                    // TODO: get the customer ID and retrieve token
                     navigate('/');
                 } else {
                     alert("Wrong account or password.");

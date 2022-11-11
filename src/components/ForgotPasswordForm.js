@@ -1,12 +1,13 @@
 import { Form, Input, Modal } from 'antd';
 import React from 'react';
 
+import axios from 'axios';
+import forgotPasswordURL from '../services/api';
+import {useNavigate} from "react-router-dom";
+
 const ForgotPasswordForm = ({ open, onCreate, onCancel }) => {
     const [form] = Form.useForm();
-
-    const handleSelectChange = (value) => {
-        console.log(`Selected: ${value}`);
-    };
+    const navigate = useNavigate();
 
     return (
         <Modal
@@ -26,6 +27,19 @@ const ForgotPasswordForm = ({ open, onCreate, onCancel }) => {
                     .catch((info) => {
                         console.log('Validate Failed:', info);
                     });
+                // axios.post(forgotPasswordURL, values).then(function (response) {
+                //     console.log(response);
+                //     if (response.status === 200) {
+                //         // TODO: get the lastName and firstName from the backend and display on the frontend
+                //         // TODO: get the customer ID and retrieve token
+                //         navigate('/change-password');
+                //     } else {
+                //         alert("Wrong account or password.");
+                //     }
+                // }).catch(function (error) {
+                //     console.log(error);
+                //     alert(error);
+                // });
             }}
         >
             <Form

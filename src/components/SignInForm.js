@@ -1,11 +1,15 @@
 import { Form, Input, Modal, Select} from 'antd';
 import React, {useState} from 'react';
 import ForgotPasswordForm from './ForgotPasswordForm';
+import axios from 'axios';
+import forgotPasswordURL from "../services/api";
+import {useNavigate} from "react-router-dom";
 
 
 const SignInForm = ({ open, onCreate, onCancel }) => {
     const [form] = Form.useForm();
     const { Option } = Select;
+    const navigate = useNavigate();
 
     const [openResetPasswordWindow, setOpenResetPasswordWindow] = useState(false);
 
@@ -16,7 +20,28 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
 
     const ResetPasswordModal = () => {
         const onCreateReset = (values) => {
-            console.log('Received values of form: ', values);
+            console.log(values);
+            // const dummy = {
+            //     "email":"poppingary@gmail.com",
+            //     "clientUri":"http://localhost:3000/change-password"
+            // }
+            //
+            // axios
+            //     .post('http://localhost:8080/api/admin/customer/forgot-password', dummy)
+            //     .then(function (response) {
+            //     console.log(response);
+            //     if (response.status === 200) {
+            //         // TODO: get the lastName and firstName from the backend and display on the frontend
+            //         // TODO: get the customer ID and retrieve token
+            //         navigate('/change-password');
+            //     } else {
+            //         alert("Wrong account or password.");
+            //     }
+            // }).catch(function (error) {
+            //     console.log(error);
+            //     alert(error);
+            // });
+
             setOpenResetPasswordWindow(false);
         };
         return (
