@@ -2,7 +2,6 @@
 // The service uses Axios for HTTP requests and Local Storage for user information & JWT.
 
 import axios from 'axios';
-import {keyboard} from "@testing-library/user-event/dist/keyboard";
 
 const API_URL = 'http://localhost:3000/api/v1/auth/';
 
@@ -47,6 +46,9 @@ const getCurrentUser = () => {
 
 const AuthService = {
     register,
+    login,
+    logout,
+    getCurrentUser
 }
 
 export default AuthService;
