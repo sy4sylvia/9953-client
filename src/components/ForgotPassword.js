@@ -1,10 +1,11 @@
 import React, {useState } from 'react';
-import ForgotPasswordForm from './ForgotPasswordForm';
-
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
+
+import ForgotPasswordForm from './ForgotPasswordForm';
 import forgotPasswordURL from '../services/api';
 
-import {useNavigate} from 'react-router-dom';
+
 
 // TODO:change to input link only and send email
 const ForgotPassword = () => {

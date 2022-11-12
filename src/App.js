@@ -6,6 +6,7 @@ import './App.css';
 
 import AuthService from './services/auth.service';
 import Home from './components/Home';
+import Register from './components/Register';
 import ChangePassword from './components/ChangePassword';
 import Navbar from './components/Navbar';
 import SearchResults from './components/SearchResults';
@@ -18,7 +19,6 @@ import Order from './components/Order';
 import Account from './components/Account';
 import AddressBook from './components/AddressBook';
 import OrderHistory from './components/OrderHistory';
-import Testv2 from "./components/Testv2";
 import Test from './components/Test';
 
 
@@ -32,6 +32,7 @@ function App() {
             <Routes>
                 <Route exact path={'/'} element={<Home />} />
                 <Route exact path={'/home'} element={<Home />} />
+                <Route exact path = '/register' element={<Register />} />
                 <Route exact path = '/change-password' element={<ChangePassword />} />
                 <Route exact path = '/search' element={<SearchResults />} />
                 <Route exact path = '/product' element={<Product/>} />
@@ -44,7 +45,6 @@ function App() {
                 <Route exact path = '/address-book' element={<AddressBook />} />
                 <Route exact path = '/order-history' element={<OrderHistory />} />
                 <Route exact path='/test' element={<Test />} />
-                <Route exact path='/testv2' element={<Testv2 />} />
             </Routes>
         </div>
         <Footer

@@ -1,9 +1,9 @@
-import { Button, Card, Form, Input } from 'antd';
 import React from 'react';
+import { Button, Card, Form, Input } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 import changePasswordURL from '../services/api';
-import { useNavigate } from 'react-router-dom';
 
 const ChangePassword = () => {
     const navigate = useNavigate();
@@ -32,7 +32,9 @@ const ChangePassword = () => {
     return (
         <Card style={{
             textAlign: 'center',
-            width: 600 }}>
+            width: 600 }}
+              title='Change Password'
+        >
         <Form
             name="basic"
             labelCol={{
@@ -76,22 +78,12 @@ const ChangePassword = () => {
             </Form.Item>
 
             <Form.Item
-                name="remember"
-                valuePropName="checked"
                 wrapperCol={{
                     offset: 8,
                     span: 16,
                 }}
             >
-            </Form.Item>
-
-            <Form.Item
-                wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                }}
-            >
-                <Button type="primary" htmlType="submit">
+                <Button type='primary' htmlType='submit'>
                     Reset Password
                 </Button>
             </Form.Item>

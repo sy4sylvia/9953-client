@@ -99,6 +99,7 @@ function Navbar(NavBarProps) {
 
             setOpenSignInWindow(false);
         };
+
         return (
             <div>
                 <SignInForm
@@ -176,7 +177,7 @@ function Navbar(NavBarProps) {
                                     icon={<UserOutlined style={{fontSize: '1.3rem'}} />}>
                                     <Menu.Item
                                         key='sign-in'
-                                        onClick = {showSignInModal}
+                                        onClick = {navigate('/register')}
                                     >
                                         Sign In
                                         { openSignInWindow?  <SignInModal /> : null}

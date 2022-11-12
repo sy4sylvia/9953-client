@@ -155,9 +155,8 @@ const SignInForm = ({ open, onCreate, onCancel }) => {
                 </Form.Item>
 
                 <a className={'forget-password-link'}
-                   onClick={showResetPasswordModal}>
-                    Forget Password
-                    {openResetPasswordWindow? <ResetPasswordModal /> : null}
+                   onClick={ navigate('/forgot-password')}>
+                    Forgot Password
                 </a>
             </Form>
         </Modal>
