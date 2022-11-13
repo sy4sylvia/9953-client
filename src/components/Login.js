@@ -19,7 +19,7 @@ const Login = () => {
         axios
             .post('http://localhost:8080/api/auth/customer/login', values)
             .then(function (response) {
-                console.log('status code here: ', response.status);
+                console.log(response);
                 if (response.status === 200) {
                     navigate('/');
                 }
