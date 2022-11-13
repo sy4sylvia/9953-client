@@ -1,6 +1,4 @@
-import 'antd/dist/antd.css';
-
-const _ = require('lodash');
+import _ from 'lodash';
 
 const QUANTITY = [];
 
@@ -54,4 +52,55 @@ const QUESTIONS = [
     },
 ]
 
-export { QUANTITY, QUESTIONS};
+const MARKET = [
+    {
+        label: 'Africa',
+        key: 'Africa',
+    },
+    {
+        label: 'Asia Pacific',
+        key: 'Asia Pacific',
+    },
+    {
+        label: 'Europe',
+        key: 'Europe',
+    },
+    {
+        label: 'LATAM',
+        key: 'LATAM',
+    },
+    {
+        label: 'USCA',
+        key: 'USCA',
+    },
+];
+
+
+const DIRECTIONS = ['Eastern', 'Central', 'Northern', 'Western', 'Southern']
+const DISTRICTS = ['Africa','Asia', 'America', 'Europe', 'US']
+
+const REGION = [
+    {
+        label: 'Canada',
+        key: 'Canada',
+    },
+    {
+        label: 'Caribbean',
+        key: 'Caribbean',
+    },
+    {
+        label: 'Southeastern Asia',
+        key: 'Southeastern Asia',
+    },
+]
+
+for (let i = 0; i < DIRECTIONS.length; i++) {
+    for (let j = 0; j < DISTRICTS.length; j++) {
+        REGION.push({
+            label: DIRECTIONS[i] + ' ' + DISTRICTS[j],
+            key: DIRECTIONS[i] + ' ' + DISTRICTS[j],
+        });
+    }
+}
+
+export { QUANTITY, QUESTIONS, MARKET, REGION};

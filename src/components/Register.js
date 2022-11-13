@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, Col, Form, Input, Card, Row, Select} from 'antd';
+import { AutoComplete, Button, Col, Form, Input, Card, Row, Select} from 'antd';
 import _ from 'lodash';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Country, State, City }  from 'country-state-city';
 
-import { QUESTIONS } from './Options';
+import { MARKET, REGION, QUESTIONS } from './Options';
 
 import 'antd/dist/antd.css';
 import '../index.css';
@@ -12,24 +13,44 @@ import '../index.css';
 const Register = () => {
     const [form] = Form.useForm();
     const { Option } = Select;
-    const children = [];
+    const questionChildren = [];
 
     const marketChildren = [];
     const regionChildren = [];
+
+
     const countryChildren = [];
     const stateChildren = [];
+    const cityChildren = [];
 
-    // TODO: these items should be retrieved from the database
-    marketChildren.push(<Option value="dummy">dummy</Option>); //dummy example
-    regionChildren.push(<Option value="lucy">lucy</Option>); //dummy example
-    countryChildren.push(<Option value='Australia'>Australia</Option>);
-    stateChildren.push(<Option value='California'>California</Option>);
+
+    _.forEach(MARKET, (market) => {
+        marketChildren.push(<Option value={market.label}> {market.key} </Option>);
+    });
+
+    _.forEach(REGION, (market) => {
+        regionChildren.push(<Option value={market.label}> {market.key} </Option>);
+    });
+
+    _.forEach(Country.getAllCountries(), (country) => {
+        countryChildren.push(<Option value={country.name}> {country.name} </Option>);
+    })
+
+    _.forEach(State.getAllStates(), (state) => {
+        stateChildren.push(<Option value={state.name}> {state.name} </Option>);
+    })
+
+    _.forEach(City.getAllCities(), (city) => {
+        cityChildren.push(<Option value={city.name}> {city.name} </Option>);
+    })
+
+    _.forEach(QUESTIONS, (question) => {
+        questionChildren.push(<Option value={question.label}> {question.key} </Option>);
+    });
 
     const navigate = useNavigate();
 
-    _.forEach(QUESTIONS, function (pair) {
-        children.push(<Option value={pair.label}> {pair.key} </Option>);
-    });
+
 
     const handleSelectChange = (value) => {
         console.log(`Selected: ${value}`);
@@ -163,10 +184,10 @@ const Register = () => {
             >
                 <Select
                     size={'middle'}
-                    initialValues='Security Question'
+                    defaultValue='Security Question'
                     onChange={handleSelectChange}
                 >
-                    {children}
+                    {questionChildren}
                 </Select>
             </Form.Item>
 
@@ -237,13 +258,13 @@ const Register = () => {
                         }
                     ]}
                 >
-                    <Select
+                    <AutoComplete
                         size={'middle'}
-                        defaultValue='Country'
+                        defaultValue=''
                         onChange={handleSelectChange}
                     >
                         {countryChildren}
-                    </Select>
+                    </AutoComplete>
                 </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -257,13 +278,13 @@ const Register = () => {
                         }
                     ]}
                 >
-                    <Select
+                    <AutoComplete
                         size={'middle'}
-                        defaultValue='State'
+                        defaultValue=''
                         onChange={handleSelectChange}
                     >
                         {stateChildren}
-                    </Select>
+                    </AutoComplete>
                 </Form.Item>
                 </Col>
                 </Row>
@@ -280,7 +301,13 @@ const Register = () => {
                         }
                     ]}
                 >
-                    <Input type = 'textarea'/>
+                    <AutoComplete
+                        size={'middle'}
+                        defaultValue=''
+                        onChange={handleSelectChange}
+                    >
+                        {cityChildren}
+                    </AutoComplete>
                 </Form.Item>
                     </Col>
                     <Col span={12}>
