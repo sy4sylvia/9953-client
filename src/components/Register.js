@@ -18,7 +18,6 @@ const Register = () => {
     const marketChildren = [];
     const regionChildren = [];
 
-
     const countryChildren = [];
     const stateChildren = [];
     const cityChildren = [];
