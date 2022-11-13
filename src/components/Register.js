@@ -6,9 +6,10 @@ import {useNavigate} from 'react-router-dom';
 
 import { QUESTIONS } from './Options';
 
+import 'antd/dist/antd.css';
 import '../index.css';
 
-const Register = ({ open, onCreate, onCancel }) => {
+const Register = () => {
     const [form] = Form.useForm();
     const { Option } = Select;
     const children = [];
@@ -33,8 +34,6 @@ const Register = ({ open, onCreate, onCancel }) => {
     const handleSelectChange = (value) => {
         console.log(`Selected: ${value}`);
     };
-
-    // TODO: add the "isPrimary":"Y" part to the data sent to the backend
 
     const submitRegisterForm = (values) => {
         console.log(values);
@@ -154,7 +153,7 @@ const Register = ({ open, onCreate, onCancel }) => {
             >
                 <Select
                     size={'middle'}
-                    defaultValue='Security Question'
+                    initialValues='Security Question'
                     onChange={handleSelectChange}
                 >
                     {children}
@@ -291,7 +290,7 @@ const Register = ({ open, onCreate, onCancel }) => {
                 </Row>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button type='primary' htmlType='submit'>
                         Register
                     </Button>
                 </Form.Item>

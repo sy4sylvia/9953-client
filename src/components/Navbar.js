@@ -9,10 +9,6 @@ import loginURL from '../services/api';
 import 'antd/dist/antd.css';
 import './Navbar.css';
 
-import SignUpForm from './SignUpForm';
-import SignInForm from './SignInForm';
-import AddAddressForm from './AddAddressForm';
-
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
@@ -26,93 +22,6 @@ function Navbar(NavBarProps) {
 
     const [searchVal, setSearchVal] = useState('');
     const [searchOptions, setSearchOptions] = useState([]);
-
-    const [openSignUpWindow, setOpenSignUpWindow] = useState(false);
-    const [openSignInWindow, setOpenSignInWindow] = useState(false);
-    const [openAddAddressWindow, setOpenAddAddressWindow] = useState(false);
-
-    const showSignUpModal = () => {
-        setOpenSignUpWindow(() => true);
-    };
-
-    const showSignInModal = () => {
-        setOpenSignInWindow(() => true);
-    };
-
-    const SignUpModal = () => {
-        const onCreate = (values) => {
-            console.log('Received values of form: ', values);
-            setOpenSignUpWindow(false);
-            // event.stopPropagation();
-            // open the add address window
-            setOpenAddAddressWindow(true);
-        };
-        return (
-            <div>
-                <SignUpForm
-                    open={openSignUpWindow}
-                    onCreate={onCreate}
-                    onCancel={(e) => {
-                        e.stopPropagation();
-                        setOpenSignUpWindow(false);
-                    }}
-                />
-            </div>
-        );
-    };
-
-    const AddAddressModal = () => {
-        const onCreateAddAddress = (values) => {
-            console.log('Received values of form: ', values);
-            setOpenAddAddressWindow(false);
-            setOpenSignUpWindow(false);
-        };
-        return (
-            <div>
-                <AddAddressForm
-                    open={openAddAddressWindow}
-                    onCreate={onCreateAddAddress}
-                    onCancel={(e) => {
-                        e.stopPropagation();
-                        setOpenAddAddressWindow(false);
-                    }}
-                />
-            </div>
-        );
-    };
-
-    const SignInModal = () => {
-        const onCreateSignIn = (values) => {
-            axios.post(loginURL, values).then(function (response) {
-                console.log(response);
-                if (response.status === 200) {
-                    // TODO: get the lastName and firstName from the backend and display on the frontend
-                    // TODO: get the customer ID and retrieve token
-                    navigate('/');
-                } else {
-                    alert("Wrong account or password.");
-                }
-            }).catch(function (error) {
-                console.log(error);
-                alert(error);
-            });
-
-            setOpenSignInWindow(false);
-        };
-
-        return (
-            <div>
-                <SignInForm
-                    open={openSignInWindow}
-                    onCreate={onCreateSignIn}
-                    onCancel={(e) => {
-                        e.stopPropagation();
-                        setOpenSignInWindow(false);
-                    }}
-                />
-            </div>
-        );
-    };
 
     const navigate = useNavigate();
 
@@ -172,24 +81,21 @@ function Navbar(NavBarProps) {
                                 <Menu.SubMenu
                                     className='submenu-navbar'
                                     key='SubMenu'
-                                    title='Sign In / Sign Up'
+                                    title='Log In / Register'
                                     // TODO: change the user icon to have other menu items
                                     icon={<UserOutlined style={{fontSize: '1.3rem'}} />}>
                                     <Menu.Item
-                                        key='sign-in'
-                                        onClick = {navigate('/register')}
+                                        key='login'
+                                        onClick = {() => gotoPage('/login')}
                                     >
-                                        Sign In
-                                        { openSignInWindow?  <SignInModal /> : null}
+                                        Log In
                                     </Menu.Item>
                                     <Menu.Item
-                                        key='sign-up'
-                                        onClick={showSignUpModal}
+                                        key='register'
+                                        onClick={() => gotoPage('/register')}
                                     >
-                                        Sign Up
-                                        { openSignUpWindow?  <SignUpModal /> : null}
+                                        Register
                                     </Menu.Item>
-                                    { openAddAddressWindow? <AddAddressModal />: null}
                                 </Menu.SubMenu>
 
                                 <Menu.SubMenu
