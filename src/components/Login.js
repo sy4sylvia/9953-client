@@ -1,6 +1,8 @@
 import React from 'react';
 import {Button, Form, Input, Select, Card, Tooltip, Typography} from 'antd';
 import _ from 'lodash';
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 
 import 'antd/dist/antd.css';
 import '../index.css';
@@ -10,15 +12,30 @@ import {QUESTIONS} from './Options';
 const Login = () => {
     const [form] = Form.useForm();
     const { Option } = Select;
+    const navigate = useNavigate();
 
     const submitLoginForm = (values) => {
         console.log(values);
-        // TODO: POST
+        axios
+            .post('http://localhost:8080/api/auth/customer/login', values)
+            .then(function (response) {
+                console.log('status code here: ', response.status);
+                if (response.status === 200) {
+                    navigate('/');
+                }
+            })
+            .catch(function (error) {
+                if (error.response.status === 401) {
+                    alert('Wrong password or security answer.');
+                } else {
+                    alert(error);
+                }
+            });
     }
 
-    const children = [];
+    const questionChildren = [];
     _.forEach(QUESTIONS, function (pair) {
-        children.push(<Option value={pair.label}> {pair.key} </Option>);
+        questionChildren.push(<Option value={pair.label}> {pair.key} </Option>);
     });
 
     const handleSelectChange = (value) => {
@@ -80,7 +97,7 @@ const Login = () => {
                         defaultValue='Security Question'
                         onChange={handleSelectChange}
                     >
-                        {children}
+                        {questionChildren}
                     </Select>
                 </Form.Item>
 
