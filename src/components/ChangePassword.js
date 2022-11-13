@@ -3,6 +3,10 @@ import { Button, Card, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
+
+import 'antd/dist/antd.css';
+import '../index.css';
+
 import changePasswordURL from '../services/api';
 
 const ChangePassword = () => {
@@ -15,7 +19,7 @@ const ChangePassword = () => {
             if (response.status === 200) {
                 // TODO: get the lastName and firstName from the backend and display on the frontend
                 // TODO: get the customer ID and retrieve token
-                navigate('/');
+                navigate('/'); // navigate to the home page
             } else {
                 alert("Wrong account or password.");
             }
@@ -30,25 +34,14 @@ const ChangePassword = () => {
     };
 
     return (
-        <Card style={{
-            textAlign: 'center',
-            width: 600 }}
+        <Card className='card-form-wrapper'
               title='Change Password'
         >
         <Form
-            name="basic"
-            labelCol={{
-                span: 8,
-            }}
-            wrapperCol={{
-                span: 16,
-            }}
-            initialValues={{
-                remember: true,
-            }}
+            className='form-inside-card'
+            layout='vertical'
             onFinish={onChangePassword}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
         >
             <Form.Item
                 label='New Password'
@@ -65,24 +58,30 @@ const ChangePassword = () => {
 
             {/*TODO: add messages when the passwords don't match*/}
             <Form.Item
-                label='Re-type Password'
-                name='rePassword'
+                label='Confirm Password'
+                name='password2'
+                dependencies={['password']}
+                hasFeedback
                 rules={[
                     {
                         required: true,
-                        message: 'Please retype your password.'
-                    }
+                        message: 'Please confirm your password.'
+                    },
+                    ({ getFieldValue }) => ({
+                        validator(_, value) {
+                            if (!value || getFieldValue('password') === value) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(
+                                new Error('Passwords do not match!'));
+                            },
+                    }),
                 ]}
             >
                 <Input.Password />
             </Form.Item>
 
-            <Form.Item
-                wrapperCol={{
-                    offset: 8,
-                    span: 16,
-                }}
-            >
+            <Form.Item>
                 <Button type='primary' htmlType='submit'>
                     Reset Password
                 </Button>

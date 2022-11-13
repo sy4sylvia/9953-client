@@ -28,7 +28,7 @@ const Login = () => {
     return (
         <Card
             className='card-form-wrapper'
-            title='Sign In'
+            title='Log In'
         >
             <Form
                 className='form-inside-card'
@@ -99,7 +99,7 @@ const Login = () => {
 
                 <Form.Item>
                     <Button type='primary' htmlType='submit'>
-                        Sign In
+                        Log In
                     </Button>
                 </Form.Item>
 

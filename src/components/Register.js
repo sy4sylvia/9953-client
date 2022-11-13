@@ -59,7 +59,7 @@ const Register = () => {
     return (
         <Card
             className='card-form-wrapper'
-            title='Sign Up'
+            title='Register'
         >
             <Form
                 className='form-inside-card'
@@ -127,15 +127,25 @@ const Register = () => {
                 <Input.Password />
             </Form.Item>
 
-            {/*TODO: add messages when the passwords don't match*/}
             <Form.Item
-                label='Re-type Password'
-                name='rePassword'
+                label='Confirm Password'
+                name='password2'
+                dependencies={['password']}
+                hasFeedback
                 rules={[
                     {
                         required: true,
-                        message: 'Please retype your password.'
-                    }
+                        message: 'Please confirm your password.'
+                    },
+                    ({ getFieldValue }) => ({
+                        validator(_, value) {
+                            if (!value || getFieldValue('password') === value) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(
+                                new Error('Passwords do not match!'));
+                        },
+                    }),
                 ]}
             >
                 <Input.Password />
