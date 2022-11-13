@@ -22,7 +22,6 @@ const Register = () => {
     const stateChildren = [];
     const cityChildren = [];
 
-
     _.forEach(MARKET, (market) => {
         marketChildren.push(<Option value={market.label}> {market.key} </Option>);
     });
@@ -49,23 +48,21 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-
-
     const handleSelectChange = (value) => {
         console.log(`Selected: ${value}`);
     };
 
     const submitRegisterForm = (values) => {
-        console.log(values);
         values = Object.assign({'isPrimary': 'Y'}, values);
+        values = Object.assign({'segment': 'Consumer'}, values);
 
-        console.log(values);
+        delete values.password2;
 
-        // TODO: fix the 404 error
+
         axios.post('http://localhost:8080/api/admin/customer', values).then(function (response) {
-            console.log(response);
+            console.log('response from the backend', response);
             if (response.status === 200) {
-                navigate('/');
+                navigate('/login');
             } else {
                 alert('Missing info');
             }
@@ -141,7 +138,15 @@ const Register = () => {
                     {
                         required: true,
                         message: 'Please input your password.'
-                    }
+                    },
+                    () => ({
+                        validator(_, value) {
+                            if (value.length >= 8 && value.length < 20) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('The length of the password must be between 8 and 20'));
+                        },
+                    }),
                 ]}
             >
                 <Input.Password />
