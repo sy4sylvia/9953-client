@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
-import axios from 'axios';
-import loginURL from '../services/api';
 
 import 'antd/dist/antd.css';
 import './Navbar.css';

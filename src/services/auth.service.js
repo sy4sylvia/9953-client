@@ -3,29 +3,36 @@
 
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/v1/auth/';
+const API_URL = 'http://localhost:8080/api/auth/';
 
-const register = (email, password, question, answer) => {
-    return axios.post(API_URL + 'register', {
+const register = (
+    firstName, lastName, segment,
+    email, password, securityQuestion, securityAnswer,
+    market, region, country, state, city, postalCode, isPrimary ) => {
+    return axios.post('http://localhost:8080/api/admin/customer', {
         email,
         password,
-        question,
-        answer,
+        securityQuestion,
+        securityAnswer,
+        market,
+        region,
+        country,
+        state,
+        city,
+        postalCode,
+        isPrimary
     });
 };
 
 // login posts the info that the user needs to log in and saves the profile to local storage
-const login = (firstName, lastName, segment, email, password, question, answer) => {
-    return axios.post(API_URL + 'login',  {
-        firstName,
-        lastName,
-        segment,
+const login = ( email, password, securityQuestion, securityAnswer) => {
+    return axios.post(API_URL + '/customer/login',  {
         email,
         password,
-        question,
-        answer,
+        securityQuestion,
+        securityAnswer,
     }).then((response) => {
-        if (response.data.email) {
+        if (response.data.accessToken) {
             localStorage.setItem('user', JSON.stringify(response.data));
         }
         return response.data;
@@ -34,10 +41,6 @@ const login = (firstName, lastName, segment, email, password, question, answer) 
 
 const logout = () => {
     localStorage.removeItem('user');
-    return axios.post(API_URL + 'logout')
-        .then((response) => {
-            return response.data;
-        });
 };
 
 const getCurrentUser = () => {

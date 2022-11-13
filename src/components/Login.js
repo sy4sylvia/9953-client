@@ -16,10 +16,9 @@ const Login = () => {
 
     const submitLoginForm = (values) => {
         console.log(values);
-        axios
-            .post('http://localhost:8080/api/auth/customer/login', values)
+
+        axios.post('http://localhost:8080/api/auth/customer/login', values)
             .then(function (response) {
-                console.log(response);
                 if (response.status === 200) {
                     navigate('/');
                 }
