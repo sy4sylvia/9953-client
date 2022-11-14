@@ -7,21 +7,28 @@ import axios from 'axios';
 import 'antd/dist/antd.css';
 import '../index.css';
 
-import changePasswordURL from '../services/api';
+const changePasswordURL = 'http://localhost:8080/api/admin/customer/change-password';
+// TODO: add bearer token to stop receiving 401 errors
+//https://stackoverflow.com/questions/53495922/error-request-failed-with-status-code-401-axios-in-react-js
 
-const ChangePassword = () => {
+const UpdatePassword = () => {
     const navigate = useNavigate();
 
     // TODO: grab the token from the URL and add it as part of the JSON and send back to backend
-    const onChangePassword = (values) => {
+    const onUpdatePassword = (values) => {
+        const curCustomerId = localStorage.getItem('customerId');
+        values = Object.assign({'customerId': curCustomerId}, values);
+
+        delete values.passwordDuplicate;
+
+        console.log(values);
+
         axios.post(changePasswordURL, values).then(function (response) {
             console.log(response);
             if (response.status === 200) {
-                // TODO: get the lastName and firstName from the backend and display on the frontend
-                // TODO: get the customer ID and retrieve token
-                navigate('/'); // navigate to the home page
+                navigate('/account'); // navigate to the home page
             } else {
-                alert("Wrong account or password.");
+                alert('Failed');
             }
         }).catch(function (error) {
             console.log(error);
@@ -35,17 +42,17 @@ const ChangePassword = () => {
 
     return (
         <Card className='card-form-wrapper'
-              title='Change Password'
+              title='Update Password'
         >
         <Form
             className='form-inside-card'
             layout='vertical'
-            onFinish={onChangePassword}
+            onFinish={onUpdatePassword}
             onFinishFailed={onFinishFailed}
         >
             <Form.Item
-                label='New Password'
-                name='password'
+                label='Old Password'
+                name='oldPassword'
                 rules={[
                     {
                         required: true,
@@ -56,10 +63,22 @@ const ChangePassword = () => {
                 <Input.Password />
             </Form.Item>
 
-            {/*TODO: add messages when the passwords don't match*/}
             <Form.Item
-                label='Confirm Password'
-                name='password2'
+                label='New Password'
+                name='newPassword'
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your new password.'
+                    }
+                ]}
+            >
+                <Input.Password />
+            </Form.Item>
+
+            <Form.Item
+                label='Confirm New Password'
+                name='passwordDuplicate'
                 dependencies={['password']}
                 hasFeedback
                 rules={[
@@ -69,7 +88,7 @@ const ChangePassword = () => {
                     },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || getFieldValue('password') === value) {
+                            if (!value || getFieldValue('newPassword') === value) {
                                 return Promise.resolve();
                             }
                             return Promise.reject(
@@ -91,4 +110,4 @@ const ChangePassword = () => {
     );
 };
 
-export default ChangePassword;
+export default UpdatePassword;

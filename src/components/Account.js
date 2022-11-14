@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Button, Card, Divider, Typography} from 'antd';
+import {useNavigate} from 'react-router-dom';
 
 import UserService from '../services/user.service';
 import EventBus from '../common/EventBus';
@@ -7,29 +8,30 @@ import EventBus from '../common/EventBus';
 const { Title } = Typography;
 
 const Account = () => {
+    const navigate = useNavigate();
 
-    const [content, setContent] = useState('');
-    useEffect(() => {
-        UserService.getUserAccount().then(
-            (response) => {
-                setContent(response.data);
-            },
-            (error) => {
-                const _content =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-
-                setContent(_content);
-
-                if (error.response && error.response.status === 401) {
-                    EventBus.dispatch("logout");
-                }
-            }
-        );
-    }, []);
+    // const [content, setContent] = useState('');
+    // useEffect(() => {
+    //     UserService.getUserAccount().then(
+    //         (response) => {
+    //             setContent(response.data);
+    //         },
+    //         (error) => {
+    //             const _content =
+    //                 (error.response &&
+    //                     error.response.data &&
+    //                     error.response.data.message) ||
+    //                 error.message ||
+    //                 error.toString();
+    //
+    //             setContent(_content);
+    //
+    //             if (error.response && error.response.status === 401) {
+    //                 EventBus.dispatch("logout");
+    //             }
+    //         }
+    //     );
+    // }, []);
 
     return (
         <div>
@@ -64,8 +66,9 @@ const Account = () => {
                 </Button>
                 <Button
                     style={{left: '20px'}}
+                    onClick={() => {navigate('/update-password')} }
                 >
-                    Change Password
+                    Update Password
                 </Button>
             </div>
         </div>

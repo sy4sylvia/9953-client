@@ -19,6 +19,18 @@ const Login = () => {
 
         axios.post('http://localhost:8080/api/auth/customer/login', values)
             .then(function (response) {
+                console.log(response);
+                console.log(response.data.customerId);
+                localStorage.setItem('customerId', response.data.customerId);
+                localStorage.setItem('oldPassword', response.data.password);
+                // response.data contains: customerId, firstName, lastName
+                // TODO: need to take the  bearer token
+                // console.log(response.headers);
+
+                // if (response.data.accessToken) {
+                //     localStorage.setItem('user', JSON.stringify(response.data));
+                // }
+
                 if (response.status === 200) {
                     navigate('/');
                 }

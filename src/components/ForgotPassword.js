@@ -6,10 +6,12 @@ import axios from 'axios';
 import 'antd/dist/antd.css';
 import '../index.css';
 
-import forgotPasswordURL from '../services/api';
+const forgotPasswordURL = 'http://localhost:8080/api/admin/customer/forgot-password';
 
 // TODO:change to input link only and send email
 const ForgotPassword = () => {
+    localStorage.clear();
+
     const [form] = Form.useForm();
 
     const navigate = useNavigate();
@@ -21,14 +23,15 @@ const ForgotPassword = () => {
     }
 
     const onCreate = (values) => {
-        axios.post(forgotPasswordURL, values).then(function (response) {
+        values = Object.assign({ 'clientUri':'http://localhost:3000/change-password'}, values);
+        // TODO: ask the backend to throw an error when the email is not registered
+        axios.post(forgotPasswordURL, values)
+            .then((response) => {
             console.log(response);
             if (response.status === 200) {
-                // TODO: get the lastName and firstName from the backend and display on the frontend
-                // TODO: get the customer ID and retrieve token
                 navigate('/change-password');
             } else {
-                alert("Wrong account or password.");
+                alert('No such email');
             }
         }).catch(function (error) {
             console.log(error);

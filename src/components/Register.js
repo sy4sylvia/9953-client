@@ -58,7 +58,6 @@ const Register = () => {
 
         delete values.password2;
 
-
         axios.post('http://localhost:8080/api/admin/customer', values).then(function (response) {
             console.log('response from the backend', response);
             if (response.status === 200) {
