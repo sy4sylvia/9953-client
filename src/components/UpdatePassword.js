@@ -7,7 +7,7 @@ import axios from 'axios';
 import 'antd/dist/antd.css';
 import '../index.css';
 
-const changePasswordURL = 'http://localhost:8080/api/admin/customer/change-password';
+const updatePasswordURL = 'http://localhost:8080/api/admin/customer/update-password';
 // TODO: add bearer token to stop receiving 401 errors
 //https://stackoverflow.com/questions/53495922/error-request-failed-with-status-code-401-axios-in-react-js
 
@@ -23,7 +23,7 @@ const UpdatePassword = () => {
 
         console.log(values);
 
-        axios.post(changePasswordURL, values).then(function (response) {
+        axios.post(updatePasswordURL, values).then(function (response) {
             console.log(response);
             if (response.status === 200) {
                 navigate('/account'); // navigate to the home page

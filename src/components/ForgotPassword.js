@@ -13,13 +13,14 @@ const ForgotPassword = () => {
     localStorage.clear();
 
     const [form] = Form.useForm();
-
     const navigate = useNavigate();
 
     const submitEmail = (values) => {
         console.log(values);
+        // localStorage.setItem('resetToken', 'hard-coded-reset-token-test-purpose');
         // TODO: POST, if 200
-        navigate('/change-password');
+        // navigate(`/change-password/${localStorage.getItem('resetToken')}`);
+        navigate('/change-password/hard-coded-reset-token-test-purpose');
     }
 
     const onCreate = (values) => {
