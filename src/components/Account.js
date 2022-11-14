@@ -1,14 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {Button, Card, Divider, Typography} from 'antd';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import UserService from '../services/user.service';
 import EventBus from '../common/EventBus';
 
 const { Title } = Typography;
+const customerBaseURL = 'http://localhost:8080/api/admin/customer';
 
 const Account = () => {
     const navigate = useNavigate();
+    const curCustomerId = localStorage.getItem('customerId');
+    const [curEmail, setCurEmail] = useState();
+    const [curFirstName, setCurFirstName] = useState();
+    const [curLastName, setCurLastName] = useState();
+
+    // TODO: need to carry the bearer token to GET, otherwise 401 erroe
+    axios.get(customerBaseURL +'/' + curCustomerId).then(function (response) {
+        console.log('response from the backend', response);
+        if (response.status === 200) {
+            setCurEmail(response.data.email);
+            setCurFirstName(response.data.firstName);
+            setCurLastName(response.data.lastName);
+        } else {
+            alert('Invalid Info');
+            navigate('/login');
+        }
+    }).catch(function (error) {
+        console.log(error);
+        alert(error);
+    });
 
     // const [content, setContent] = useState('');
     // useEffect(() => {
@@ -48,9 +70,9 @@ const Account = () => {
                 <Card>
                     Account Info
                     <Divider />
-                    Name: Justin Ritter
+                    Name: {curFirstName} {curLastName}
                     <Divider />
-                    Email: jritter@gmail.com
+                    Email: {curEmail}
                 </Card>
             </div>
             <div
@@ -61,6 +83,7 @@ const Account = () => {
             >
                 <Button
                     style={{right: '20px'}}
+                    onClick={() => {navigate('/edit-info')} }
                 >
                     Edit Info
                 </Button>
