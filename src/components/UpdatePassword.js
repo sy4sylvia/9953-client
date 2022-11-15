@@ -8,14 +8,16 @@ import 'antd/dist/antd.css';
 import '../index.css';
 
 const updatePasswordURL = 'http://localhost:8080/api/admin/customer/update-password';
-// TODO: add bearer token to stop receiving 401 errors
-//https://stackoverflow.com/questions/53495922/error-request-failed-with-status-code-401-axios-in-react-js
 
 const UpdatePassword = () => {
     const navigate = useNavigate();
 
-    // TODO: grab the token from the URL and add it as part of the JSON and send back to backend
+    console.log('token', localStorage.getItem('authorization'));
+
     const onUpdatePassword = (values) => {
+        // Set the bearer token
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
         const curCustomerId = localStorage.getItem('customerId');
         values = Object.assign({'customerId': curCustomerId}, values);
 
@@ -23,7 +25,7 @@ const UpdatePassword = () => {
 
         console.log(values);
 
-        axios.post(updatePasswordURL, values).then(function (response) {
+        axios.put(updatePasswordURL, values).then(function (response) {
             console.log(response);
             if (response.status === 200) {
                 navigate('/account'); // navigate to the home page
