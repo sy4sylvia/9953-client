@@ -1,10 +1,37 @@
 import React from 'react';
 import {Button, Card, Col, Divider, Row, Typography} from 'antd';
 import { PlusOutlined} from '@ant-design/icons';
+import axios from 'axios';
+import {useNavigate} from "react-router-dom";
 
 const { Title } = Typography;
 
+const addressBaseURL = 'http://localhost:8080/customer/addresses';
+const curCustomerId = localStorage.getItem('customerId');
+
 const AddressBook = () => {
+
+    const navigate = useNavigate();
+
+    // Set the bearer token
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+    axios.get(addressBaseURL +'?customerId=' + curCustomerId)
+        .then(function (response) {
+            console.log('response from the backend', response);
+            if (response.status === 200) {
+                // setCurEmail(response.data.email);
+                // setCurFirstName(response.data.firstName);
+                // setCurLastName(response.data.lastName);
+            } else {
+                alert('Invalid Info');
+                navigate('/login');
+            }
+        }).catch(function (error) {
+        console.log(error);
+        alert(error);
+    });
+
     return (
         <div>
             <div style={{padding: '80px 120px'}}>
@@ -14,12 +41,15 @@ const AddressBook = () => {
                     <Col span={8}>
                         <Card>
                            <Title><PlusOutlined /></Title>
-                            <Title level={5}>Add Address</Title>
+                            <Title
+                                level={5}
+                                onClick={() => navigate('/add-address')}
+                            >Add Address</Title>
                         </Card>
                     </Col>
                     <Col span={8}>
                         <Card>
-                            <Title level={3}>Primary Address</Title>
+                            <Title level={4}>Primary Address</Title>
                             <Divider />
                             jritter@gmail.com <br/>
                             Justin Ritter <br/>
@@ -36,7 +66,7 @@ const AddressBook = () => {
                     </Col>
                     <Col span={8}>
                         <Card>
-                            <Title level={3}>Additional Address</Title>
+                            <Title level={4}>Additional Address</Title>
                             <Divider />
                             britter@gmail.com <br/>
                             Bob Ritter <br/>
@@ -66,6 +96,7 @@ const AddressBook = () => {
                 </Button>
                 <Button
                     style={{left: '20px'}}
+                    onClick={() => {localStorage.clear()}}
                 >
                     Sign Out
                 </Button>
