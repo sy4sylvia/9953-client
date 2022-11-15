@@ -22,24 +22,13 @@ const EditInfo = () => {
     const submitEditForm = (values) => {
         console.log(values);
 
-        console.log(customerBaseURL +'/' + curCustomerId);
+        // Set the bearer token
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
         axios.put(customerBaseURL +'/' + curCustomerId, values)
             .then(function (response) {
-                console.log(response);
-                console.log(response.data.customerId);
-                localStorage.setItem('customerId', response.data.customerId);
-
-                // response.data contains: customerId, firstName, lastName
-                // TODO: need to take the  bearer token
-                // console.log(response.headers);
-
-                // if (response.data.accessToken) {
-                //     localStorage.setItem('user', JSON.stringify(response.data));
-                // }
-
                 if (response.status === 200) {
-                    navigate('/account');
+                    navigate('/');
                 }
             })
             .catch(function (error) {
