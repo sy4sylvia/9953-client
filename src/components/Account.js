@@ -16,21 +16,24 @@ const Account = () => {
     const [curFirstName, setCurFirstName] = useState();
     const [curLastName, setCurLastName] = useState();
 
-    // TODO: need to carry the bearer token to GET, otherwise 401 erroe
-    axios.get(customerBaseURL +'/' + curCustomerId).then(function (response) {
-        console.log('response from the backend', response);
-        if (response.status === 200) {
-            setCurEmail(response.data.email);
-            setCurFirstName(response.data.firstName);
-            setCurLastName(response.data.lastName);
-        } else {
-            alert('Invalid Info');
-            navigate('/login');
-        }
-    }).catch(function (error) {
-        console.log(error);
-        alert(error);
-    });
+    // Set the bearer token
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+    axios.get(customerBaseURL +'/' + curCustomerId)
+        .then(function (response) {
+            console.log('response from the backend', response);
+            if (response.status === 200) {
+                setCurEmail(response.data.email);
+                setCurFirstName(response.data.firstName);
+                setCurLastName(response.data.lastName);
+            } else {
+                alert('Invalid Info');
+                navigate('/login');
+            }
+        }).catch(function (error) {
+            console.log(error);
+            alert(error);
+        });
 
     // const [content, setContent] = useState('');
     // useEffect(() => {

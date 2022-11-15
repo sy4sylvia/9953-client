@@ -18,26 +18,23 @@ const Login = () => {
 
     const submitLoginForm = (values) => {
         console.log(values);
-
         // Set old password in case the user wants to update the password
         localStorage.setItem('oldPassword', values.password);
 
         axios.post(loginURL, values)
             .then(function (response) {
                 console.log(response);
-                console.log(response.data.customerId);
+
                 localStorage.setItem('customerId', response.data.customerId);
+                localStorage.setItem('firstName', response.data.firstName);
 
                 // response.data contains: customerId, firstName, lastName
-                // TODO: need to take the  bearer token
-                // console.log(response.headers);
 
-                // if (response.data.accessToken) {
-                //     localStorage.setItem('user', JSON.stringify(response.data));
-                // }
+                // Store the bearer token in the local storage
+                localStorage.setItem('authorization', response.headers.authorization);
 
                 if (response.status === 200) {
-                    navigate('/account');
+                    navigate('/');
                 }
             })
             .catch(function (error) {
