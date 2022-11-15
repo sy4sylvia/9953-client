@@ -22,6 +22,7 @@ import Order from './components/Order';
 import Account from './components/Account';
 import EditInfo from './components/EditInfo';
 import AddressBook from './components/AddressBook';
+import AddAddress from './components/AddAddress';
 import OrderHistory from './components/OrderHistory';
 import Test from './components/Test';
 
@@ -39,7 +40,7 @@ function App() {
                 <Route exact path = '/register' element={<Register />} />
                 <Route exact path = '/login' element={<Login />} />
                 <Route exact path = '/forgot-password' element={<ForgotPassword />} />
-                <Route path = '/change-password/:resetToken' element={<ChangePassword />} />
+                <Route path = '/change-password' element={<ChangePassword />} />
                 <Route exact path = '/search' element={<SearchResults />} />
                 <Route exact path = '/product' element={<Product/>} />
                 <Route exact path = '/cart' element={<Cart />} />
@@ -51,6 +52,7 @@ function App() {
                 <Route exact path = '/edit-info' element={<EditInfo />} />
                 <Route exact path = '/update-password' element={<UpdatePassword />} />
                 <Route exact path = '/address-book' element={<AddressBook />} />
+                <Route exact path = '/add-address' element={<AddAddress />} />
                 <Route exact path = '/order-history' element={<OrderHistory />} />
                 <Route exact path='/test' element={<Test />} />
             </Routes>

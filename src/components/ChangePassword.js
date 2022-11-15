@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, Form, Input } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -11,21 +11,23 @@ const changePasswordURL = 'http://localhost:8080/api/admin/customer/change-passw
 
 const ChangePassword = () => {
     localStorage.clear();
+    const [searchParams] = useSearchParams();
 
     const navigate = useNavigate();
-    const { resetToken } = useParams();
-    console.log(resetToken);
+    const tokenFromEmail = searchParams.get('token')
 
-    // TODO: fix the 401 error, no bearer token in this case
+    //Set the new bearer token
+    localStorage.setItem('authorization', tokenFromEmail);
+
     const onResetPassword = (values) => {
         delete values.passwordDuplicate;
-        values = Object.assign({resetToken}, values);
+        values = Object.assign({'resetToken': tokenFromEmail}, values);
         console.log(values);
 
         axios.post(changePasswordURL, values).then(function (response) {
             console.log(response);
             if (response.status === 200) {
-                navigate('/account'); // navigate to the home page
+                navigate('/'); // navigate to the home page
             } else {
                 alert('Failed');
             }
@@ -56,7 +58,15 @@ const ChangePassword = () => {
                         {
                             required: true,
                             message: 'Please input your new password.'
-                        }
+                        },
+                        () => ({
+                            validator(_, value) {
+                                if (value.length >= 8 && value.length < 20) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('The length of the password must be between 8 and 20'));
+                            },
+                        }),
                     ]}
                 >
                     <Input.Password />
