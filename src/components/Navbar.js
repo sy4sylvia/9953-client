@@ -1,4 +1,4 @@
-import React,  { useState } from 'react';
+import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
@@ -22,10 +22,18 @@ function Navbar(NavBarProps) {
     const [searchOptions, setSearchOptions] = useState([]);
 
     const navigate = useNavigate();
+    const curFirstName = localStorage.getItem('firstName');
 
-    const gotoPage = (path) => {
-        navigate(path);
-    };
+    let greeting = '';
+    let accountDisabled = true;
+    let loginDisabled = true;
+
+    if (curFirstName !== null) {
+        // already logged in
+        greeting = 'Hi, ' + curFirstName;
+        accountDisabled = false;
+        loginDisabled = true;
+    }
 
     const onSearch = (searchText) => {
         setSearchOptions(
@@ -39,6 +47,13 @@ function Navbar(NavBarProps) {
         setSearchVal(data);
     };
 
+    const handleLogout = () => {
+        localStorage.clear();
+        greeting = '';
+        accountDisabled = true;
+        loginDisabled = false;
+    }
+
     return (
         <Row justify='center'>
             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
@@ -47,12 +62,12 @@ function Navbar(NavBarProps) {
                         <Col xl={6} lg={6} md={6} sm={10} xs={10}>
                             <Title
                                    className='awesome-icon'
-                                   code
+                                   keyboard
                                    level={3}
                                    id='title-button'
                             >
                                 <a className={'navbar-title'}
-                                   onClick={() => gotoPage('')}>
+                                   onClick={() => navigate('')}>
                                     Awesome
                                 </a>
                             </Title>
@@ -77,20 +92,50 @@ function Navbar(NavBarProps) {
                                 {/*TODO: icon show or not depends on the token*/}
 
                                 <Menu.SubMenu
+                                    disabled={accountDisabled}
+                                    icon={<UserOutlined style={{fontSize: '1.3rem'}} />}
+                                    key='accountMenu'
+                                    title= {greeting}>
+                                    <Menu.Item
+                                        key='account'
+                                        onClick={() => navigate('/account')}
+                                    >
+                                        My Account
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        key={'address'}
+                                        onClick={() => navigate('/address-book')}
+                                    >
+                                        Address Book
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        key={'order'}
+                                        onClick={() => navigate('/order-history')}
+                                    >
+                                        Order History
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        key={'logout'}
+                                        onClick={handleLogout}
+                                    >
+                                        Log Out
+                                    </Menu.Item>
+                                </Menu.SubMenu>
+
+                                <Menu.SubMenu
                                     className='submenu-navbar'
+                                    disabled={loginDisabled}
                                     key='SubMenu'
-                                    title='Log In / Register'
-                                    // TODO: change the user icon to have other menu items
-                                    icon={<UserOutlined style={{fontSize: '1.3rem'}} />}>
+                                    title='Log In / Register'>
                                     <Menu.Item
                                         key='login'
-                                        onClick = {() => gotoPage('/login')}
+                                        onClick = {() => navigate('/login')}
                                     >
                                         Log In
                                     </Menu.Item>
                                     <Menu.Item
                                         key='register'
-                                        onClick={() => gotoPage('/register')}
+                                        onClick={() => navigate('/register')}
                                     >
                                         Register
                                     </Menu.Item>
@@ -102,13 +147,13 @@ function Navbar(NavBarProps) {
                                     icon={<ShoppingCartOutlined style={{fontSize: '1.3rem'}} />}>
                                     <Menu.Item
                                         key='cart'
-                                        onClick={() => gotoPage('cart')}
+                                        onClick={() => navigate('/cart')}
                                     >
                                        View Cart
                                     </Menu.Item>
                                     <Menu.Item
                                         key={'checkout'}
-                                        onClick={() => gotoPage('checkout')}
+                                        onClick={() => navigate('/checkout')}
                                     >
                                         Checkout
                                     </Menu.Item>
