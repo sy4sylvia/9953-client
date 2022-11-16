@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Table, Button, Typography } from 'antd';
 
 import { COLUMNS, DATA } from './OrderTable'
@@ -8,28 +8,28 @@ import EventBus from "../common/EventBus";
 const { Title } = Typography;
 
 const OrderHistory = () => {
-    const [content, setContent] = useState('');
-    useEffect(() => {
-        UserService.getUserAccount().then(
-            (response) => {
-                setContent(response.data);
-            },
-            (error) => {
-                const _content =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message ||
-                    error.toString();
-
-                setContent(_content);
-
-                if (error.response && error.response.status === 401) {
-                    EventBus.dispatch("logout");
-                }
-            }
-        );
-    }, []);
+    // const [content, setContent] = useState('');
+    // useEffect(() => {
+    //     UserService.getUserAccount().then(
+    //         (response) => {
+    //             setContent(response.data);
+    //         },
+    //         (error) => {
+    //             const _content =
+    //                 (error.response &&
+    //                     error.response.data &&
+    //                     error.response.data.message) ||
+    //                 error.message ||
+    //                 error.toString();
+    //
+    //             setContent(_content);
+    //
+    //             if (error.response && error.response.status === 401) {
+    //                 EventBus.dispatch("logout");
+    //             }
+    //         }
+    //     );
+    // }, []);
 
     return (
         <div>

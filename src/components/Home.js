@@ -1,42 +1,45 @@
-import React, { useState } from 'react';
-import {Carousel, Col, Row} from 'antd';
+import React from 'react';
+import { Typography, Carousel, Col, Image, Row} from 'antd';
 
 import 'antd/dist/antd.css';
+import '../index.css'
+
+import {IMAGEURLS} from './ProductInfo';
+
+const {Title} = Typography;
 
 function Home(){
 
-    const contentStyle = {
-        height: '160px',
-        color: '#fff',
-        lineHeight: '160px',
-        textAlign: 'center',
-        background: '#364d79',
-    };
-
-    const style = {
-        background: '#0092ff',
-        padding: '8px 0',
-    };
-
     return (
         <div>
-            <h1>
-                Home page - content sample
-            </h1>
-
             <div>
-                <Carousel autoplay style={{padding: '150px 250px'}}>
+                <Carousel
+                    autoplay
+                    dotPosition={"bottom"}
+                    style={{padding: '100px'}}>
                     <div>
-                        <h3 style={contentStyle}>1</h3>
+                        <Image
+                            width={400}
+                            src={IMAGEURLS[0]}
+                        />
                     </div>
                     <div>
-                        <h3 style={contentStyle}>2</h3>
+                        <Image
+                            width={400}
+                            src={IMAGEURLS[1]}
+                        />
                     </div>
                     <div>
-                        <h3 style={contentStyle}>3</h3>
+                        <Image
+                            width={400}
+                            src={IMAGEURLS[2]}
+                        />
                     </div>
                     <div>
-                        <h3 style={contentStyle}>4</h3>
+                        <Image
+                            width={400}
+                            src={IMAGEURLS[3]}
+                        />
                     </div>
                 </Carousel>
 
@@ -50,26 +53,58 @@ function Home(){
                         }}
                     >
                         <Col className="gutter-row" span={6}>
-                            <div style={style}>product-1</div>
+                            <Image
+                                width={200}
+                                src={IMAGEURLS[0]}
+                            />
+                            <Title
+                                className='product-title'
+                                level={5}
+                            >
+                                Elvarli Wardrobe White
+                            </Title>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div style={style}>product-2</div>
+                            <Image
+                                width={200}
+                                src={IMAGEURLS[1]}
+                            />
+                            <Title
+                                className='product-title'
+                                level={5}
+                            >
+                                Aurdal Wardrobe White
+                            </Title>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div style={style}>product-3</div>
+                            <Image
+                                width={200}
+                                src={IMAGEURLS[2]}
+                            />
+                            <Title
+                                className='product-title'
+                                level={5}
+                            >
+                                Aurdal Wardrobe Light
+                            </Title>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div style={style}>product-4</div>
+                            <Image
+                                width={200}
+                                src={IMAGEURLS[3]}
+                            />
+                            <Title
+                                className='product-title'
+                                level={5}
+                            >
+                                Aurdal Wardrobe Dark
+                            </Title>
                         </Col>
                     </Row>
-
                 </div>
-
             </div>
-
         </div>
-
     )
-};
+}
 
 export default Home;
