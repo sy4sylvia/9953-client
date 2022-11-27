@@ -12,7 +12,6 @@ import {QUESTIONS} from './Options';
 const { Option } = Select;
 const customerBaseURL = 'http://localhost:8080/api/admin/customer';
 
-// TODO: add the bearer token to fix the 401
 const EditInfo = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -27,8 +26,10 @@ const EditInfo = () => {
 
         axios.put(customerBaseURL +'/' + curCustomerId, values)
             .then(function (response) {
+                console.log("updated info response: ", response)
                 if (response.status === 200) {
-                    navigate('/');
+                    // redirect to the login page so that the updated customer info could be posted again
+                    navigate('/login');
                 }
             })
             .catch(function (error) {
