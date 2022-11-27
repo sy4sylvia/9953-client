@@ -3,9 +3,11 @@ import {useNavigate} from 'react-router-dom';
 import {AutoComplete, Button, Card, Col, Form, Input, Row, Select} from 'antd';
 import {City, Country, State} from 'country-state-city';
 import _ from 'lodash';
+import axios from 'axios';
 
 import {MARKET, REGION} from './Options';
-import axios from "axios";
+
+const addAddressURL = 'http://localhost:8080/api/admin/customer/address';
 
 const AddAddress = ({ open, onCreate, onCancel }) => {
     const [form] = Form.useForm();
@@ -40,11 +42,19 @@ const AddAddress = ({ open, onCreate, onCancel }) => {
         cityChildren.push(<Option value={city.name}> {city.name} </Option>);
     })
 
+    // Set the bearer token
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+    const curCustomerId = localStorage.getItem('customerId');
+
+    console.log(curCustomerId);
+
     const submitNewAddressForm = (values) => {
         console.log(values);
-        values = Object.assign({'isPrimary': 'N'}, values);
+        // always change the added address to primary address
+        values = Object.assign({'isPrimary': 'Y'}, values);
+        values = Object.assign({'customerId': curCustomerId}, values);
 
-        axios.post('http://localhost:8080/customer/address', values).then(function (response) {
+        axios.post(addAddressURL, values).then(function (response) {
             console.log('response from the backend', response);
             if (response.status === 200) {
                 navigate('/address-book');
@@ -52,7 +62,6 @@ const AddAddress = ({ open, onCreate, onCancel }) => {
                 alert('Missing info');
             }
         }).catch(function (error) {
-            console.log(error);
             alert(error);
         });
     }
@@ -75,49 +84,6 @@ const AddAddress = ({ open, onCreate, onCancel }) => {
                     modifier: 'public',
                 }}
             >
-                <Form.Item
-                    label='Email'
-                    name='email'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your email.'
-                        }
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Row gutter={8}>
-                    <Col span={12}>
-                        <Form.Item
-                            label='First Name'
-                            name='firstName'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your first name.'
-                                }
-                            ]}
-                        >
-                            <Input type = 'textarea' />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
-                            label='Last Name'
-                            name='lastName'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your last name.'
-                                }
-                            ]}
-                        >
-                            <Input type = 'textarea' />
-                        </Form.Item>
-                    </Col>
-                </Row>
 
                 <Row gutter={8}>
                     <Col span={12}>

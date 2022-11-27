@@ -1,36 +1,31 @@
 import React from 'react';
 import {Button, Card, Col, Divider, Row, Typography} from 'antd';
 import { PlusOutlined} from '@ant-design/icons';
-import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
 const { Title } = Typography;
 
-const addressBaseURL = 'http://localhost:8080/customer/addresses';
-const curCustomerId = localStorage.getItem('customerId');
 
 const AddressBook = () => {
 
     const navigate = useNavigate();
 
-    // Set the bearer token
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
-
-    axios.get(addressBaseURL +'?customerId=' + curCustomerId)
-        .then(function (response) {
-            console.log('response from the backend', response);
-            if (response.status === 200) {
-                // setCurEmail(response.data.email);
-                // setCurFirstName(response.data.firstName);
-                // setCurLastName(response.data.lastName);
-            } else {
-                alert('Invalid Info');
-                navigate('/login');
-            }
-        }).catch(function (error) {
-        console.log(error);
-        alert(error);
-    });
+    //
+    // axios.get(addressBaseURL +'?customerId=' + curCustomerId)
+    //     .then(function (response) {
+    //         console.log('response from the backend', response);
+    //         if (response.status === 200) {
+    //             // setCurEmail(response.data.email);
+    //             // setCurFirstName(response.data.firstName);
+    //             // setCurLastName(response.data.lastName);
+    //         } else {
+    //             alert('Invalid Info');
+    //             navigate('/login');
+    //         }
+    //     }).catch(function (error) {
+    //     console.log(error);
+    //     alert(error);
+    // });
 
     return (
         <div>
@@ -39,13 +34,18 @@ const AddressBook = () => {
 
                 <Row>
                     <Col span={8}>
-                        <Card>
-                           <Title><PlusOutlined /></Title>
+                        <Button
+                            onClick={() => navigate('/add-address')}
+                            style={{
+                                height: '300px',
+                                width: '300px',
+                        }}
+                        >
+                            <Title><PlusOutlined /></Title>
                             <Title
                                 level={5}
-                                onClick={() => navigate('/add-address')}
                             >Add Address</Title>
-                        </Card>
+                        </Button>
                     </Col>
                     <Col span={8}>
                         <Card>
