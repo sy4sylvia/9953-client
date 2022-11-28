@@ -23,7 +23,6 @@ function Navbar(NavBarProps) {
 
     const navigate = useNavigate();
     const curFirstName = localStorage.getItem('firstName');
-    console.log(curFirstName);
 
     let greeting = '';
     let accountDisabled = true;

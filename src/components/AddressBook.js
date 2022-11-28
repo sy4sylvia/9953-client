@@ -91,6 +91,7 @@ const AddressBook = () => {
             >
                 <Button
                     style={{right: '20px'}}
+                    onClick={() => {navigate('/account')}}
                 >
                     Back to My Account
                 </Button>
