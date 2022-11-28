@@ -167,13 +167,10 @@ const Results = () => {
                 onChange={handleTableChange}
                 onRow={(record) => {
                     return {
+                        // click row
                         onClick: () => {
                             fetchSingleProduct(record.id);
-                        }, // click row
-                        // onDoubleClick: event => {}, // double click row
-                        // onContextMenu: event => {}, // right button click row
-                        // onMouseEnter: event => {}, // mouse enter row
-                        // onMouseLeave: event => {}, // mouse leave row
+                        },
                     };
                 }}
             />

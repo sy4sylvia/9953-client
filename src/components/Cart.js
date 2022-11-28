@@ -1,12 +1,12 @@
-import React  from 'react';
-import {Typography, Select, Button, Row, Col, Divider, Breadcrumb} from 'antd';
+import React, {useState} from 'react';
+import {Typography, Button, Row, Col, Divider, Breadcrumb} from 'antd';
 import {useNavigate} from 'react-router-dom';
 
 import 'antd/dist/antd.css';
-
-import { QUANTITY } from './Options';
+import axios from "axios";
 
 const { Title } = Typography;
+const cartURL = 'http://localhost:8080/api/cart';
 
 const Cart = () => {
 
@@ -17,25 +17,47 @@ const Cart = () => {
         textAlign: 'center',
     };
 
-    const handleChange = (value) => {
-        console.log(`selected ${value}`);
-    };
-
     const navigate = useNavigate();
 
-    const gotoPage = (path) => {
-        navigate(path);
-    };
+    const curCustomerId = localStorage.getItem('customerId');
+    const [cartItems, setCartItems] = useState(null);
+    const productNames=  [];
+    const quantities = [];
+    const prices = [];
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+    if (cartItems === null) {
+        axios.get(cartURL +'/' + curCustomerId)
+            .then(function (response) {
+                if (response.status === 200) {
+                    setCartItems(response.data);
+                } else {
+                    alert('Please log in to view your cart.');
+                    navigate('/login');
+                }
+            }).catch(function (error) {
+            console.log(error);
+            alert(error);
+        });
+    }
+
+    if (cartItems !== null) {
+        for (let i = 0; i < cartItems.length; i++) {
+            productNames.push(cartItems[i].productName);
+            quantities.push(cartItems[i].quantity);
+            prices.push(cartItems[i].unitPrice);
+        }
+    }
 
     return (
         <div>
-            <div  style={{padding: '40px 60px 0 60px'}}>
+            <div style={{padding: '40px 60px 0 60px'}}>
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item href='/cart' >Cart</Breadcrumb.Item>
                 </Breadcrumb>
             </div>
         <div style={{padding: '120px 120px'}} >
-
             <Row
                 gutter={{
                     xs: 8,
@@ -51,86 +73,25 @@ const Cart = () => {
                         </Col>
                         <Col span={6}>
                             <Title level = {4}>
-                                Stool, Red
+                                {productNames[0]}
                             </Title>
                         </Col>
                         <Col span={4} />
                         <Col span={8}>
                             <Col>
                                 <Title level = {5}>
-                                    $155
+                                    ${prices[0] * quantities[0]}
                                 </Title>
                             </Col>
-                            <Col style={{
-                                right: '5px',
-                                width: '20%'}}>
-
-                                <Row>
-                                    <Col style={{left: '20px', width: '80%'}}>
-                                        Quantity:
-                                    </Col>
-                                    <Col span ={1}>
-                                        {/*TODO: this quantity should be retrieved from */}
-                                        {/*previous add to cart action*/}
-                                        <Select
-                                            defaultValue='1'
-                                            style={{
-                                                left: '50px',
-                                                right: 0,
-                                            }}
-                                            onChange={handleChange}
-                                            options={QUANTITY}
-                                        />
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Col>
-                    </Row>
-                    <Divider />
-
-{/*Repetitive codes:*/}
-                    <Row>
-                        <Col span={6}>
-                            <h3 style={style}>Product Image</h3>
-                        </Col>
-                        <Col span={6}>
-                            <Title level = {4}>
-                                Stool, Red
-                            </Title>
-                        </Col>
-                        <Col span={4} />
-                        <Col span={8}>
                             <Col>
                                 <Title level = {5}>
-                                    $255
+                                    Quantity: {quantities[0]}
                                 </Title>
-                            </Col>
-                            <Col style={{
-                                right: '5px',
-                                width: '20%'}}>
-
-                                <Row>
-                                    <Col style={{left: '20px', width: '80%'}}>
-                                        Quantity:
-                                    </Col>
-                                    <Col span ={1}>
-                                        {/*TODO: this quantity should be retrieved from */}
-                                        {/*previous add to cart action*/}
-                                        <Select
-                                            defaultValue='1'
-                                            style={{
-                                                left: '50px',
-                                                right: 0,
-                                            }}
-                                            onChange={handleChange}
-                                            options={QUANTITY}
-                                        />
-                                    </Col>
-                                </Row>
                             </Col>
                         </Col>
                     </Row>
                     <Divider />
+
                 </Col>
 
 
@@ -157,7 +118,7 @@ const Cart = () => {
                     <Button
                         block
                         type='primary'
-                        onClick={() => gotoPage('/checkout')}
+                        onClick={() => navigate('/checkout')}
                     >
                         Checkout
                     </Button>
