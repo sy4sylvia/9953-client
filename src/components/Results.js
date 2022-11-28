@@ -8,6 +8,7 @@ import { FURNITURE, OFFICE, TECHNOLOGY } from './CategoryItems'
 const { Title } = Typography;
 
 const searchURL = 'http://localhost:8080/api/product/search';
+const productURL = 'http://localhost:8080/api/product/';
 
 const getItem = (text, value) => {
     return { text, value,};
@@ -33,6 +34,7 @@ const columns = [
     {
         title: 'Product Name',
         dataIndex: 'productName',
+        render: (text) => <a onClick={() => console.log('clicked')}>{text}</a>,
         sorter: (a, b) => a.productName.length - b.productName.length,
     },
     {
@@ -125,6 +127,21 @@ const Results = () => {
         fetchProducts();
     }, [JSON.stringify(tableParams)]);
 
+    const fetchSingleProduct = (productId) => {
+        console.log('called fetchSingleProduct');
+        axios.get(productURL + productId)
+            .then(function (response) {
+                if (response.status === 200) {
+                    // stringify the object and store in the local storage
+                    localStorage.setItem('curProduct', JSON.stringify(response.data));
+                    navigate('/product');
+                } else {
+                    alert('Please log in before you search for a product.');
+                    navigate('/login');
+                }
+            }).catch((error) => alert(error));
+    };
+
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
             pagination,
@@ -148,6 +165,17 @@ const Results = () => {
                 pagination={tableParams.pagination}
                 loading={loading}
                 onChange={handleTableChange}
+                onRow={(record) => {
+                    return {
+                        onClick: () => {
+                            fetchSingleProduct(record.id);
+                        }, // click row
+                        // onDoubleClick: event => {}, // double click row
+                        // onContextMenu: event => {}, // right button click row
+                        // onMouseEnter: event => {}, // mouse enter row
+                        // onMouseLeave: event => {}, // mouse leave row
+                    };
+                }}
             />
         </div>
     )

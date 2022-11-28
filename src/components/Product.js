@@ -1,14 +1,21 @@
 import React from 'react';
 import {Typography, Select, Button, Row, Col, Divider} from 'antd';
 
-import 'antd/dist/antd.css';
-
 import { QUANTITY } from './Options';
+
+import 'antd/dist/antd.css';
 
 const { Title } = Typography;
 
 const Product = () => {
 
+    const curProduct = JSON.parse(localStorage.getItem('curProduct'));
+
+    const productName = curProduct.productName;
+    const unitPrice = curProduct.unitPrice;
+    const discount = curProduct.discount;
+
+    // TODO: change the product image
     const contentStyle = {
         height: '240px',
         color: '#fff',
@@ -41,8 +48,8 @@ const Product = () => {
                 </Col>
                 <Col className="gutter-row" span={8}>
                     <div>
-                        <Title level = {3}>
-                            Stool 1
+                        <Title level = {3} italic ={true}>
+                            {productName}
                         </Title>
                     </div>
 
@@ -51,11 +58,18 @@ const Product = () => {
                     <div>
                         <Title level = {3}>
                             {/*TODO: if on sale, change color to red*/}
-                            $200
+                            ${unitPrice}
                         </Title>
                     </div>
 
                     <Divider />
+
+                    {/*<div>*/}
+                    {/*    <Typography.Paragraph type ='danger'>*/}
+                    {/*        {discount}*/}
+                    {/*    </Typography.Paragraph>*/}
+                    {/*    <Divider />*/}
+                    {/*</div>*/}
 
                     <div>
                         <Title level = {5}>
