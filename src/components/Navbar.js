@@ -104,7 +104,7 @@ function Navbar(NavBarProps) {
                                     </Menu.Item>
                                     <Menu.Item
                                         key={'address'}
-                                        onClick={() => navigate('/address-book')}
+                                        onClick={() => navigate('/addresses')}
                                     >
                                         Address Book
                                     </Menu.Item>
