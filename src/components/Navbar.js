@@ -46,20 +46,21 @@ function Navbar(NavBarProps) {
     const onSearch = (searchText) => {
         console.log(searchText);
 
+        localStorage.setItem('searchText', searchText);
 
         // connect to the backend
-
-        // axios.get(searchURL, {params: {q: searchText}})
-        //     .then(function (response) {
-        //         console.log('response from the backend', response);
-        //         if (response.status === 200) {
-        //             console.log(response.data);
-        //             navigate('/results');
-        //         } else {
-        //             alert('Please log in before you search for a product.');
-        //             navigate('/login');
-        //         }
-        //     }).catch((error) => alert(error));
+        axios.get(searchURL, {params: {q: searchText}})
+            .then(function (response) {
+                console.log('navbar search bar response from the backend', response);
+                if (response.status === 200) {
+                    console.log(response.data);
+                    // populate all the data into the table
+                    navigate('/results');
+                } else {
+                    alert('Please log in before you search for a product.');
+                    navigate('/login');
+                }
+            }).catch((error) => alert(error));
     };
 
     const onSelect = (value) => console.log(value);

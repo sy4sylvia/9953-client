@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Table, Typography} from 'antd';
-import { FURNITURE, OFFICE, TECHNOLOGY } from './CategoryItems'
 import _ from 'lodash';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
+import { FURNITURE, OFFICE, TECHNOLOGY } from './CategoryItems'
 const { Title } = Typography;
 
-function getItem(text, value) {
-    return {
-        text,
-        value,
-    };
+const searchURL = 'http://localhost:8080/api/product/search';
+
+const getItem = (text, value) => {
+    return { text, value,};
 }
 
 const furnitureChildren = [];
@@ -28,7 +29,6 @@ _.forEach(TECHNOLOGY, function(obj) {
     techChildren.push(getItem(obj.label, obj.key));
 });
 
-
 const columns = [
     {
         title: 'Product Name',
@@ -42,28 +42,7 @@ const columns = [
             {
                 text: 'Furniture',
                 value: 'Furniture',
-                children: [
-                    {
-                        text: 'All',
-                        value: 'Furniture',
-                    },
-                    {
-                        text: 'Bookcases',
-                        value: 'Bookcases',
-                    },
-                    {
-                        text: 'Chairs',
-                        value: 'Chairs',
-                    },
-                    {
-                        text: 'Furnishings',
-                        value: 'Furnishings',
-                    },
-                    {
-                        text: 'Tables',
-                        value: 'Tables',
-                    },
-                ]
+                children: furnitureChildren
             },
             {
                 text: 'Office',
@@ -81,6 +60,8 @@ const columns = [
             if (value === 'Furniture' || value === 'Office' || value === 'Technology') {
                 console.log('record category', record.category);
                 return record.category.indexOf(value) === 0;
+            } else {
+                return record.subcategory.indexOf(value) === 0;
             }
         }
     },
@@ -98,44 +79,60 @@ const columns = [
 
 ];
 
-const data = [
-    {
-        key: '1',
-        productName: 'John Brown',
-        unitPrice: 32,
-        discount: 0.4,
-        category: 'Office',
-        subcategory: 'New York No. 1 Lake Park',
-    },
-    {
-        key: '2',
-        productName: 'Jim Green',
-        unitPrice: 42,
-        discount: 0.4,
-        category: 'Office',
-        subcategory: 'Tables London No. 1 Lake Park',
-    },
-    {
-        key: '3',
-        productName: 'Joe Black',
-        unitPrice: 32,
-        discount: 0.4,
-        category: 'Furniture',
-        subcategory: 'Furniture Sidney No. 1 Lake Park',
-    },
-    {
-        key: '4',
-        productName: 'Jim Red',
-        unitPrice: 32,
-        discount: 0.4,
-        category: 'Furniture',
-        subcategory: 'London No. 2 Lake Park',
-    },
-];
-const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
-};
 const Results = () => {
+    const navigate = useNavigate();
+
+    const [data, setData] = useState();
+    const [loading, setLoading] = useState(false);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: 10,
+        },
+    });
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+    const searchText = localStorage.getItem('searchText');
+
+    const fetchProducts = () => {
+        console.log('called');
+        setLoading(true);
+        axios.get(searchURL, {params: {q: searchText}})
+            .then(function (response) {
+                console.log('response on the results page axios', response);
+                if (response.status === 200) {
+                    setData(response.data);
+                    setLoading(false);
+                    setTableParams({
+                        ...tableParams,
+                        pagination: {
+                            ...tableParams.pagination,
+                            total: response.data.length, // total count before the filter
+                        },
+                    });
+                    //refresh the page if already at the /results
+                    navigate('/results');
+                    // window.location.reload();
+                } else {
+                    alert('Please log in before you search for a product.');
+                    navigate('/login');
+                }
+            }).catch((error) => alert(error));
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, [JSON.stringify(tableParams)]);
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+    };
+
     return (
         <div>
             <Title
@@ -145,7 +142,13 @@ const Results = () => {
             >
                 Search Results
             </Title>
-            <Table columns={columns} dataSource={data} onChange={onChange} />
+            <Table
+                columns={columns}
+                dataSource={data}
+                pagination={tableParams.pagination}
+                loading={loading}
+                onChange={handleTableChange}
+            />
         </div>
     )
 };
