@@ -14,6 +14,7 @@ const AddressBook = () => {
     const navigate = useNavigate();
     const [data, setData] = useState(null);
 
+    const shipAddressIds = [];
     const postalCodes = [];
     const cities = [];
     const states = [];
@@ -43,6 +44,7 @@ const AddressBook = () => {
 
     if (data !== null) {
         for (let i = 0; i < data.length; i++) {
+            shipAddressIds.push(data[i].shipAddressId);
             postalCodes.push(data[i].postalCode);
             cities.push(data[i].city);
             states.push(data[i].state);
@@ -54,11 +56,15 @@ const AddressBook = () => {
     }
 
     let primaryIdx = 0;
+    let otherIdx = 1;
     for (let i = 0; i < primaryOptions.length; i++) {
         if (primaryOptions[i] === 'Y') {
             primaryIdx = i;
             break;
         }
+    }
+    if (primaryIdx === 1) {
+        otherIdx = 0;
     }
 
     // const cntAddress = data.length;
@@ -101,12 +107,32 @@ const AddressBook = () => {
                             <Divider />
                             {/*TODO: add onClick functions for the edit / remove*/}
                             <Button
-                                onClick={() => navigate('/edit-address')}
+                                onClick={() =>{
+                                    navigate('/edit-address');
+                                    localStorage.setItem('shipAddressId', shipAddressIds[primaryIdx]);
+                                    localStorage.setItem('isPrimary', 'Y');
+                                }}
                             >
                                 Edit
                             </Button>
                             <Divider type='vertical' />
-                            Remove
+                            <Button
+                                onClick={() => {
+                                    localStorage.setItem('shipAddressId', shipAddressIds[primaryIdx]);
+                                    axios.delete(addressBaseURL + '/' + shipAddressIds[primaryIdx])
+                                        .then(function (response) {
+                                        console.log('response from the backend', response);
+                                        if (response.status === 200) {
+                                            navigate('/addresses')
+                                        } else {
+                                            alert('Invalid Info');
+                                            navigate('/login');
+                                        }
+                                    }).catch((error) => alert(error))}
+                                }
+                            >
+                                Remove
+                            </Button>
                         </Card>
                     </Col>
                     <Col span={8}>
@@ -118,23 +144,41 @@ const AddressBook = () => {
                         >
                             <Title level={4}>Additional Address</Title>
                             <Divider />
-                            Postal Code: {postalCodes[0]}<br/>
-                            City: {cities[0]} <br/>
-                            State: {states[0]} <br/>
-                            Country: {countries[0]} <br/>
-                            Market: {markets[0]} <br/>
-                            Region: {regions[0]} <br/>
+                            Postal Code: {postalCodes[otherIdx]}<br/>
+                            City: {cities[otherIdx]} <br/>
+                            State: {states[otherIdx]} <br/>
+                            Country: {countries[otherIdx]} <br/>
+                            Market: {markets[otherIdx]} <br/>
+                            Region: {regions[otherIdx]} <br/>
                             Is Primary Address: No
                             <Divider />
                             <Button
-                                onClick={() => navigate('/edit-address')}
+                                onClick={() =>{
+                                    navigate('/edit-address');
+                                    localStorage.setItem('shipAddressId', shipAddressIds[otherIdx]);
+                                    localStorage.setItem('isPrimary', 'N');
+                                }}
                             >
                                 Edit
                             </Button>
                             <Divider type='vertical' />
-                            Remove <Divider type='vertical' />
-                            {/*TODO: no such endpoint in the backend*/}
-                            Set as Primary
+                            <Button
+                                onClick={() => {
+                                    localStorage.setItem('shipAddressId', shipAddressIds[otherIdx]);
+                                    axios.delete(addressBaseURL + '/' + shipAddressIds[otherIdx])
+                                        .then(function (response) {
+                                            console.log('response from the backend', response);
+                                            if (response.status === 200) {
+                                                navigate('/addresses')
+                                            } else {
+                                                alert('Invalid Info');
+                                                navigate('/login');
+                                            }
+                                        }).catch((error) => alert(error))}
+                                }
+                            >
+                                Remove
+                            </Button>
                         </Card>
                     </Col>
                 </Row>

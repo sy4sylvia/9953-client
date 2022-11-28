@@ -23,6 +23,7 @@ import Account from './components/Account';
 import EditInfo from './components/EditInfo';
 import AddressBook from './components/AddressBook';
 import AddAddress from './components/AddAddress';
+import EditAddress from './components/EditAddress';
 import OrderHistory from './components/OrderHistory';
 import Test from './components/Test';
 
@@ -51,8 +52,9 @@ function App() {
                 <Route exact path = '/account' element={<Account />} />
                 <Route exact path = '/edit-info' element={<EditInfo />} />
                 <Route exact path = '/update-password' element={<UpdatePassword />} />
-                <Route exact path = '/address-book' element={<AddressBook />} />
+                <Route exact path = '/addresses' element={<AddressBook />} />
                 <Route exact path = '/add-address' element={<AddAddress />} />
+                <Route exact path = '/edit-address' element={<EditAddress />} />
                 <Route exact path = '/order-history' element={<OrderHistory />} />
                 <Route exact path='/test' element={<Test />} />
             </Routes>
