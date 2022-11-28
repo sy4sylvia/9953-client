@@ -92,6 +92,7 @@ function Navbar(NavBarProps) {
         greeting = '';
         accountDisabled = true;
         loginDisabled = false;
+        navigate('/');
     }
 
     return (
