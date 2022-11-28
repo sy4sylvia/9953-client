@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {Typography, Button, Row, Col, Divider, Breadcrumb} from 'antd';
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 
 import 'antd/dist/antd.css';
-import axios from "axios";
 
 const { Title } = Typography;
 const cartURL = 'http://localhost:8080/api/cart';
@@ -88,6 +88,15 @@ const Cart = () => {
                                     Quantity: {quantities[0]}
                                 </Title>
                             </Col>
+                                {/*<Select*/}
+                                {/*    defaultValue={quantities[0]}*/}
+                                {/*    style={{*/}
+                                {/*        width: 120,*/}
+                                {/*    }}*/}
+                                {/*    onChange={handleChange}*/}
+                                {/*    options={QUANTITY}*/}
+                                {/*/>*/}
+                            {/*</Col>*/}
                         </Col>
                     </Row>
                     <Divider />
