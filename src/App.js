@@ -12,7 +12,7 @@ import ForgotPassword from './components/ForgotPassword';
 import ChangePassword from './components/ChangePassword';
 import UpdatePassword from './components/UpdatePassword';
 import Navbar from './components/Navbar';
-import SearchResults from './components/SearchResults';
+import Results from './components/Results';
 import Product from './components/Product';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
@@ -42,7 +42,7 @@ function App() {
                 <Route exact path = '/login' element={<Login />} />
                 <Route exact path = '/forgot-password' element={<ForgotPassword />} />
                 <Route path = '/change-password' element={<ChangePassword />} />
-                <Route exact path = '/search' element={<SearchResults />} />
+                <Route exact path = '/results' element={<Results />} />
                 <Route exact path = '/product' element={<Product/>} />
                 <Route exact path = '/cart' element={<Cart />} />
                 <Route exact path = '/checkout' element={<Checkout />} />

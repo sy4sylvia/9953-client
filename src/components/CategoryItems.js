@@ -1,10 +1,9 @@
-import React  from 'react';
 import 'antd/dist/antd.css';
 
 const FURNITURE = [
     {
         label: 'All',
-        key: 'FurnitureAll',
+        key: 'Furniture',
     },
     {
         label: 'Bookcases',
@@ -27,7 +26,7 @@ const FURNITURE = [
 const OFFICE = [
     {
         label: 'All',
-        key: 'OfficeAll',
+        key: 'Office',
     },
     {
         label: 'Appliances',
@@ -70,7 +69,7 @@ const OFFICE = [
 const TECHNOLOGY = [
     {
         label: 'All',
-        key: 'TechnologyAll',
+        key: 'Technology',
     },
     {
         label: 'Accessories',

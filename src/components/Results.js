@@ -1,11 +1,9 @@
 import React from 'react';
-import { Table } from 'antd';
+import {Table, Typography} from 'antd';
 import { FURNITURE, OFFICE, TECHNOLOGY } from './CategoryItems'
 import _ from 'lodash';
 
-const furnitureChildren = [];
-const officeChildren = [];
-const techChildren = [];
+const { Title } = Typography;
 
 function getItem(text, value) {
     return {
@@ -13,6 +11,10 @@ function getItem(text, value) {
         value,
     };
 }
+
+const furnitureChildren = [];
+const officeChildren = [];
+const techChildren = [];
 
 _.forEach(FURNITURE, function(obj) {
     furnitureChildren.push(getItem(obj.label, obj.key));
@@ -133,5 +135,18 @@ const data = [
 const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
 };
-const Test = () => <Table columns={columns} dataSource={data} onChange={onChange} />;
-export default Test;
+const Results = () => {
+    return (
+        <div>
+            <Title
+                style={{
+                    marginTop: '36px',
+                }}
+            >
+                Search Results
+            </Title>
+            <Table columns={columns} dataSource={data} onChange={onChange} />
+        </div>
+    )
+};
+export default Results;

@@ -7,7 +7,7 @@ import { FURNITURE, OFFICE, TECHNOLOGY } from './CategoryItems'
 const _ = require('lodash');
 
 const { Title } = Typography;
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 const style = {
     background: '#0092ff',
@@ -55,24 +55,24 @@ const SearchResults = () => {
         >
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                 <div className="logo" />
-                {/*TODO: choose the color of the title and move down a bit */}
-                <Title level={5} type = 'success'> Category </Title>
+                TODO: choose the color of the title and move down a bit
+                {/*<Title level={5} type = 'success'> Category </Title>*/}
                 <Menu
                     theme='dark' defaultSelectedKeys={['furniture']} mode="inline" items={items} />
             </Sider>
             <Layout className="site-layout">
-                <Header
-                    className="site-layout-background"
-                    style={{
-                        padding: 0,
-                    }}
-                />
                 <Content
                     style={{
                         margin: '0 16px',
                     }}
                 >
-                    <Title> Search Results </Title>
+                    <Title
+                        style={{
+                            marginTop: '36px',
+                        }}
+                    >
+                        Search Results
+                    </Title>
 
                     <div
                         className="site-layout-background"

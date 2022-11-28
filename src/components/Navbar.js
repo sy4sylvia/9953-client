@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 
@@ -10,7 +11,14 @@ import './Navbar.css';
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
+const searchURL = 'http://localhost:8080/api/product/search';
+const keywordURL = 'http://localhost:8080/api/product/keyword';
+
 function Navbar(NavBarProps) {
+    // TODO: disable the search bar
+    if (localStorage.getItem('authorization') === null) {
+    }
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
     const mockColors = ['red', 'black', 'blue'];
 
@@ -36,15 +44,46 @@ function Navbar(NavBarProps) {
     }
 
     const onSearch = (searchText) => {
-        setSearchOptions(
-            !searchText ? [] : [mockData(searchText), mockData(searchText, 1), mockData(searchText, 2)],
-        );
+        console.log(searchText);
+
+
+        // connect to the backend
+
+        // axios.get(searchURL, {params: {q: searchText}})
+        //     .then(function (response) {
+        //         console.log('response from the backend', response);
+        //         if (response.status === 200) {
+        //             console.log(response.data);
+        //             navigate('/results');
+        //         } else {
+        //             alert('Please log in before you search for a product.');
+        //             navigate('/login');
+        //         }
+        //     }).catch((error) => alert(error));
     };
 
     const onSelect = (value) => console.log(value);
 
     const onChange = (data) => {
         setSearchVal(data);
+        console.log(data); // one letter by letter
+
+        axios.get(keywordURL, {params: {q: data}})
+            .then(function (response) {
+                console.log('response from the backend', response);
+                if (response.status === 200) {
+                    console.log(response.data.length);
+                    const slicedArray = response.data.slice(0, 5);
+                    console.log(slicedArray);
+                    // setSearchOptions(
+                    //     !slicedArray ? [] : slicedArray,
+                    // );
+                } else {
+                    alert('Please log in before you begin searching.');
+                    navigate('/login');
+                }
+            }).catch((error) => alert(error));
+
     };
 
     const handleLogout = () => {
@@ -79,6 +118,13 @@ function Navbar(NavBarProps) {
                                 defaultSelectedKeys={['account']}
                                 overflowedIndicator={<MenuOutlined />}
                             >
+                                {/*<Input.Search*/}
+                                {/*    className='searchbar-nav'*/}
+                                {/*    placeholder='Search for a product'*/}
+                                {/*    enterButton*/}
+                                {/*    onSearch={onSearch}*/}
+                                {/*/>*/}
+
                                 <AutoComplete
                                     className='searchbar-nav'
                                     value={searchVal}
@@ -86,7 +132,11 @@ function Navbar(NavBarProps) {
                                     onSelect={onSelect}
                                     onSearch={onSearch}
                                     onChange={onChange} >
-                                    <Input.Search placeholder='Search for a product' enterButton />
+                                    <Input.Search
+                                        placeholder='Search for a product'
+                                        enterButton
+                                        onSearch={onSearch}
+                                    />
                                 </AutoComplete>
 
                                 {/*TODO: icon show or not depends on the token*/}
