@@ -1,13 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Table, Button, Typography } from 'antd';
 
 import { COLUMNS, DATA } from './OrderTable'
 import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 
 const { Title } = Typography;
+const orderBaseURL = 'http://localhost:8080/api/order';
 
+const curCustomerId = localStorage.getItem('customerId');
 const OrderHistory = () => {
+    const [data, setData] = useState(null);
+    const navigate = useNavigate();
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+    if (data === null) {
+        axios.get(orderBaseURL, {params: {customerId: curCustomerId}})
+            .then(function (response) {
+                console.log('response from the backend', response);
+                if (response.status === 200) {
+                    console.log(response.data);
+                    setData(response.data);
+                } else {
+                    alert('Invalid Info');
+                    navigate('/login');
+                }
+            }).catch(function (error) {
+            console.log(error);
+            alert(error);
+        });
+    }
     // const [content, setContent] = useState('');
     // useEffect(() => {
     //     UserService.getUserAccount().then(
