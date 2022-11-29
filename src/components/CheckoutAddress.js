@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom';
 
 const { Title } = Typography;
 
-const Checkout = () => {
+const CheckoutAddress = () => {
 
     const [radioVal, setRadioVal] = useState(1);
     const onChangeRadio = (e) => {
@@ -14,9 +14,6 @@ const Checkout = () => {
 
     const navigate = useNavigate();
 
-    const gotoPage = (path) => {
-        navigate(path);
-    };
     return (
         <div>
             <div style={{padding: '40px 60px 0 60px'}} >
@@ -53,7 +50,7 @@ const Checkout = () => {
                                 <Radio.Group onChange={onChangeRadio} value={radioVal}>
                                     <Space direction='vertical'>
                                         <Radio value={1}>
-                                            <Title level={5}>Same Day</Title>
+                                            <Title level={5}>Primary Address</Title>
                                         </Radio>
 
                                         <Card
@@ -88,7 +85,7 @@ const Checkout = () => {
                                         bottom: 0,
                                     }}
                                     type='default'
-                                    onClick={() => gotoPage('/cart')}
+                                    onClick={() => navigate('/cart')}
                                 >
                                     Return to cart
                                 </Button>
@@ -100,7 +97,7 @@ const Checkout = () => {
                                         position: 'absolute',
                                         bottom: 0,
                                     }}
-                                    onClick={() => gotoPage('/shipping-mode')}
+                                    onClick={() => navigate('/shipping-mode')}
                                 >
                                     Continue to shipping
                                 </Button>
@@ -135,5 +132,5 @@ const Checkout = () => {
     );
 }
 
-export default Checkout;
+export default CheckoutAddress;
 

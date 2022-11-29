@@ -50,6 +50,9 @@ const Cart = () => {
         }
     }
 
+    const handleChangeQuantity = (value) => {
+        console.log(value);
+    }
     return (
         <div>
             <div style={{padding: '40px 60px 0 60px'}}>
@@ -68,38 +71,38 @@ const Cart = () => {
             >
                 <Col className="gutter-row" span={16}>
                     <Row>
-                        <Col span={6}>
-                            <h3 style={style}>Product Image</h3>
-                        </Col>
-                        <Col span={6}>
-                            <Title level = {4}>
-                                {productNames[0]}
-                            </Title>
-                        </Col>
+                        <Col span={6}><h3 style={style}>Product Image</h3></Col>
+                        <Col span={6}><Title level = {4}>{productNames[0]}</Title></Col>
                         <Col span={4} />
-                        <Col span={8}>
+                        <Col span={8}><Col><Title level = {5}>${prices[0] * quantities[0]}</Title></Col>
                             <Col>
-                                <Title level = {5}>
-                                    ${prices[0] * quantities[0]}
-                                </Title>
+                                <Title level = {5}>Quantity: {quantities[0]}</Title>
+                                {/*TODO: add the edit window here*/}
+                                {/*<Typography.Paragraph editable={{*/}
+                                {/*    onChange: handleChangeQuantity,*/}
+                                {/*}}>{quantities[0]} </Typography.Paragraph>*/}
                             </Col>
-                            <Col>
-                                <Title level = {5}>
-                                    Quantity: {quantities[0]}
-                                </Title>
-                            </Col>
-                                {/*<Select*/}
-                                {/*    defaultValue={quantities[0]}*/}
-                                {/*    style={{*/}
-                                {/*        width: 120,*/}
-                                {/*    }}*/}
-                                {/*    onChange={handleChange}*/}
-                                {/*    options={QUANTITY}*/}
-                                {/*/>*/}
-                            {/*</Col>*/}
                         </Col>
                     </Row>
                     <Divider />
+
+                    <Row>
+                        <Col span={6}><h3 style={style}>Product Image</h3></Col>
+                        <Col span={6}><Title level = {4}>{productNames[1]}</Title></Col>
+                        <Col span={4} />
+                        <Col span={8}><Col><Title level = {5}>${prices[1] * quantities[0]}</Title></Col>
+                            <Col><Title level = {5}>Quantity: {quantities[1]}</Title></Col>
+                            {/*<Select*/}
+                            {/*    defaultValue={quantities[0]}*/}
+                            {/*    style={{*/}
+                            {/*        width: 120,*/}
+                            {/*    }}*/}
+                            {/*    onChange={handleChange}*/}
+                            {/*    options={QUANTITY}*/}
+                            {/*/>*/}
+                            {/*</Col>*/}
+                        </Col>
+                    </Row>
 
                 </Col>
 
@@ -110,7 +113,7 @@ const Cart = () => {
                 <Col className="gutter-row" span={6}>
                     <div>
                         <Title level = {4}>
-                            Subtotal:
+                            Subtotal: {quantities[0] * prices[0] + quantities[1] * prices[1]}
                             <Divider dashed />
                             Shipping: TBD
                         </Title>
@@ -119,8 +122,8 @@ const Cart = () => {
                     <Divider />
 
                     <div>
-                        <Title level = {3}>
-                            Estimated Total:
+                        <Title level = {4}>
+                            Estimated Total: TBD
                         </Title>
                     </div>
                     <Divider />

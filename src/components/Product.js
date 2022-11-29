@@ -18,7 +18,7 @@ const Product = () => {
     const productId = curProduct.id;
     const productName = curProduct.productName;
     const unitPrice = curProduct.unitPrice;
-    const discount = curProduct.discount;
+    // const discount = curProduct.discount;
 
     // TODO: change the product image
     const contentStyle = {
@@ -105,7 +105,7 @@ const Product = () => {
                             Quantity
                         </Title>
                         <Select
-                            defaultValue='1'
+                            defaultValue='0'
                             style={{
                                 width: 120,
                             }}

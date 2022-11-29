@@ -1,137 +1,98 @@
 import React from 'react';
-import { Table } from 'antd';
-import { FURNITURE, OFFICE, TECHNOLOGY } from './CategoryItems'
-import _ from 'lodash';
+import { Button, Col, Form, Input, Card, Row } from 'antd';
 
-const furnitureChildren = [];
-const officeChildren = [];
-const techChildren = [];
+import 'antd/dist/antd.css';
+import '../index.css';
 
-function getItem(text, value) {
-    return {
-        text,
-        value,
+const Test = () => {
+    const [form] = Form.useForm();
+
+    const submitPaymentForm = (values) => {
+        values = Object.assign({'isPrimary': 'Y'}, values);
+        values = Object.assign({'segment': 'Consumer'}, values);
+        console.log(values);
     };
-}
-
-_.forEach(FURNITURE, function(obj) {
-    furnitureChildren.push(getItem(obj.label, obj.key));
-});
-
-_.forEach(OFFICE, function(obj) {
-    officeChildren.push(getItem(obj.label, obj.key));
-});
-
-_.forEach(TECHNOLOGY, function(obj) {
-    techChildren.push(getItem(obj.label, obj.key));
-});
 
 
-const columns = [
-    {
-        title: 'Product Name',
-        dataIndex: 'productName',
-        sorter: (a, b) => a.productName.length - b.productName.length,
-    },
-    {
-        title: 'Category',
-        dataIndex: 'subcategory',
-        filters: [
-            {
-                text: 'Furniture',
-                value: 'Furniture',
-                children: [
-                    {
-                        text: 'All',
-                        value: 'Furniture',
-                    },
-                    {
-                        text: 'Bookcases',
-                        value: 'Bookcases',
-                    },
-                    {
-                        text: 'Chairs',
-                        value: 'Chairs',
-                    },
-                    {
-                        text: 'Furnishings',
-                        value: 'Furnishings',
-                    },
-                    {
-                        text: 'Tables',
-                        value: 'Tables',
-                    },
-                ]
-            },
-            {
-                text: 'Office',
-                value: 'office',
-                children: officeChildren
-            },
-            {
-                text: 'Technology',
-                value: 'technology',
-                children: techChildren
-            },
-        ],
-        onFilter: (value, record) => {
-            // Filter on the three categories
-            if (value === 'Furniture' || value === 'Office' || value === 'Technology') {
-                console.log('record category', record.category);
-                return record.category.indexOf(value) === 0;
-            }
-        }
-    },
-    {
-        title: 'Discount',
-        dataIndex: 'discount',
-        sorter: (a, b) => a.discount - b.discount,
-    },
-    {
-        title: 'Unit Price',
-        dataIndex: 'unitPrice',
-        defaultSortOrder: 'descend',
-        sorter: (a, b) => a.unitPrice - b.unitPrice,
-    },
+    return (
+        <Card
+            className='card-form-wrapper'
+            title='Payment Information'
+        >
+            <Form
+                className='form-inside-card'
+                form={form}
+                layout='vertical'
+                onFinish={submitPaymentForm}
+                initialValues={{
+                    modifier: 'public',
+                }}
+            >
+                <Row gutter={8}>
+                    <Col span={12}>
+                        <Form.Item
+                            label='MM/YY'
+                            name='creditCardExpiredDate'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input the expired date.'
+                                }
+                            ]}
+                        >
+                            <Input type = 'textarea' />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label='CVV'
+                            name='creditCardCvv'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input the cvv.'
+                                }
+                            ]}
+                        >
+                            <Input.Password />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-];
+                <Form.Item
+                    label='Card Holder'
+                    name='creditCardHolder'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input the card holder name.'
+                        }
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
 
-const data = [
-    {
-        key: '1',
-        productName: 'John Brown',
-        unitPrice: 32,
-        discount: 0.4,
-        category: 'Office',
-        subcategory: 'New York No. 1 Lake Park',
-    },
-    {
-        key: '2',
-        productName: 'Jim Green',
-        unitPrice: 42,
-        discount: 0.4,
-        category: 'Office',
-        subcategory: 'Tables London No. 1 Lake Park',
-    },
-    {
-        key: '3',
-        productName: 'Joe Black',
-        unitPrice: 32,
-        discount: 0.4,
-        category: 'Furniture',
-        subcategory: 'Furniture Sidney No. 1 Lake Park',
-    },
-    {
-        key: '4',
-        productName: 'Jim Red',
-        unitPrice: 32,
-        discount: 0.4,
-        category: 'Furniture',
-        subcategory: 'London No. 2 Lake Park',
-    },
-];
-const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
+                <Form.Item
+                    label='Card Number'
+                    name='creditCardNumber'
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your answer for the security question.'
+                        }
+                    ]}
+                >
+                    <Input type='textarea' />
+                </Form.Item>
+
+                <Form.Item>
+                    <Button type='primary' htmlType='submit'>
+                        Confirm
+                    </Button>
+                </Form.Item>
+            </Form>
+        </Card>
+    );
 };
-const Test = () => <Table columns={columns} dataSource={data} onChange={onChange} />;
+
 export default Test;

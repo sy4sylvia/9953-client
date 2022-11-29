@@ -1,24 +1,171 @@
 import React, {useState} from 'react';
-import {Breadcrumb, Button, Input, Col, Divider, Radio, Row, Space, Typography} from 'antd';
+import {Breadcrumb, Button, Input, Col, Divider, Form, Radio, Row, Space, Typography, Card} from 'antd';
 import {useNavigate} from 'react-router-dom';
-import {CreditCardFilled, EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons';
+import {CreditCardFilled, ExclamationCircleFilled} from '@ant-design/icons';
+import axios from "axios";
 
 const { Title } = Typography;
 
+const addressBaseURL = 'http://localhost:8080/api/admin/customer/address';
+const cartBaseURL = 'http://localhost:8080/api/cart/';
+const orderURL = 'http://localhost:8080/api/order';
+
+const curCustomerId = localStorage.getItem('customerId');
+
+// TODO: on this page, Get product and include these values in the order
 const Payment = () => {
 
-    const [addressVal, setAddressVal] = useState(0);
+    const navigate = useNavigate();
 
+    const [form] = Form.useForm();
+
+    // get primary address
+    let values = null;
+    const [data, setData] = useState(null);
+    const [cart, setCart] = useState(null);
+
+    const postalCodes = [];
+    const cities = [];
+    const states = [];
+    const countries = [];
+    const regions = [];
+    const markets = [];
+    const primaryOptions = [];
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+    if (data === null) {
+        axios.get(addressBaseURL, {params: {customerId: curCustomerId}})
+            .then(function (response) {
+                console.log('response from the backend', response);
+                if (response.status === 200) {
+                    console.log(response.data);
+                    setData(response.data);
+                } else {
+                    alert('Invalid Info');
+                    navigate('/login');
+                }
+            }).catch(function (error) {
+            console.log(error);
+            alert(error);
+        });
+    }
+
+    if (data !== null) {
+        for (let i = 0; i < data.length; i++) {
+            postalCodes.push(data[i].postalCode);
+            cities.push(data[i].city);
+            states.push(data[i].state);
+            countries.push(data[i].country);
+            regions.push(data[i].region);
+            markets.push(data[i].market);
+            primaryOptions.push(data[i].isPrimary);
+        }
+    }
+
+    let primaryIdx = 0;
+    for (let i = 0; i < primaryOptions.length; i++) {
+        if (primaryOptions[i] === 'Y') {
+            primaryIdx = i;
+            break;
+        }
+    }
+
+    const getProductsFromCart = () => {
+        axios.get(cartBaseURL + curCustomerId)
+            .then(function (response) {
+                console.log('response from the backend', response);
+                if (response.status === 200) {
+                    console.log(response.data);
+                    setCart(response.data);
+                } else {
+                    alert('Invalid Info');
+                    navigate('/login');
+                }
+            }).catch(function (error) {
+            console.log(error);
+            alert(error);
+        });
+    }
+
+    if (cart === null) {
+        getProductsFromCart();
+        // TODO: we only need the productId and the quantity here
+    } else {
+        for (let i = 0; i < cart.length; i++) {
+            delete cart[i].discount;
+            delete cart[i].productName;
+            delete cart[i].unitPrice;
+        }
+        values = Object.assign({'productQuantityList': cart}, values);
+    }
+    console.log('cart', cart);
+
+    const [radioVal, setRadioVal] = useState(1);
+    const onChangeRadio = (e) => {
+        console.log('radio checked', e.target.value);
+        setRadioVal(e.target.value);
+        //TODO: if the 2nd radio is checked, create a modal with form?
+    };
+
+    const [addressVal, setAddressVal] = useState(0);
     const onChangeAddress = (e) => {
         console.log('radio checked', e.target.value);
         setAddressVal(e.target.value);
     };
 
-    const navigate = useNavigate();
+    const [shippingModeVal, setShippingModeVal] = useState(0);
+    const [priorityVal, setPriorityVal] = useState(4);
 
-    const gotoPage = (path) => {
-        navigate(path);
+    const onChangeMode = (e) => {
+        console.log('mode radio checked', e.target.value);
+        setShippingModeVal(e.target.value);
     };
+
+    const onChangePriority = (e) => {
+        console.log('radio checked', e.target.value);
+        setPriorityVal(e.target.value);
+    };
+
+    const submitPaymentForm = (paymentValues) => {
+        values = Object.assign(paymentValues, values);
+    };
+
+
+    const handlePlaceOrder = () => {
+        values = Object.assign({'customerId': curCustomerId}, values)
+        values = Object.assign({'orderPriority': priorityVal}, values)
+        values = Object.assign({'shipMode': shippingModeVal}, values)
+        values = Object.assign({'isReturned': 'N'}, values);
+
+
+        values = Object.assign({'postalCode': postalCodes[primaryIdx]}, values)
+        values = Object.assign({'city': cities[primaryIdx]}, values)
+        values = Object.assign({'state': states[primaryIdx]}, values);
+        values = Object.assign({'region': regions[primaryIdx]}, values);
+        values = Object.assign({'country': countries[primaryIdx]}, values);
+        values = Object.assign({'market': markets[primaryIdx]}, values);
+
+        console.log(values);
+
+        axios.post(orderURL, values)
+            .then(function (response) {
+                console.log('response from the backend', response);
+                if (response.status === 200) {
+                    console.log(response.data);
+                    setData(response.data);
+                } else {
+                    alert('Invalid Info');
+                    navigate('/login');
+                }
+            }).catch(function (error) {
+            console.log(error);
+            alert(error);
+        });
+
+        // values = Object.assign({'orderPriority': priorityVal}, values)
+    }
+
     return (
         <div>
             <div style={{padding: '40px 60px 0 60px'}} >
@@ -40,6 +187,131 @@ const Payment = () => {
                     }}
                 >
                     <Col className="gutter-row" span={16}>
+                        {/*first row, title of shipping address*/}
+                        <Row>
+                            <Col span={8}>
+                                <Title level={3}>
+                                    Shipping Address
+                                </Title>
+                            </Col>
+                            <Col span={8}/>
+                            <Col span={8}>
+                                <Title level={3}>
+                                    Shipping Mode
+                                </Title>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col span={6}>
+                                <Radio.Group onChange={onChangeRadio} value={radioVal}>
+                                    <Space direction='vertical'>
+                                        <Radio value={1}>
+                                            <Title level={5}>Primary Address</Title>
+                                        </Radio>
+
+                                        <Card
+                                            style={{
+                                                left: '50px',
+                                                width: 200,
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            Postal Code: {postalCodes[primaryIdx]}<br/>
+                                            City: {cities[primaryIdx]} <br/>
+                                            State: {states[primaryIdx]} <br/>
+                                            Country: {countries[primaryIdx]} <br/>
+                                            Market: {markets[primaryIdx]} <br/>
+                                            Region: {regions[primaryIdx]} <br/>
+                                        </Card>
+
+                                        <Radio value={2}>
+                                            <Title level={5}>Add New Address</Title>
+                                            {/*TODO: add the new address modal here*/}
+                                        </Radio>
+                                    </Space>
+                                </Radio.Group>
+                            </Col>
+                            <Col span={6} />
+
+                        </Row>
+                        <Divider />
+                    </Col>
+
+
+                    <Col className="gutter-row" span={16}>
+                        <Row>
+                            <Col span={8}>
+                                <Row>
+                                    <Title level={3}>
+                                        Shipping Mode
+                                    </Title>
+                                </Row>
+
+                                <Radio.Group
+                                    onChange={onChangeMode}
+                                    value={shippingModeVal}
+                                    style={{ textAlign: 'left'}}
+                                >
+                                    <Space direction='vertical'>
+                                        <Radio value={'Same Day'}>
+                                            <Title level={5}>Same Day</Title>
+                                        </Radio>
+
+                                        <Radio value={'First Class'}>
+                                            <Title level={5}>First Class</Title>
+                                        </Radio>
+
+                                        <Radio value={'Second Class'}>
+                                            <Title level={5}>Second Class</Title>
+                                        </Radio>
+
+                                        <Radio value={'Standard Class'}>
+                                            <Title level={5}>Standard Class</Title>
+                                        </Radio>
+                                    </Space>
+
+                                </Radio.Group>
+
+                                <Space />
+                                <Divider dashed />
+                                <Row>
+                                    <Title level={3}>
+                                        Order Priority <ExclamationCircleFilled />
+                                    </Title>
+                                </Row>
+
+                                <Radio.Group
+                                    onChange={onChangePriority}
+                                    value={priorityVal}
+                                    style={{ textAlign: 'left'}}
+                                >
+                                    <Space direction='vertical'>
+                                        <Radio value={'Critical'}>
+                                            <Title level={5}>Critical</Title>
+                                        </Radio>
+
+                                        <Radio value={'High'}>
+                                            <Title level={5}>High</Title>
+                                        </Radio>
+
+                                        <Radio value={'Medium'}>
+                                            <Title level={5}>Medium</Title>
+                                        </Radio>
+
+                                        <Radio value={'Low'}>
+                                            <Title level={5}>Low</Title>
+                                        </Radio>
+                                    </Space>
+                                </Radio.Group>
+                            </Col>
+
+                            <Col span={4} />
+                        </Row>
+                        <Divider />
+                    </Col>
+
+                    <Col className="gutter-row" span={16}>
                         {/*TODO: add extra spacing*/}
                         <Row>
                             <Col span={16}>
@@ -52,37 +324,120 @@ const Payment = () => {
                                     <Title level={4}>Payment Method</Title>
                                 </Row>
                                 <Row>
-                                    <Input placeholder='Card Number'></Input>
+                                    <Form
+                                        className='form-inside-card'
+                                        form={form}
+                                        layout='vertical'
+                                        onFinish={submitPaymentForm}
+                                        initialValues={{
+                                            modifier: 'public',
+                                        }}
+                                    >
+                                        <Row gutter={8}>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    label='MM/YY'
+                                                    name='creditCardExpiredDate'
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            message: 'Please input the expired date.'
+                                                        }
+                                                    ]}
+                                                >
+                                                    <Input type = 'textarea' />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col span={12}>
+                                                <Form.Item
+                                                    label='CVV'
+                                                    name='creditCardCvv'
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            message: 'Please input the cvv.'
+                                                        }
+                                                    ]}
+                                                >
+                                                    <Input.Password />
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+
+                                        <Form.Item
+                                            label='Card Holder Name'
+                                            name='creditCardHolder'
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Please input the card holder name.'
+                                                }
+                                            ]}
+                                        >
+                                            <Input />
+                                        </Form.Item>
+
+                                        <Form.Item
+                                            label='Card Number'
+                                            name='creditCardNumber'
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Please input your answer for the security question.'
+                                                }
+                                            ]}
+                                        >
+                                            <Input type='textarea' />
+                                        </Form.Item>
+
+                                        <Form.Item>
+                                            <Button type='primary' htmlType='submit'>
+                                                Confirm
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
                                 </Row>
 
 
-                                <Space direction="horizontal">
-                                <Row>
-                                    <Input
-                                        placeholder='Name on card'
-                                        style={{
-                                            width: '34%',
-                                        }}
-                                    ></Input>
-                                    <Input
-                                        placeholder='MM/YY'
-                                        style={{
-                                            width: '33%',
-                                        }}
-                                    ></Input>
+                                {/*<Row>*/}
+                                {/*    <Input*/}
+                                {/*        placeholder='Card Holder'*/}
+                                {/*        // value={cardHolder || ''}*/}
+                                {/*        onChange={handleCreditCardInfo}*/}
+                                {/*    ></Input>*/}
+                                {/*</Row>*/}
+                                {/*<Row>*/}
+                                {/*    <Input placeholder='Card Number'></Input>*/}
+                                {/*</Row>*/}
 
-                                    <Input.Password
-                                        placeholder='CVV'
-                                        iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                                        style={{
-                                            width: '33%',
-                                        }}
-                                    />
+                                {/*<Space direction="horizontal">*/}
+                                {/*<Row>*/}
+                                {/*    <Input*/}
+                                {/*        placeholder='Name on card'*/}
+                                {/*        style={{*/}
+                                {/*            width: '34%',*/}
+                                {/*        }}*/}
+                                {/*    ></Input>*/}
+                                {/*    <Input*/}
+                                {/*        placeholder='MM/YY'*/}
+                                {/*        style={{*/}
+                                {/*            width: '33%',*/}
+                                {/*        }}*/}
+                                {/*    ></Input>*/}
 
-                                </Row>
-                                </Space>
+                                {/*    <Input.Password*/}
+                                {/*        placeholder='CVV'*/}
+                                {/*        iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}*/}
+                                {/*        style={{*/}
+                                {/*            width: '33%',*/}
+                                {/*        }}*/}
+                                {/*    />*/}
+
+                                {/*</Row>*/}
+                                {/*</Space>*/}
 
                                 <Divider />
+
                                 <Row>
                                     <Title level={4}>Billing Address</Title>
                                 </Row>
@@ -114,7 +469,7 @@ const Payment = () => {
                                             bottom: 0,
                                         }}
                                         type='default'
-                                        onClick={() => gotoPage('/cart')}
+                                        onClick={() => navigate('/cart')}
                                     >
                                         Return to cart
                                     </Button>
@@ -129,31 +484,13 @@ const Payment = () => {
                                             top:30,
                                             bottom: 0,
                                         }}
-                                        onClick={() => gotoPage('/order')}
+                                        onClick={handlePlaceOrder}
                                     >
                                         Place Order
                                     </Button>
                                 < /Col>
                             </Col>
                         </Row>
-                    </Col>
-
-                    <Col className="gutter-row" span={6}
-                    >
-                        <div>
-                            <Title level={4}>Summary</Title>
-                            <Divider />
-                            <Title level = {5}>
-                                Subtotal: $mock
-                                <Divider dashed />
-                                Shipping: $mock
-                                <Space />
-                                <Divider />
-                                Total: $mock
-                            </Title>
-                        </div>
-
-                        <Divider />
                     </Col>
                 </Row>
             </div>
