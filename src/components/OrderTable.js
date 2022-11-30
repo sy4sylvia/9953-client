@@ -7,6 +7,16 @@ const COLUMNS = [
         key: 'id',
     },
     {
+        title: 'Products',
+        dataIndex: 'products',
+        key: 'products',
+    },
+    {
+        title: 'Total Price',
+        dataIndex: 'totalPrice',
+        key: 'totalPrice',
+    },
+    {
         title: 'Order Priority',
         dataIndex: 'priority',
         key: 'priority',
@@ -17,26 +27,15 @@ const COLUMNS = [
         key: 'orderDate',
     },
     {
-        title: 'Ship Date',
-        key: 'shipDate',
-        dataIndex: 'shipDate',
+        title: 'Shipping Address',
+        dataIndex: 'address',
+        key: 'address',
     },
     {
-        title: 'Total',
-        key: 'total',
-        dataIndex: 'total',
+        title: 'Arrival Date',
+        dataIndex: 'arrivingDate',
+        key: 'arrivingDate',
     },
 ];
 
-const DATA = [
-    {
-        key: '1',
-        id: 'IN-2014-JR162107-41675',
-        priority: 'Critical',
-        orderDate: '02/04/2014',
-        shipDate: '02/07/2014',
-        total: '$805.98'
-    },
-];
-
-export { COLUMNS, DATA };
+export { COLUMNS };

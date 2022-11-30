@@ -1,9 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Table, Button, Typography } from 'antd';
 
-import { COLUMNS, DATA } from './OrderTable'
-import UserService from "../services/user.service";
-import EventBus from "../common/EventBus";
+import { COLUMNS } from './OrderTable'
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
@@ -12,17 +10,61 @@ const orderBaseURL = 'http://localhost:8080/api/order';
 
 const curCustomerId = localStorage.getItem('customerId');
 const OrderHistory = () => {
-    const [data, setData] = useState(null);
     const navigate = useNavigate();
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
-    if (data === null) {
+    const [orderData, setOrderData] = useState();
+    const [loading, setLoading] = useState(false);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: 10,
+        },
+    });
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+    const fetchOrders = () => {
+        setLoading(true);
         axios.get(orderBaseURL, {params: {customerId: curCustomerId}})
             .then(function (response) {
-                console.log('response from the backend', response);
                 if (response.status === 200) {
-                    console.log(response.data);
-                    setData(response.data);
+                    let values = response.data.orderSet;
+
+                    console.log(values);
+
+                    for (let i = 0; i < values.length; i++) {
+                        // extract the shipping address
+                        const separator = ', ';
+                        const curCode = values[i].postalCode;
+                        const curCity = values[i].city;
+                        const curState = values[i].state;
+                        const curCountry = values[i].country;
+                        const curRegion = values[i].region;
+                        const curMarket = values[i].market;
+
+                        const address = curCode + separator+ curCity + separator + curState + separator
+                            + curCountry + separator + curRegion + separator + curMarket;
+                        values[i] = Object.assign({'address': address}, values[i]);
+
+                        // extract the product information
+                        let products = '';
+                        for (let j = 0; j < values[i].productResponseSet.length; j++) {
+                            products += values[i].productResponseSet[j].productName + ' & ';
+                        }
+
+                        // delete the last & symbol
+                        const final_products = products.substring(0,products.length - 3);
+                        values[i] = Object.assign({'products': final_products}, values[i]);
+                    }
+
+                    setOrderData(values);
+                    setLoading(false);
+                    setTableParams({
+                        ...tableParams,
+                        pagination: {
+                            ...tableParams.pagination,
+                            total: response.data.length, // total count before the filter
+                        },
+                    });
                 } else {
                     alert('Invalid Info');
                     navigate('/login');
@@ -32,36 +74,30 @@ const OrderHistory = () => {
             alert(error);
         });
     }
-    // const [content, setContent] = useState('');
-    // useEffect(() => {
-    //     UserService.getUserAccount().then(
-    //         (response) => {
-    //             setContent(response.data);
-    //         },
-    //         (error) => {
-    //             const _content =
-    //                 (error.response &&
-    //                     error.response.data &&
-    //                     error.response.data.message) ||
-    //                 error.message ||
-    //                 error.toString();
-    //
-    //             setContent(_content);
-    //
-    //             if (error.response && error.response.status === 401) {
-    //                 EventBus.dispatch("logout");
-    //             }
-    //         }
-    //     );
-    // }, []);
+
+    useEffect(() => {
+        fetchOrders();
+    }, [JSON.stringify(tableParams)]);
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+    };
 
     return (
         <div>
             <div style={{padding: '80px 120px'}}>
                 <Title level={3}>Order History</Title>
-                {/*TODO: change the hard-coded data to content, table with real data*/}
-                {/*{content}*/}
-                <Table columns={COLUMNS} dataSource={DATA} />
+                <Table
+                    columns={COLUMNS}
+                    dataSource={orderData}
+                    pagination={tableParams.pagination}
+                    loading={loading}
+                    onChange={handleTableChange}
+                />
             </div>
             <div
                 style={{

@@ -96,7 +96,6 @@ const Results = () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
     const searchText = localStorage.getItem('searchText');
 
-    console.log(localStorage.getItem('authorization'));
     const fetchProducts = () => {
         console.log('called');
         setLoading(true);
