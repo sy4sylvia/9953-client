@@ -5,8 +5,6 @@ import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import _ from 'lodash';
 
-import { COLUMNS } from './OrderTable'
-
 const { Title } = Typography;
 const orderBaseURL = 'http://localhost:8080/api/order';
 
@@ -22,6 +20,101 @@ const OrderHistory = () => {
             pageSize: 10,
         },
     });
+
+    const COLUMNS = [
+        {
+            title: 'Order ID',
+            dataIndex: 'id',
+            key: 'id',
+        },
+        {
+            title: 'Products',
+            dataIndex: 'products',
+            key: 'products',
+        },
+        {
+            title: 'Total Price',
+            dataIndex: 'totalPrice',
+            key: 'totalPrice',
+        },
+        {
+            title: 'Order Priority',
+            dataIndex: 'orderPriority',
+            key: 'orderPriority',
+        },
+        {
+            title: 'Order Date',
+            dataIndex: 'orderDate',
+            key: 'orderDate',
+        },
+        {
+            title: 'Shipping Address',
+            dataIndex: 'address',
+            key: 'address',
+        },
+        {
+            title: 'Ship Mode',
+            dataIndex: 'shipMode',
+            key: 'shipMode',
+        },
+        {
+            title: 'Arrival Date',
+            dataIndex: 'arrivingDate',
+            key: 'arrivingDate',
+        },
+        // {
+        //     title: 'Return Status',
+        //     dataIndex: 'isReturned',
+        //     key: 'isReturned',
+        //     render: (text) => <text>{"No"}</text>,
+        // },
+        {
+            title: 'Return',
+            dataIndex: 'return',
+            key: 'return',
+
+            render:(text, record) => (
+                // text undefined
+                <Button
+                    onClick={()=> {
+                        console.log('record.id ', record.id);
+
+                        // const source = orderData.find(source => source.id === record.id);
+                        //
+                        // console.log('source.id ', source.id);
+                        // source.disabled = true;
+                        // console.log("source.disabled ,", source.disabled)
+                        // setOrderData(orderData);
+
+                        const today = new Date().getDate();
+                        if (today - record.arrivingDate > 30) {
+                            alert('You can only return an order within 30 days');
+                        } else {
+                            const curCustomerId = localStorage.getItem('customerId');
+
+                            let values = {}
+                            values = Object.assign({'isReturned': 'Y'}, values)
+                            values = Object.assign({'orderId': record.id}, values)
+
+                            axios.post(orderBaseURL, values, {params: {customerId: curCustomerId}})
+                                .then(function (response) {
+                                    if (response.status === 200) {
+                                        alert('You just successfully returned your order: ' + record.id);
+                                    }
+                                }).catch(function (error) {
+                                console.log(error);
+                                alert(error);
+                            });
+                        }
+                        console.log('record ', record)
+                    }}>
+                    {"Return"}
+                </Button>),
+
+        },
+    ];
+
+
     console.log(localStorage.getItem('authorization'))
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
     const fetchOrders = () => {
@@ -30,11 +123,11 @@ const OrderHistory = () => {
             .then(function (response) {
                 if (response.status === 200) {
                     let values = response.data.orderResponseSet;
-                    console.log(response.data);
-                    console.log(typeof values)
+                    console.log(response.data.orderResponseSet);
 
                     let idx = 0;
                     const separator = ', ';
+
                     _.forEach(response.data.orderResponseSet, () => {
                         const curCode = values[idx].postalCode;
                         const curCity = values[idx].city;
@@ -57,33 +150,10 @@ const OrderHistory = () => {
                         const final_products = products.substring(0,products.length - 3);
                         values[idx] = Object.assign({'products': final_products}, values[idx]);
 
+                        // values[idx] = Object.assign({'return': 'Return'}, values[idx]);
+
                         idx++;
                     });
-
-                    // for (let i = 0; i < response.data.orderResponseSet.length; i++) {
-                    //     // extract the shipping address
-                    //     const separator = ', ';
-                    //     const curCode = values[i].postalCode;
-                    //     const curCity = values[i].city;
-                    //     const curState = values[i].state;
-                    //     const curCountry = values[i].country;
-                    //     const curRegion = values[i].region;
-                    //     const curMarket = values[i].market;
-                    //
-                    //     const address = curCode + separator+ curCity + separator + curState + separator
-                    //         + curCountry + separator + curRegion + separator + curMarket;
-                    //     values[i] = Object.assign({'address': address}, values[i]);
-                    //
-                    //     // extract the product information
-                    //     let products = '';
-                    //     for (let j = 0; j < values[i].productResponseSet.length; j++) {
-                    //         products += values[i].productResponseSet[j].productName + ' & ';
-                    //     }
-                    //
-                    //     // delete the last & symbol
-                    //     const final_products = products.substring(0,products.length - 3);
-                    //     values[i] = Object.assign({'products': final_products}, values[i]);
-                    // }
 
                     setOrderData(values);
                     setLoading(false);
@@ -126,6 +196,14 @@ const OrderHistory = () => {
                     pagination={tableParams.pagination}
                     loading={loading}
                     onChange={handleTableChange}
+                    onRow={(record) => {
+                        return {
+                            // click row
+                            onClick: () => {
+                                console.log(record.id);
+                            },
+                        };
+                    }}
                 />
             </div>
             <div
