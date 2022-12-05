@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Breadcrumb, Button, Input, Col, Divider, Form, Radio, Row, Space, Typography, Card} from 'antd';
+import { Button, Input, Col, Divider, Form, Radio, Row, Space, Typography, Card} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import {CreditCardFilled, ExclamationCircleFilled} from '@ant-design/icons';
 import axios from "axios";
@@ -169,25 +169,9 @@ const Payment = () => {
 
     return (
         <div>
-            <div style={{padding: '40px 60px 0 60px'}} >
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item href='/cart' >Cart</Breadcrumb.Item>
-                    <Breadcrumb.Item href="/checkout">Address Info</Breadcrumb.Item>
-                    <Breadcrumb.Item href='/shipping-mode'>Shipping</Breadcrumb.Item>
-                    <Breadcrumb.Item href='/payment '>Payment</Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
-
             <div style={{padding: '80px 120px'}} >
-                <Row
-                    gutter={{
-                        xs: 8,
-                        sm: 16,
-                        md: 24,
-                        lg: 32,
-                    }}
-                >
-                    <Col className="gutter-row" span={16}>
+                <Row gutter={{xs: 8, sm: 16, md: 24, lg: 32, }}>
+                    <Col className="gutter-row" span={24}>
                         {/*first row, title of shipping address*/}
                         <Row>
                             <Col span={8}>
@@ -195,16 +179,21 @@ const Payment = () => {
                                     Shipping Address
                                 </Title>
                             </Col>
-                            <Col span={8}/>
+                            {/*<Col span={4}/> */}
+                            <Col span={8}>
+                                <Title level={3} style={{paddingBottom: '3%'}}>
+                                    Ship Mode
+                                </Title>
+                            </Col>
                             <Col span={8}>
                                 <Title level={3}>
-                                    Shipping Mode
+                                    Order Priority <ExclamationCircleFilled />
                                 </Title>
                             </Col>
                         </Row>
 
                         <Row>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <Radio.Group onChange={onChangeRadio} value={radioVal}>
                                     <Space direction='vertical'>
                                         <Radio value={1}>
@@ -233,22 +222,8 @@ const Payment = () => {
                                     </Space>
                                 </Radio.Group>
                             </Col>
-                            <Col span={6} />
 
-                        </Row>
-                        <Divider />
-                    </Col>
-
-
-                    <Col className="gutter-row" span={16}>
-                        <Row>
                             <Col span={8}>
-                                <Row>
-                                    <Title level={3}>
-                                        Shipping Mode
-                                    </Title>
-                                </Row>
-
                                 <Radio.Group
                                     onChange={onChangeMode}
                                     value={shippingModeVal}
@@ -273,15 +248,9 @@ const Payment = () => {
                                     </Space>
 
                                 </Radio.Group>
+                            </Col>
 
-                                <Space />
-                                <Divider dashed />
-                                <Row>
-                                    <Title level={3}>
-                                        Order Priority <ExclamationCircleFilled />
-                                    </Title>
-                                </Row>
-
+                            <Col span={8}>
                                 <Radio.Group
                                     onChange={onChangePriority}
                                     value={priorityVal}
@@ -307,24 +276,31 @@ const Payment = () => {
                                 </Radio.Group>
                             </Col>
 
-                            <Col span={4} />
                         </Row>
+
                         <Divider />
                     </Col>
 
-                    <Col className="gutter-row" span={16}>
-                        {/*TODO: add extra spacing*/}
+
+                    <Col className="gutter-row" span={24}>
+                        <Row>
+                            <Col span={6}>
+                                <Title level={3}>
+                                    Payment <CreditCardFilled />
+                                </Title>
+                            </Col>
+                            <Col span={6}/>
+                            <Col span={12}>
+                                <Title level={3} style={{paddingBottom: '3%'}}>
+                                    Billing Address
+                                </Title>
+                            </Col>
+                        </Row>
+
                         <Row>
                             <Col span={16}>
                                 <Row>
-                                    <Title level={3}>
-                                        Payment <CreditCardFilled />
-                                    </Title>
-                                </Row>
-                                <Row>
-                                    <Title level={4}>Payment Method</Title>
-                                </Row>
-                                <Row>
+                                    <Col span={2} />
                                     <Form
                                         className='form-inside-card'
                                         form={form}
@@ -397,52 +373,10 @@ const Payment = () => {
                                             </Button>
                                         </Form.Item>
                                     </Form>
+
                                 </Row>
-
-
-                                {/*<Row>*/}
-                                {/*    <Input*/}
-                                {/*        placeholder='Card Holder'*/}
-                                {/*        // value={cardHolder || ''}*/}
-                                {/*        onChange={handleCreditCardInfo}*/}
-                                {/*    ></Input>*/}
-                                {/*</Row>*/}
-                                {/*<Row>*/}
-                                {/*    <Input placeholder='Card Number'></Input>*/}
-                                {/*</Row>*/}
-
-                                {/*<Space direction="horizontal">*/}
-                                {/*<Row>*/}
-                                {/*    <Input*/}
-                                {/*        placeholder='Name on card'*/}
-                                {/*        style={{*/}
-                                {/*            width: '34%',*/}
-                                {/*        }}*/}
-                                {/*    ></Input>*/}
-                                {/*    <Input*/}
-                                {/*        placeholder='MM/YY'*/}
-                                {/*        style={{*/}
-                                {/*            width: '33%',*/}
-                                {/*        }}*/}
-                                {/*    ></Input>*/}
-
-                                {/*    <Input.Password*/}
-                                {/*        placeholder='CVV'*/}
-                                {/*        iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}*/}
-                                {/*        style={{*/}
-                                {/*            width: '33%',*/}
-                                {/*        }}*/}
-                                {/*    />*/}
-
-                                {/*</Row>*/}
-                                {/*</Space>*/}
-
-                                <Divider />
-
-                                <Row>
-                                    <Title level={4}>Billing Address</Title>
-                                </Row>
-
+                            </Col>
+                            <Col span={8}>
                                 <Row>
                                     <Radio.Group
                                         onChange={onChangeAddress}
@@ -460,37 +394,44 @@ const Payment = () => {
                                         </Space>
                                     </Radio.Group>
                                 </Row>
-
-                                <Col span={4}>
-                                    <Button
-                                        style={{
-                                            position: 'absolute',
-                                            left: 50,
-                                            top:30,
-                                            bottom: 0,
-                                        }}
-                                        type='default'
-                                        onClick={() => navigate('/cart')}
-                                    >
-                                        Return to cart
-                                    </Button>
-                                </Col>
-
-                                <Col span={8}>
-                                    <Button
-                                        type='primary'
-                                        style={{
-                                            position: 'absolute',
-                                            left: 400,
-                                            top:30,
-                                            bottom: 0,
-                                        }}
-                                        onClick={handlePlaceOrder}
-                                    >
-                                        Place Order
-                                    </Button>
-                                < /Col>
                             </Col>
+
+                        </Row>
+                        <Divider />
+                    </Col>
+
+
+                    <Col className="gutter-row" span={24}>
+                        <Row>
+                            <Col span={4} />
+                            <Col span={4}>
+                                <Button
+                                    style={{
+                                        position: 'absolute',
+                                        left: 50,
+                                        top:30,
+                                        bottom: 0,
+                                    }}
+                                    type='default'
+                                    onClick={() => navigate('/cart')}
+                                >
+                                    Return to cart
+                                </Button>
+                            </Col>
+                            <Col span={8}>
+                                <Button
+                                    type='primary'
+                                    style={{
+                                        position: 'absolute',
+                                        left: 400,
+                                        top:30,
+                                        bottom: 0,
+                                    }}
+                                    onClick={handlePlaceOrder}
+                                >
+                                    Place Order
+                                </Button>
+                            < /Col>
                         </Row>
                     </Col>
                 </Row>

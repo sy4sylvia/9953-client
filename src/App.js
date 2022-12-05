@@ -15,8 +15,6 @@ import Navbar from './components/Navbar';
 import Results from './components/Results';
 import Product from './components/Product';
 import Cart from './components/Cart';
-import CheckoutAddress from './components/CheckoutAddress';
-import ShippingMode from './components/ShippingMode';
 import Payment from './components/Payment';
 import Order from './components/Order';
 import Account from './components/Account';
@@ -48,9 +46,7 @@ function App() {
                     <Route exact path = '/results' element={<Results />} />
                     <Route exact path = '/product' element={<Product/>} />
                     <Route exact path = '/cart' element={<Cart />} />
-                    <Route exact path = '/checkout' element={<CheckoutAddress />} />
-                    <Route exact path = '/shipping-mode' element={<ShippingMode />} />
-                    <Route exact path = '/payment' element={<Payment />} />
+                    <Route exact path = '/checkout' element={<Payment />} />
                     <Route exact path = '/order' element={<Order />} />
                     <Route exact path = '/account' element={<Account />} />
                     <Route exact path = '/edit-info' element={<EditInfo />} />
