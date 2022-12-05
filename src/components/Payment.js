@@ -31,7 +31,7 @@ const Payment = () => {
     const regions = [];
     const markets = [];
     const primaryOptions = [];
-
+    console.log(localStorage.getItem('authorization'))
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
     if (data === null) {
@@ -154,6 +154,7 @@ const Payment = () => {
                 if (response.status === 200) {
                     console.log(response.data);
                     setData(response.data);
+                    navigate('/');
                 } else {
                     alert('Invalid Info');
                     navigate('/login');

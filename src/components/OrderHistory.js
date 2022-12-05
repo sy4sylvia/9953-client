@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Table, Button, Typography } from 'antd';
 
-import { COLUMNS } from './OrderTable'
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import _ from 'lodash';
+
+import { COLUMNS } from './OrderTable'
 
 const { Title } = Typography;
 const orderBaseURL = 'http://localhost:8080/api/order';
@@ -20,41 +22,68 @@ const OrderHistory = () => {
             pageSize: 10,
         },
     });
-
+    console.log(localStorage.getItem('authorization'))
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
     const fetchOrders = () => {
         setLoading(true);
         axios.get(orderBaseURL, {params: {customerId: curCustomerId}})
             .then(function (response) {
                 if (response.status === 200) {
-                    let values = response.data.orderSet;
+                    let values = response.data.orderResponseSet;
+                    console.log(response.data);
+                    console.log(typeof values)
 
-                    console.log(values);
-
-                    for (let i = 0; i < values.length; i++) {
-                        // extract the shipping address
-                        const separator = ', ';
-                        const curCode = values[i].postalCode;
-                        const curCity = values[i].city;
-                        const curState = values[i].state;
-                        const curCountry = values[i].country;
-                        const curRegion = values[i].region;
-                        const curMarket = values[i].market;
+                    let idx = 0;
+                    const separator = ', ';
+                    _.forEach(response.data.orderResponseSet, () => {
+                        const curCode = values[idx].postalCode;
+                        const curCity = values[idx].city;
+                        const curState = values[idx].state;
+                        const curCountry = values[idx].country;
+                        const curRegion = values[idx].region;
+                        const curMarket = values[idx].market;
 
                         const address = curCode + separator+ curCity + separator + curState + separator
                             + curCountry + separator + curRegion + separator + curMarket;
-                        values[i] = Object.assign({'address': address}, values[i]);
+                        values[idx] = Object.assign({'address': address}, values[idx]);
 
                         // extract the product information
                         let products = '';
-                        for (let j = 0; j < values[i].productResponseSet.length; j++) {
-                            products += values[i].productResponseSet[j].productName + ' & ';
+                        for (let j = 0; j < values[idx].productInOrderResponseSet.length; j++) {
+                            products += values[idx].productInOrderResponseSet[j].productName + ' & ';
                         }
 
                         // delete the last & symbol
                         const final_products = products.substring(0,products.length - 3);
-                        values[i] = Object.assign({'products': final_products}, values[i]);
-                    }
+                        values[idx] = Object.assign({'products': final_products}, values[idx]);
+
+                        idx++;
+                    });
+
+                    // for (let i = 0; i < response.data.orderResponseSet.length; i++) {
+                    //     // extract the shipping address
+                    //     const separator = ', ';
+                    //     const curCode = values[i].postalCode;
+                    //     const curCity = values[i].city;
+                    //     const curState = values[i].state;
+                    //     const curCountry = values[i].country;
+                    //     const curRegion = values[i].region;
+                    //     const curMarket = values[i].market;
+                    //
+                    //     const address = curCode + separator+ curCity + separator + curState + separator
+                    //         + curCountry + separator + curRegion + separator + curMarket;
+                    //     values[i] = Object.assign({'address': address}, values[i]);
+                    //
+                    //     // extract the product information
+                    //     let products = '';
+                    //     for (let j = 0; j < values[i].productResponseSet.length; j++) {
+                    //         products += values[i].productResponseSet[j].productName + ' & ';
+                    //     }
+                    //
+                    //     // delete the last & symbol
+                    //     const final_products = products.substring(0,products.length - 3);
+                    //     values[i] = Object.assign({'products': final_products}, values[i]);
+                    // }
 
                     setOrderData(values);
                     setLoading(false);

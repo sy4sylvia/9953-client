@@ -18,8 +18,8 @@ const COLUMNS = [
     },
     {
         title: 'Order Priority',
-        dataIndex: 'priority',
-        key: 'priority',
+        dataIndex: 'orderPriority',
+        key: 'orderPriority',
     },
     {
         title: 'Order Date',
@@ -30,6 +30,11 @@ const COLUMNS = [
         title: 'Shipping Address',
         dataIndex: 'address',
         key: 'address',
+    },
+    {
+        title: 'Ship Mode',
+        dataIndex: 'shipMode',
+        key: 'shipMode',
     },
     {
         title: 'Arrival Date',
