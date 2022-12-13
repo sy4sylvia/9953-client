@@ -62,12 +62,11 @@ const OrderHistory = () => {
             dataIndex: 'arrivingDate',
             key: 'arrivingDate',
         },
-        // {
-        //     title: 'Return Status',
-        //     dataIndex: 'isReturned',
-        //     key: 'isReturned',
-        //     render: (text) => <text>{"No"}</text>,
-        // },
+        {
+            title: 'Return Status (N - No, Y - Yes)',
+            dataIndex: 'isReturned',
+            key: 'isReturned',
+        },
         {
             title: 'Return',
             dataIndex: 'return',
@@ -77,36 +76,28 @@ const OrderHistory = () => {
                 // text undefined
                 <Button
                     onClick={()=> {
-                        console.log('record.id ', record.id);
-
-                        // const source = orderData.find(source => source.id === record.id);
-                        //
-                        // console.log('source.id ', source.id);
-                        // source.disabled = true;
-                        // console.log("source.disabled ,", source.disabled)
-                        // setOrderData(orderData);
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
                         const today = new Date().getDate();
-                        if (today - record.arrivingDate > 30) {
-                            alert('You can only return an order within 30 days');
-                        } else {
-                            const curCustomerId = localStorage.getItem('customerId');
 
+                        if (record.isReturned === 'Y') {
+                            alert('This order has already been returned.');
+                        } else if (today - record.arrivingDate > 30) {
+                            alert('You can only return an order within 30 days.');
+                        } else {
                             let values = {}
                             values = Object.assign({'isReturned': 'Y'}, values)
-                            values = Object.assign({'orderId': record.id}, values)
-
-                            axios.post(orderBaseURL, values, {params: {customerId: curCustomerId}})
+                            axios.put('http://localhost:8080/api/order/return/' + record.id, values)
                                 .then(function (response) {
                                     if (response.status === 200) {
                                         alert('You just successfully returned your order: ' + record.id);
+                                        navigate('/');
                                     }
                                 }).catch(function (error) {
                                 console.log(error);
                                 alert(error);
                             });
                         }
-                        console.log('record ', record)
                     }}>
                     {"Return"}
                 </Button>),
