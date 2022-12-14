@@ -57,7 +57,7 @@ const AddAddress = ({ open, onCreate, onCancel }) => {
         axios.post(addAddressURL, values).then(function (response) {
             console.log('response from the backend', response);
             if (response.status === 200) {
-                navigate('/address-book');
+                navigate('/addresses');
             } else {
                 alert('Missing info');
             }

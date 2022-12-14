@@ -46,6 +46,7 @@ const OrderHistory = () => {
             title: 'Order Date',
             dataIndex: 'orderDate',
             key: 'orderDate',
+            sorter: (a, b) => Date.parse(b.orderDate) - Date.parse(a.orderDate),
         },
         {
             title: 'Shipping Address',

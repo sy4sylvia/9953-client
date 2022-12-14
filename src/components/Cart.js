@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Typography, Button, Row, Col, Divider, Breadcrumb} from 'antd';
+import {Typography, Button, Row, Col, Divider} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
@@ -31,6 +31,7 @@ const Cart = () => {
         axios.get(cartURL +'/' + curCustomerId)
             .then(function (response) {
                 if (response.status === 200) {
+                    console.log(response.data);
                     setCartItems(response.data);
                 } else {
                     alert('Please log in to view your cart.');
@@ -55,11 +56,6 @@ const Cart = () => {
     }
     return (
         <div>
-            <div style={{padding: '40px 60px 0 60px'}}>
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item href='/cart' >Cart</Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
         <div style={{padding: '120px 120px'}} >
             <Row
                 gutter={{
