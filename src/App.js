@@ -24,6 +24,8 @@ import AddAddress from './components/AddAddress';
 import EditAddress from './components/EditAddress';
 import OrderHistory from './components/OrderHistory';
 import Test from './components/Test';
+import AdminLogin from './components/AdminLogin';
+import AdminUpdateProduct from './components/AdminUpdateProduct';
 
 
 const { Footer } = Layout;
@@ -55,6 +57,8 @@ function App() {
                     <Route exact path = '/add-address' element={<AddAddress />} />
                     <Route exact path = '/edit-address' element={<EditAddress />} />
                     <Route exact path = '/order-history' element={<OrderHistory />} />
+                    <Route exact path = '/admin-login' element={<AdminLogin />} />
+                    <Route exact path = '/update-product' element={<AdminUpdateProduct />} />
                     <Route exact path='/test' element={<Test />} />
                 </Routes>
             </div>

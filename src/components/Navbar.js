@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Row, Col, Typography, Layout, Menu, Input, AutoComplete } from 'antd';
-import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { MenuOutlined, ShoppingCartOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons';
 
 
 import 'antd/dist/antd.css';
@@ -20,11 +20,6 @@ function Navbar(NavBarProps) {
     }
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
-    const mockColors = ['red', 'black', 'blue'];
-
-    const mockData = (str, colorIdx = 0) => ({
-        value: str.concat(', ').concat(mockColors[colorIdx]),
-    });
 
     const [searchVal, setSearchVal] = useState('');
     const [searchOptions, setSearchOptions] = useState([]);
@@ -108,7 +103,7 @@ function Navbar(NavBarProps) {
                                    id='title-button'
                             >
                                 <a className={'navbar-title'}
-                                   onClick={() => navigate('')}>
+                                   onClick={() => navigate('/')}>
                                     Awesome
                                 </a>
                             </Title>
@@ -141,8 +136,6 @@ function Navbar(NavBarProps) {
                                     />
                                 </AutoComplete>
 
-                                {/*TODO: icon show or not depends on the token*/}
-
                                 <Menu.SubMenu
                                     disabled={accountDisabled}
                                     icon={<UserOutlined style={{fontSize: '1.3rem'}} />}
@@ -155,13 +148,13 @@ function Navbar(NavBarProps) {
                                         My Account
                                     </Menu.Item>
                                     <Menu.Item
-                                        key={'address'}
+                                        key='address'
                                         onClick={() => navigate('/addresses')}
                                     >
                                         Address Book
                                     </Menu.Item>
                                     <Menu.Item
-                                        key={'order'}
+                                        key='order'
                                         onClick={() => navigate('/order-history')}
                                     >
                                         Order History
@@ -204,12 +197,41 @@ function Navbar(NavBarProps) {
                                        View Cart
                                     </Menu.Item>
                                     <Menu.Item
-                                        key={'checkout'}
+                                        key='checkout'
                                         onClick={() => navigate('/checkout')}
                                     >
                                         Checkout
                                     </Menu.Item>
                                 </Menu.SubMenu>
+
+                                <Menu.SubMenu
+                                    key='adminMenu'
+                                    title='Admin'
+                                    icon={<UserSwitchOutlined style={{fontSize: '1.3rem'}} />}
+                                >
+                                    <Menu.Item
+                                        key='adminLogin'
+                                        // change to update product page
+                                        onClick={() => navigate('/admin-login')}
+                                    >
+                                        Log in as Admin
+                                    </Menu.Item>
+
+                                    <Menu.Item
+                                        key='updateProduct'
+                                        // change to update product page
+                                        onClick={() => navigate('/update-product')}
+                                    >
+                                        Update Product
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        key='adminLogout'
+                                        onClick={() => alert('You have successfully logged out')}
+                                    >
+                                        Log out as Admin
+                                    </Menu.Item>
+                                </Menu.SubMenu>
+
                             </Menu>
                         </Col>
                     </Row>
