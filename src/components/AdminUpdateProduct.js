@@ -16,7 +16,8 @@ const AdminUpdateProduct = () => {
 
     const submitUpdateProductForm = (values) => {
         console.log(values);
-        alert('You have successfully updated the stock of the product with id: ' + values.productId +' to ' + values.stock)
+        alert('You have successfully updated the stock of the product with id: ' + values.productId +
+            ' to ' + values.stock);
     }
 
     return (
@@ -64,16 +65,6 @@ const AdminUpdateProduct = () => {
                         Confirm Updating the Stock
                     </Button>
                 </Form.Item>
-
-                <Button htmlType='submit' onClick={() => {
-                    localStorage.removeItem('admin');
-                    navigate('/');
-                }
-                }>
-                    Log Out
-                </Button>
-
-
             </Form>
         </Card>
     );

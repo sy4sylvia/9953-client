@@ -21,9 +21,10 @@ const ForgotPassword = () => {
             .then((response) => {
             console.log(response);
             if (response.status === 200) {
+                alert('Please check your email inbox to reset the password.');
                 // navigate('/change-password'); //wait for the email
             } else {
-                alert('No such email address registered with us');
+                alert('No such email address registered with us, please try again.');
             }
         }).catch(function (error) {
             console.log(error);

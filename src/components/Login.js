@@ -34,6 +34,7 @@ const Login = () => {
                 localStorage.setItem('authorization', response.headers.authorization);
 
                 if (response.status === 200) {
+                    alert('You have successfully logged in!');
                     navigate('/');
                 }
             })

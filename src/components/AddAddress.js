@@ -57,6 +57,7 @@ const AddAddress = ({ open, onCreate, onCancel }) => {
         axios.post(addAddressURL, values).then(function (response) {
             console.log('response from the backend', response);
             if (response.status === 200) {
+                alert('You have successfully added another address!')
                 navigate('/addresses');
             } else {
                 alert('Missing info');

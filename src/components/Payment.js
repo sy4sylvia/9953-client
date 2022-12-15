@@ -154,6 +154,7 @@ const Payment = () => {
                 if (response.status === 200) {
                     console.log(response.data);
                     setData(response.data);
+                    alert('You have successfully placed an order!');
                     navigate('/');
                 } else {
                     alert('Invalid Info');
@@ -215,10 +216,10 @@ const Payment = () => {
                                             Region: {regions[primaryIdx]} <br/>
                                         </Card>
 
-                                        <Radio value={2}>
-                                            <Title level={5}>Add New Address</Title>
-                                            {/*TODO: add the new address modal here*/}
-                                        </Radio>
+                                        {/*<Radio value={2}>*/}
+                                        {/*    <Title level={5}>Add New Address</Title>*/}
+                                        {/*    /!*TODO: add the new address modal here*!/*/}
+                                        {/*</Radio>*/}
                                     </Space>
                                 </Radio.Group>
                             </Col>
@@ -300,7 +301,7 @@ const Payment = () => {
                         <Row>
                             <Col span={16}>
                                 <Row>
-                                    <Col span={2} />
+                                    <Col span={3} />
                                     <Form
                                         className='form-inside-card'
                                         form={form}
@@ -360,7 +361,7 @@ const Payment = () => {
                                             rules={[
                                                 {
                                                     required: true,
-                                                    message: 'Please input your answer for the security question.'
+                                                    message: 'Please input your credit card number.'
                                                 }
                                             ]}
                                         >
@@ -368,7 +369,8 @@ const Payment = () => {
                                         </Form.Item>
 
                                         <Form.Item>
-                                            <Button type='primary' htmlType='submit'>
+                                            <Button type='primary' htmlType='submit'
+                                            onClick={() => {alert('Your payment information has been submitted');}}>
                                                 Confirm
                                             </Button>
                                         </Form.Item>
@@ -403,31 +405,20 @@ const Payment = () => {
 
                     <Col className="gutter-row" span={24}>
                         <Row>
-                            <Col span={4} />
-                            <Col span={4}>
+                            <Col span={6} />
+                            <Col span={6}>
                                 <Button
-                                    style={{
-                                        position: 'absolute',
-                                        left: 50,
-                                        top:30,
-                                        bottom: 0,
-                                    }}
                                     type='default'
                                     onClick={() => navigate('/cart')}
                                 >
                                     Return to cart
                                 </Button>
                             </Col>
-                            <Col span={8}>
+                            <Col span={6}>
                                 <Button
                                     type='primary'
-                                    style={{
-                                        position: 'absolute',
-                                        left: 400,
-                                        top:30,
-                                        bottom: 0,
-                                    }}
                                     onClick={handlePlaceOrder}
+                                    // TODO: display the order id and the order date
                                 >
                                     Place Order
                                 </Button>

@@ -61,6 +61,7 @@ const Register = () => {
         axios.post('http://localhost:8080/api/admin/customer', values).then(function (response) {
             console.log('response from the backend', response);
             if (response.status === 200) {
+                alert('You have successfully registered!');
                 navigate('/login');
             } else {
                 alert('Missing info');

@@ -123,6 +123,7 @@ const AddressBook = () => {
                                         .then(function (response) {
                                         console.log('response from the backend', response);
                                         if (response.status === 200) {
+                                            alert('You have successfully deleted this address!')
                                             navigate('/addresses')
                                         } else {
                                             alert('Invalid Info');
@@ -190,19 +191,6 @@ const AddressBook = () => {
                     paddingTop: '0',
                 }}
             >
-                <Button
-                    style={{right: '20px'}}
-                    onClick={() => {navigate('/account')}}
-
-                >
-                    Back to My Account
-                </Button>
-                <Button
-                    style={{left: '20px'}}
-                    onClick={() => {localStorage.clear()}}
-                >
-                    Sign Out
-                </Button>
             </div>
         </div>
     );

@@ -47,6 +47,7 @@ const Product = () => {
         axios.post(cartURL, values).then(function (response) {
             console.log('response from the backend', response);
             if (response.status === 200) {
+                alert('You have successfully added this time to the shopping cart!');
                 console.log(response.data);
             } else {
                 alert('Missing info');

@@ -126,7 +126,11 @@ const Cart = () => {
                     <Button
                         block
                         type='primary'
-                        onClick={() => navigate('/checkout')}
+                        onClick={() => {
+                            alert('Continuing with the checkout process...');
+                            navigate('/checkout');
+                        }
+                        }
                     >
                         Checkout
                     </Button>

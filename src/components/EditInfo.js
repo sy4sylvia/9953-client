@@ -12,6 +12,7 @@ import {QUESTIONS} from './Options';
 const { Option } = Select;
 const customerBaseURL = 'http://localhost:8080/api/admin/customer';
 
+// TODO: fill out the form automatically
 const EditInfo = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -28,8 +29,9 @@ const EditInfo = () => {
             .then(function (response) {
                 console.log("updated info response: ", response)
                 if (response.status === 200) {
+                    alert('You have successfully changed your information!');
                     // redirect to the login page so that the updated customer info could be posted again
-                    navigate('/login');
+                    navigate('/account');
                 }
             })
             .catch(function (error) {
@@ -74,6 +76,7 @@ const EditInfo = () => {
                         }
                     ]}
                 >
+                    {/*TODO: disabled*/}
                     <Input />
                 </Form.Item>
                 <Row gutter={8}>

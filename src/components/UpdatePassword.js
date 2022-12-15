@@ -28,6 +28,7 @@ const UpdatePassword = () => {
         axios.put(updatePasswordURL, values).then(function (response) {
             console.log(response);
             if (response.status === 200) {
+                alert('You have successfully changed your password!')
                 navigate('/account'); // navigate to the home page
             } else {
                 alert('Failed');

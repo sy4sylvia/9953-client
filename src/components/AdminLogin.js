@@ -26,7 +26,8 @@ const AdminLogin = () => {
                 alert('Wrong login token, please try again.');
             } else {
                 // successfully log in, direct to the page to change the stock of a product
-                localStorage.setItem('admin', values.username)
+                localStorage.setItem('admin', values.username);
+                alert('You just successfully logged in as admin.');
                 navigate('/update-product');
             }
         }

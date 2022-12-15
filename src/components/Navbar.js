@@ -226,7 +226,10 @@ function Navbar(NavBarProps) {
                                     </Menu.Item>
                                     <Menu.Item
                                         key='adminLogout'
-                                        onClick={() => alert('You have successfully logged out')}
+                                        onClick={() => {
+                                            localStorage.removeItem('admin');
+                                            alert('You have successfully logged out');}
+                                        }
                                     >
                                         Log out as Admin
                                     </Menu.Item>

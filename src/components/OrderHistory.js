@@ -67,6 +67,7 @@ const OrderHistory = () => {
             title: 'Return Status (N - No, Y - Yes)',
             dataIndex: 'isReturned',
             key: 'isReturned',
+            // TODO: disable based on the row id
         },
         {
             title: 'Return',
@@ -197,24 +198,6 @@ const OrderHistory = () => {
                         };
                     }}
                 />
-            </div>
-            <div
-                style={{
-                    paddingBottom: '20px',
-                    paddingTop: '0',
-                }}
-            >
-                <Button
-                    style={{right: '20px'}}
-                >
-                    Back to My Account
-                </Button>
-                <Button
-                    style={{left: '20px'}}
-                    type = 'primary'
-                >
-                    Sign Out
-                </Button>
             </div>
         </div>
     );
