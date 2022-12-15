@@ -46,7 +46,7 @@ const EditInfo = () => {
                 } else {
                     alert(error);
                 }
-            })
+            });
     }
     useEffect(() => {
         fetchCustomerInfo();

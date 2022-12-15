@@ -1,7 +1,7 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {AutoComplete, Button, Card, Col, Form, Input, Row, Select} from 'antd';
-import {City, Country, State} from 'country-state-city';
+import { Country, State} from 'country-state-city';
 import _ from 'lodash';
 import axios from 'axios';
 
@@ -20,7 +20,6 @@ const AddAddress = ({ open, onCreate, onCancel }) => {
 
     const countryChildren = [];
     const stateChildren = [];
-    const cityChildren = [];
 
     _.forEach(MARKET, (market) => {
         marketChildren.push(<Option value={market.label}> {market.key} </Option>);
@@ -36,10 +35,6 @@ const AddAddress = ({ open, onCreate, onCancel }) => {
 
     _.forEach(State.getAllStates(), (state) => {
         stateChildren.push(<Option value={state.name}> {state.name} </Option>);
-    })
-
-    _.forEach(City.getAllCities(), (city) => {
-        cityChildren.push(<Option value={city.name}> {city.name} </Option>);
     })
 
     // Set the bearer token
@@ -184,13 +179,7 @@ const AddAddress = ({ open, onCreate, onCancel }) => {
                                 }
                             ]}
                         >
-                            <AutoComplete
-                                size={'middle'}
-                                defaultValue=''
-                                onChange={handleSelectChange}
-                            >
-                                {cityChildren}
-                            </AutoComplete>
+                            <Input type = 'textarea'/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>

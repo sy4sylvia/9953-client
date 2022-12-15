@@ -10,6 +10,7 @@ const addressBaseURL = 'http://localhost:8080/api/admin/customer/address';
 const curCustomerId = localStorage.getItem('customerId');
 
 // TODO: add more cards if there are more addresses
+// todo: has a 400 error message when first rendering... -> maybe refer to search products
 const AddressBook = () => {
     const navigate = useNavigate();
     const [data, setData] = useState(null);
@@ -67,7 +68,6 @@ const AddressBook = () => {
         otherIdx = 0;
     }
 
-    // const cntAddress = data.length;
 
     return (
         <div>
