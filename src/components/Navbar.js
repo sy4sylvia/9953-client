@@ -49,7 +49,8 @@ function Navbar(NavBarProps) {
                 console.log('navbar search bar response from the backend', response);
                 if (response.status === 200) {
                     console.log(response.data);
-                    // populate all the data into the table
+                    // populate all the
+                    // data into the table
                     navigate('/results');
                 } else {
                     alert('Please log in before you search for a product.');

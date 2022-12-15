@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Button, Input, Col, Divider, Form, Radio, Row, Space, Typography, Card} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import {CreditCardFilled, ExclamationCircleFilled} from '@ant-design/icons';
-import axios from "axios";
+import axios from 'axios';
 
 const { Title } = Typography;
 
@@ -13,8 +13,7 @@ const orderURL = 'http://localhost:8080/api/order';
 const curCustomerId = localStorage.getItem('customerId');
 
 // TODO: on this page, Get product and include these values in the order
-const Payment = () => {
-
+const Checkout = () => {
     const navigate = useNavigate();
 
     const [form] = Form.useForm();
@@ -41,13 +40,15 @@ const Payment = () => {
                 if (response.status === 200) {
                     console.log(response.data);
                     setData(response.data);
-                } else {
-                    alert('Invalid Info');
-                    navigate('/login');
                 }
             }).catch(function (error) {
-            console.log(error);
-            alert(error);
+                if (error.response.status === 401) {
+                    alert('Please log in before checking out.');
+                    navigate('/login');
+                } else {
+                    console.log(error);
+                    alert(error);
+                }
         });
     }
 
@@ -138,7 +139,6 @@ const Payment = () => {
         values = Object.assign({'shipMode': shippingModeVal}, values)
         values = Object.assign({'isReturned': 'N'}, values);
 
-
         values = Object.assign({'postalCode': postalCodes[primaryIdx]}, values)
         values = Object.assign({'city': cities[primaryIdx]}, values)
         values = Object.assign({'state': states[primaryIdx]}, values);
@@ -153,9 +153,13 @@ const Payment = () => {
                 console.log('response from the backend', response);
                 if (response.status === 200) {
                     console.log(response.data);
-                    setData(response.data);
+                    // setData(response.data);
                     alert('You have successfully placed an order!');
-                    navigate('/');
+                    //TODO: navigate to the success window
+                    localStorage.setItem('orderId', response.data.orderId);
+                    localStorage.setItem('arrivingDate', response.data.arrivingDate);
+
+                    navigate('/order-placed');
                 } else {
                     alert('Invalid Info');
                     navigate('/login');
@@ -431,5 +435,5 @@ const Payment = () => {
     );
 }
 
-export default Payment;
+export default Checkout;
 
