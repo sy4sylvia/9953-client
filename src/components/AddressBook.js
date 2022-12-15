@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Card, Col, Divider, Row, Typography } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Button, Col, Row, Table, Typography} from 'antd';
 import { PlusOutlined} from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -7,79 +7,181 @@ import axios from 'axios';
 const { Title } = Typography;
 
 const addressBaseURL = 'http://localhost:8080/api/admin/customer/address';
-const curCustomerId = localStorage.getItem('customerId');
 
-// TODO: add more cards if there are more addresses
-// todo: has a 400 error message when first rendering... -> maybe refer to search products
 const AddressBook = () => {
     const navigate = useNavigate();
-    const [data, setData] = useState(null);
 
-    const shipAddressIds = [];
-    const postalCodes = [];
-    const cities = [];
-    const states = [];
-    const countries = [];
-    const regions = [];
-    const markets = [];
-    const primaryOptions = [];
+    const [addressData, setAddressData] = useState();
+    const [loading, setLoading] = useState(false);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: 10,
+        },
+    });
 
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
-    if (data === null) {
+    const addressColumns = [
+        {
+            title: 'City',
+            dataIndex: 'city',
+            key: 'city',
+        },
+        {
+            title: 'State',
+            dataIndex: 'state',
+            key: 'state',
+        },
+        {
+            title: 'Country',
+            dataIndex: 'country',
+            key: 'country',
+        },
+        {
+            title: 'Region',
+            dataIndex: 'region',
+            key: 'region',
+        },
+        {
+            title: 'Market',
+            dataIndex: 'market',
+            key: 'market',
+        },
+        {
+            title: 'Is Primary Address ',
+            dataIndex: 'isPrimary',
+            key: 'isPrimary',
+        },
+        {
+            title: 'Postal Code',
+            dataIndex: 'postalCode',
+            key: 'postalCode',
+        },
+        {
+            title: 'Edit',
+            dataIndex: 'edit',
+            key: 'edit',
+            render:(text, record) => (
+                <Button
+                    onClick={()=> {
+                        localStorage.setItem('shipAddressId', record.shipAddressId);
+                        alert('Continuing to updating your current address...');
+                        navigate('/edit-address');
+                    }
+                }>
+                    {'Edit'}
+                </Button>),
+
+        },
+        {
+            title: 'Remove',
+            dataIndex: 'remove',
+            key: 'remove',
+
+            render:(text, record) => (
+                <Button
+                    onClick={()=> {
+                        if (addressData.length < 2) {
+                            alert('Sorry, we require at least one address on your profile.');
+                        } else {
+                            localStorage.setItem('shipAddressId', record.shipAddressId);
+                            axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+                            axios.delete(addressBaseURL + '/' + record.shipAddressId)
+                                .then(function (response) {
+                                    console.log('response from the backend', response);
+                                    if (response.status === 200) {
+                                        alert('You have successfully deleted this address, please refresh the page to view.')
+                                        navigate('/addresses')
+                                    }
+                                }).catch(error => {
+                                if (error.response.status === 400) {
+                                    alert(error.response);
+                                } else if (error.response.status === 401) {
+                                    alert('Invalid JWT, please log in again.');
+                                    navigate('/login');
+                                } else {
+                                    alert(error);
+                                }
+                            });
+                        }
+                    }}>
+                    {'Remove'}
+                </Button>),
+        }
+
+    ];
+    const fetchAddress = () => {
+        setLoading(true);
+        const curCustomerId = localStorage.getItem('customerId');
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
         axios.get(addressBaseURL, {params: {customerId: curCustomerId}})
             .then(function (response) {
-                console.log('response from the backend', response);
                 if (response.status === 200) {
-                    console.log(response.data);
-                    setData(response.data);
-                } else {
-                    alert('Invalid Info');
-                    navigate('/login');
+                    setAddressData(response.data);
+                    setLoading(false);
+                    setTableParams({
+                        ...tableParams,
+                        pagination: {
+                            ...tableParams.pagination,
+                            total: response.data.length, // total count before the filter
+                        },
+                    });
                 }
             }).catch(function (error) {
-            console.log(error);
-            alert(error);
+                if (error.response.status === 401) {
+                    alert('Invalid JWT, please log in again.');
+                    navigate('/login');
+                } else {
+                    alert(error);
+                }
         });
     }
 
-    if (data !== null) {
-        for (let i = 0; i < data.length; i++) {
-            shipAddressIds.push(data[i].shipAddressId);
-            postalCodes.push(data[i].postalCode);
-            cities.push(data[i].city);
-            states.push(data[i].state);
-            countries.push(data[i].country);
-            regions.push(data[i].region);
-            markets.push(data[i].market);
-            primaryOptions.push(data[i].isPrimary);
-        }
-    }
+    useEffect(() => {
+        fetchAddress();
+    }, [JSON.stringify(tableParams)]);
 
-    let primaryIdx = 0;
-    let otherIdx = 1;
-    for (let i = 0; i < primaryOptions.length; i++) {
-        if (primaryOptions[i] === 'Y') {
-            primaryIdx = i;
-            break;
-        }
-    }
-    if (primaryIdx === 1) {
-        otherIdx = 0;
-    }
-
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+    };
 
     return (
         <div>
             <div style={{padding: '80px 120px'}}>
                 <Title level={3}>Address Book</Title>
                 <Row>
-                    <Col span={8}>
+                    <Col span={20}>
+                        <Table
+                            columns={addressColumns}
+                            dataSource={addressData}
+                            pagination={tableParams.pagination}
+                            loading={loading}
+                            onChange={handleTableChange}
+                            onRow={(record) => {
+                                return {
+                                    // click row
+                                    onClick: () => {
+                                        console.log(record.id);
+                                    },
+                                };
+                            }}
+                        />
+
+                    </Col>
+                    <Col span={4}>
                         <Button
                             onClick={() => navigate('/add-address')}
                             style={{
-                                height: '300px',
-                                width: '300px',
+                                left: '50px',
+                                height: '200px',
+                                width: '200px',
                             }}
                         >
                             <Title><PlusOutlined /></Title>
@@ -87,100 +189,6 @@ const AddressBook = () => {
                                 level={5}
                             >Add Address</Title>
                         </Button>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-                            style={{
-                                height: '350px',
-                                width: '300px',
-                            }}
-                        >
-                            <Title level={4}>Primary Address</Title>
-                            <Divider />
-                            Postal Code: {postalCodes[primaryIdx]}<br/>
-                            City: {cities[primaryIdx]} <br/>
-                            State: {states[primaryIdx]} <br/>
-                            Country: {countries[primaryIdx]} <br/>
-                            Market: {markets[primaryIdx]} <br/>
-                            Region: {regions[primaryIdx]} <br/>
-                            Is Primary Address: Yes
-                            <Divider />
-                            {/*TODO: add onClick functions for the edit / remove*/}
-                            <Button
-                                onClick={() =>{
-                                    navigate('/edit-address');
-                                    localStorage.setItem('shipAddressId', shipAddressIds[primaryIdx]);
-                                    localStorage.setItem('isPrimary', 'Y');
-                                }}
-                            >
-                                Edit
-                            </Button>
-                            <Divider type='vertical' />
-                            <Button
-                                onClick={() => {
-                                    localStorage.setItem('shipAddressId', shipAddressIds[primaryIdx]);
-                                    axios.delete(addressBaseURL + '/' + shipAddressIds[primaryIdx])
-                                        .then(function (response) {
-                                        console.log('response from the backend', response);
-                                        if (response.status === 200) {
-                                            alert('You have successfully deleted this address!')
-                                            navigate('/addresses')
-                                        } else {
-                                            alert('Invalid Info');
-                                            navigate('/login');
-                                        }
-                                    }).catch((error) => alert(error))}
-                                }
-                            >
-                                Remove
-                            </Button>
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card
-                            style={{
-                                height: '350px',
-                                width: '300px',
-                            }}
-                        >
-                            <Title level={4}>Additional Address</Title>
-                            <Divider />
-                            Postal Code: {postalCodes[otherIdx]}<br/>
-                            City: {cities[otherIdx]} <br/>
-                            State: {states[otherIdx]} <br/>
-                            Country: {countries[otherIdx]} <br/>
-                            Market: {markets[otherIdx]} <br/>
-                            Region: {regions[otherIdx]} <br/>
-                            Is Primary Address: No
-                            <Divider />
-                            <Button
-                                onClick={() =>{
-                                    navigate('/edit-address');
-                                    localStorage.setItem('shipAddressId', shipAddressIds[otherIdx]);
-                                    localStorage.setItem('isPrimary', 'N');
-                                }}
-                            >
-                                Edit
-                            </Button>
-                            <Divider type='vertical' />
-                            <Button
-                                onClick={() => {
-                                    localStorage.setItem('shipAddressId', shipAddressIds[otherIdx]);
-                                    axios.delete(addressBaseURL + '/' + shipAddressIds[otherIdx])
-                                        .then(function (response) {
-                                            console.log('response from the backend', response);
-                                            if (response.status === 200) {
-                                                navigate('/addresses')
-                                            } else {
-                                                alert('Invalid Info');
-                                                navigate('/login');
-                                            }
-                                        }).catch((error) => alert(error))}
-                                }
-                            >
-                                Remove
-                            </Button>
-                        </Card>
                     </Col>
                 </Row>
 

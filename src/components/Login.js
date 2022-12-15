@@ -20,6 +20,7 @@ const Login = () => {
         console.log(values);
         // Set old password in case the user wants to update the password
         localStorage.setItem('oldPassword', values.password);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
         axios.post(loginURL, values)
             .then(function (response) {
@@ -27,8 +28,6 @@ const Login = () => {
 
                 localStorage.setItem('customerId', response.data.customerId);
                 localStorage.setItem('firstName', response.data.firstName);
-
-                // response.data contains: customerId, firstName, lastName
 
                 // Store the bearer token in the local storage
                 localStorage.setItem('authorization', response.headers.authorization);

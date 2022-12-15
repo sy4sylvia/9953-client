@@ -8,7 +8,6 @@ import _ from 'lodash';
 const { Title } = Typography;
 const orderBaseURL = 'http://localhost:8080/api/order';
 
-const curCustomerId = localStorage.getItem('customerId');
 const OrderHistory = () => {
     const navigate = useNavigate();
 
@@ -21,7 +20,7 @@ const OrderHistory = () => {
         },
     });
 
-    const COLUMNS = [
+    const orderColumns = [
         {
             title: 'Order ID',
             dataIndex: 'id',
@@ -79,7 +78,6 @@ const OrderHistory = () => {
                 <Button
                     onClick={()=> {
                         axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
-
                         const today = new Date().getDate();
 
                         if (record.isReturned === 'Y') {
@@ -103,15 +101,15 @@ const OrderHistory = () => {
                     }}>
                     {"Return"}
                 </Button>),
-
         },
     ];
-
-
-    console.log(localStorage.getItem('authorization'))
-    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
     const fetchOrders = () => {
         setLoading(true);
+        const curCustomerId = localStorage.getItem('customerId');
+
+        console.log(localStorage.getItem('authorization'))
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
         axios.get(orderBaseURL, {params: {customerId: curCustomerId}})
             .then(function (response) {
                 if (response.status === 200) {
@@ -142,8 +140,6 @@ const OrderHistory = () => {
                         // delete the last & symbol
                         const final_products = products.substring(0,products.length - 3);
                         values[idx] = Object.assign({'products': final_products}, values[idx]);
-
-                        // values[idx] = Object.assign({'return': 'Return'}, values[idx]);
 
                         idx++;
                     });
@@ -184,7 +180,7 @@ const OrderHistory = () => {
             <div style={{padding: '80px 120px'}}>
                 <Title level={3}>Order History</Title>
                 <Table
-                    columns={COLUMNS}
+                    columns={orderColumns}
                     dataSource={orderData}
                     pagination={tableParams.pagination}
                     loading={loading}
