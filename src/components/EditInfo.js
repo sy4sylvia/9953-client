@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Form, Input, Select, Card, Col, Row} from 'antd';
 import _ from 'lodash';
 import axios from 'axios';
@@ -10,33 +10,65 @@ import '../index.css';
 import {QUESTIONS} from './Options';
 
 const { Option } = Select;
-const customerBaseURL = 'http://localhost:8080/api/admin/customer';
+const customerBaseURL = 'http://localhost:8080/api/admin/customer/';
 
-// TODO: fill out the form automatically
 const EditInfo = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
 
+    // Set the bearer token
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
     const curCustomerId = localStorage.getItem('customerId');
 
+    const[email, setEmail] = useState();
+    const[firstName, setFirstName] = useState();
+    const[lastName, setLastName] = useState();
+
+    const[securityQ, setSecurityQ] = useState();
+    const[securityA, setSecurityA] = useState();
+
+    const fetchCustomerInfo = () => {
+        console.log('called fetchCustomerInfo ');
+        axios.get(customerBaseURL + curCustomerId)
+            .then((response) => {
+                if (response.status === 200) {
+                    setEmail(response.data.email);
+                    setFirstName(response.data.firstName);
+                    setLastName(response.data.lastName);
+                    setSecurityQ(response.data.securityQuestion);
+                    setSecurityA(response.data.securityAnswer);
+                }
+            })
+            .catch(error => {
+                if (error.response.status === 401) {
+                    alert('Need bearer token?');
+                } else {
+                    alert(error);
+                }
+            })
+    }
+    useEffect(() => {
+        fetchCustomerInfo();
+    }, []);
+
     const submitEditForm = (values) => {
+        // set the original email address to be sent as part of the values of the form
+        values.email = email;
         console.log(values);
 
-        // Set the bearer token
-        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
-
-        axios.put(customerBaseURL +'/' + curCustomerId, values)
+        axios.put(customerBaseURL + curCustomerId, values)
             .then(function (response) {
                 console.log("updated info response: ", response)
                 if (response.status === 200) {
                     alert('You have successfully changed your information!');
-                    // redirect to the login page so that the updated customer info could be posted again
                     navigate('/account');
                 }
             })
             .catch(function (error) {
                 if (error.response.status === 401) {
-                    alert('Need bearer token?');
+                    alert('Invalid JWT token, please log in again.');
+                    navigate('/login');
                 } else {
                     alert(error);
                 }
@@ -69,15 +101,8 @@ const EditInfo = () => {
                 <Form.Item
                     label='Email'
                     name='email'
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your email.'
-                        }
-                    ]}
                 >
-                    {/*TODO: disabled*/}
-                    <Input />
+                    <Input disabled={true} placeholder={email} value={email} />
                 </Form.Item>
                 <Row gutter={8}>
                     <Col span={12}>
@@ -91,7 +116,7 @@ const EditInfo = () => {
                                 }
                             ]}
                         >
-                            <Input type = 'textarea' />
+                            <Input type = 'textarea' placeholder={firstName} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -105,7 +130,7 @@ const EditInfo = () => {
                                 }
                             ]}
                         >
-                            <Input type = 'textarea' />
+                            <Input type = 'textarea' placeholder={lastName}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -122,7 +147,7 @@ const EditInfo = () => {
                 >
                     <Select
                         size={'middle'}
-                        defaultValue='Security Question'
+                        placeholder={securityQ}
                         onChange={handleSelectChange}
                     >
                         {questionChildren}
@@ -139,7 +164,7 @@ const EditInfo = () => {
                         }
                     ]}
                 >
-                    <Input type='textarea' />
+                    <Input type='textarea' placeholder={securityA} />
                 </Form.Item>
 
                 <Form.Item>
