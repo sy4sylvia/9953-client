@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
-import {Typography, Button, Row, Col, Divider} from 'antd';
+import React, { useEffect, useState} from 'react';
+import {Button, Col, Divider, Row, Select, Table, Typography} from 'antd';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
+
+import { QUANTITY } from './Options';
 
 import 'antd/dist/antd.css';
 
@@ -11,49 +13,199 @@ const cartURL = 'http://localhost:8080/api/cart';
 const Cart = () => {
 
     const style = {
-        background: '#0092ff',
-        height: '120px',
-        padding: '8px 0',
+        background: '#2db7f5',
+        fontStyle: 'italic',
+        height: '80px',
+        padding: '8px',
         textAlign: 'center',
     };
 
     const navigate = useNavigate();
 
-    const curCustomerId = localStorage.getItem('customerId');
-    const [cartItems, setCartItems] = useState(null);
-    const productNames=  [];
-    const quantities = [];
-    const prices = [];
-
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
-    if (cartItems === null) {
+    const [buttonState, setButtonState] = useState(null);
+    const [curQuantity, setCurQuantity] = useState(null);
+    const [totalPrice, setTotalPrice] = useState();
+
+    const [cartData, setCartData] = useState();
+    const [loading, setLoading] = useState(false);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: 10,
+        },
+    });
+
+    const cartColumns = [
+        {
+            title: '',
+            key: 'empty',
+            dataIndex: 'empty',
+            render: () => {
+                return (
+                    <h4 style={style}>Product Image</h4>
+                );
+            }
+        },
+        {
+            title: 'Product Name',
+            dataIndex: 'productName',
+            key: 'productName',
+            sorter: (a, b) => a.productName.localeCompare(b.productName),
+        },
+        {
+            title: 'Quantity',
+            dataIndex: 'quantity',
+            key: 'quantity',
+            render: (text, record) => (
+                <div>
+                    <Select
+                        placeholder={record.quantity}
+                        style={{ width: 120,}}
+                        onChange={(value) => {
+                            console.log('select change, product id', record.productId);
+                            setButtonState(record.productId);
+                            setCurQuantity(value);
+                        }}
+                        options={QUANTITY}
+                    />
+                    {buttonState === record.productId &&
+                        <Button
+                            onClick={() => {
+                                //axios.put, update the product by id and quantity
+                                const curCustomerId = localStorage.getItem('customerId');
+                                axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+                                let values = [];
+                                values = Object.assign({'productId': record.productId}, values);
+                                values = Object.assign({'quantity': curQuantity}, values);
+
+                                axios.put(cartURL + '/' + curCustomerId, values)
+                                    .then(function (response) {
+                                        console.log('response from the backend', response);
+                                        if (response.status === 200) {
+                                            alert('You have successfully updated the quantity of this product from your cart.');
+                                            setButtonState(null);
+                                            navigate('/cart')
+                                        }
+                                    }).catch(error => {
+                                    if (error.response.status === 400) {
+                                        alert(error);
+                                    } else if (error.response.status === 401) {
+                                        alert('Invalid JWT, please log in again.');
+                                        navigate('/login');
+                                    } else {
+                                        alert(error);
+                                    }
+                                });
+                            }
+                        }>
+                            Confirm
+                        </Button>
+                    }
+                </div>
+            ),
+        },
+        {
+            title: 'Unit Price',
+            dataIndex: 'unitPrice',
+            key: 'unitPrice',
+            sorter: (a, b) => a.unitPrice - b.unitPrice,
+        },
+        {
+            title: 'Discount',
+            dataIndex: 'discount',
+            key: 'discount',
+            sorter: (a, b) => a.discount - b.discount,
+        },
+        {
+            title: 'Remove from Cart',
+            dataIndex: 'remove',
+            key: 'remove',
+
+            render:(text, record) => (
+                <Button
+                    onClick={()=> {
+                        // axios.delete
+                        const curCustomerId = localStorage.getItem('customerId');
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
+                        let values = [];
+                        values = Object.assign({'productId': record.productId}, values);
+
+                        axios.delete(cartURL + '/' + curCustomerId, {data: values})
+                            .then(function (response) {
+                                console.log('response from the backend', response);
+                                if (response.status === 200) {
+                                    alert('You have successfully deleted this product from your cart, please refresh the page.');
+                                    setButtonState(null);
+                                    navigate('/cart')
+                                }
+                            }).catch(error => {
+                            if (error.response.status === 400) {
+                                alert(error.response);
+                            } else if (error.response.status === 401) {
+                                alert('Invalid JWT, please log in again.');
+                                navigate('/login');
+                            } else {
+                                alert(error);
+                            }
+                        });
+                    }}>
+                    {'Delete'}
+                </Button>),
+        }
+    ];
+    const fetchCart = () => {
+        setLoading(true);
+        const curCustomerId = localStorage.getItem('customerId');
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
+
         axios.get(cartURL +'/' + curCustomerId)
             .then(function (response) {
                 if (response.status === 200) {
-                    console.log(response.data);
-                    setCartItems(response.data);
-                } else {
-                    alert('Please log in to view your cart.');
-                    navigate('/login');
+                    console.log('response.data ', response.data);
+                    setCartData(response.data);
+
+                    let total = 0;
+                    for (let i = 0; i < response.data.length; i++) {
+                        total += response.data[i].unitPrice * response.data[i].quantity * (1 - response.data[i].discount);
+                    }
+                    setTotalPrice(total);
+
+                    setLoading(false);
+                    setTableParams({
+                        ...tableParams,
+                        pagination: {
+                            ...tableParams.pagination,
+                            total: response.data.length,
+                        },
+                    });
                 }
             }).catch(function (error) {
-            console.log(error);
-            alert(error);
+            if (error.response.status === 401) {
+                alert('Invalid JWT, please log in again.');
+                navigate('/login');
+            } else {
+                alert(error);
+            }
         });
     }
 
-    if (cartItems !== null) {
-        for (let i = 0; i < cartItems.length; i++) {
-            productNames.push(cartItems[i].productName);
-            quantities.push(cartItems[i].quantity);
-            prices.push(cartItems[i].unitPrice);
-        }
-    }
+    useEffect(() => {
+        fetchCart();
+    }, [JSON.stringify(tableParams)]);
 
-    const handleChangeQuantity = (value) => {
-        console.log(value);
-    }
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+    };
+
     return (
         <div>
         <div style={{padding: '120px 120px'}} >
@@ -65,51 +217,31 @@ const Cart = () => {
                     lg: 32,
                 }}
             >
-                <Col className="gutter-row" span={16}>
+                <Col className="gutter-row" span={18}>
                     <Row>
-                        <Col span={6}><h3 style={style}>Product Image</h3></Col>
-                        <Col span={6}><Title level = {4}>{productNames[0]}</Title></Col>
-                        <Col span={4} />
-                        <Col span={8}><Col><Title level = {5}>${prices[0] * quantities[0]}</Title></Col>
-                            <Col>
-                                <Title level = {5}>Quantity: {quantities[0]}</Title>
-                                {/*TODO: add the edit window here*/}
-                                {/*<Typography.Paragraph editable={{*/}
-                                {/*    onChange: handleChangeQuantity,*/}
-                                {/*}}>{quantities[0]} </Typography.Paragraph>*/}
-                            </Col>
-                        </Col>
+                        <Table
+                            columns={cartColumns}
+                            dataSource={cartData}
+                            pagination={tableParams.pagination}
+                            loading={loading}
+                            onChange={handleTableChange}
+                            onRow={(record) => {
+                                return {
+                                    onClick: () => {
+                                        console.log('record? ', record.productId);
+                                    },
+                                };
+                            }}
+                        />
                     </Row>
-                    <Divider />
-
-                    <Row>
-                        <Col span={6}><h3 style={style}>Product Image</h3></Col>
-                        <Col span={6}><Title level = {4}>{productNames[1]}</Title></Col>
-                        <Col span={4} />
-                        <Col span={8}><Col><Title level = {5}>${prices[1] * quantities[0]}</Title></Col>
-                            <Col><Title level = {5}>Quantity: {quantities[1]}</Title></Col>
-                            {/*<Select*/}
-                            {/*    defaultValue={quantities[0]}*/}
-                            {/*    style={{*/}
-                            {/*        width: 120,*/}
-                            {/*    }}*/}
-                            {/*    onChange={handleChange}*/}
-                            {/*    options={QUANTITY}*/}
-                            {/*/>*/}
-                            {/*</Col>*/}
-                        </Col>
-                    </Row>
-
                 </Col>
 
-
-                <Col span={2}>
-
-                </Col>
-                <Col className="gutter-row" span={6}>
+                <Col className="gutter-row" span={4}>
                     <div>
                         <Title level = {4}>
-                            Subtotal: {quantities[0] * prices[0] + quantities[1] * prices[1]}
+                            {/*Subtotal: {quantities[0] * prices[0] + quantities[1] * prices[1]}*/}
+                            Subtotal: {totalPrice}
+
                             <Divider dashed />
                             Shipping: TBD
                         </Title>

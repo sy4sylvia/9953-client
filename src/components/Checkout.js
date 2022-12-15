@@ -10,8 +10,6 @@ const addressBaseURL = 'http://localhost:8080/api/admin/customer/address';
 const cartBaseURL = 'http://localhost:8080/api/cart/';
 const orderURL = 'http://localhost:8080/api/order';
 
-const curCustomerId = localStorage.getItem('customerId');
-
 // TODO: on this page, Get product and include these values in the order
 const Checkout = () => {
     const navigate = useNavigate();
@@ -34,6 +32,7 @@ const Checkout = () => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('authorization')}`;
 
     if (data === null) {
+        const curCustomerId = localStorage.getItem('customerId');
         axios.get(addressBaseURL, {params: {customerId: curCustomerId}})
             .then(function (response) {
                 console.log('response from the backend', response);
@@ -73,6 +72,7 @@ const Checkout = () => {
     }
 
     const getProductsFromCart = () => {
+        const curCustomerId = localStorage.getItem('customerId');
         axios.get(cartBaseURL + curCustomerId)
             .then(function (response) {
                 console.log('response from the backend', response);
@@ -134,6 +134,7 @@ const Checkout = () => {
 
 
     const handlePlaceOrder = () => {
+        const curCustomerId = localStorage.getItem('customerId');
         values = Object.assign({'customerId': curCustomerId}, values)
         values = Object.assign({'orderPriority': priorityVal}, values)
         values = Object.assign({'shipMode': shippingModeVal}, values)

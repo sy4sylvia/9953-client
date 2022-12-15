@@ -16,7 +16,6 @@ import Results from './components/Results';
 import Product from './components/Product';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
-import Order from './components/Order';
 import OrderPlaced from './components/OrderPlaced';
 import Account from './components/Account';
 import EditInfo from './components/EditInfo';
@@ -50,7 +49,6 @@ function App() {
                     <Route exact path = '/product' element={<Product/>} />
                     <Route exact path = '/cart' element={<Cart />} />
                     <Route exact path = '/checkout' element={<Checkout />} />
-                    <Route exact path = '/order' element={<Order />} />
                     <Route exact path = '/order-placed' element={<OrderPlaced />} />
                     <Route exact path = '/account' element={<Account />} />
                     <Route exact path = '/edit-info' element={<EditInfo />} />
