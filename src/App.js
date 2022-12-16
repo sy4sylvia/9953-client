@@ -4,7 +4,6 @@ import { Layout } from 'antd';
 
 import './App.css';
 
-import AuthService from './services/auth.service';
 import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
@@ -23,7 +22,6 @@ import AddressBook from './components/AddressBook';
 import AddAddress from './components/AddAddress';
 import EditAddress from './components/EditAddress';
 import OrderHistory from './components/OrderHistory';
-import Test from './components/Test';
 import AdminLogin from './components/AdminLogin';
 import AdminUpdateProduct from './components/AdminUpdateProduct';
 
@@ -31,9 +29,6 @@ import AdminUpdateProduct from './components/AdminUpdateProduct';
 const { Footer } = Layout;
 
 function App() {
-    // every time restart the web app, clear the tokens, etc.
-    // TODO: add this part when all functions are valid
-    // localStorage.clear();
     return (
         <div className='App'>
             <Navbar />
@@ -59,7 +54,6 @@ function App() {
                     <Route exact path = '/order-history' element={<OrderHistory />} />
                     <Route exact path = '/admin-login' element={<AdminLogin />} />
                     <Route exact path = '/update-product' element={<AdminUpdateProduct />} />
-                    <Route exact path='/test' element={<Test />} />
                 </Routes>
             </div>
             <Footer
@@ -69,7 +63,6 @@ function App() {
             >
                 Awesome E-commerce ©{new Date().getFullYear()}
             </Footer>
-
         </div>
     );
 }
