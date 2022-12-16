@@ -3,7 +3,7 @@ import { AutoComplete, Button, Col, Form, Input, Card, Row, Select} from 'antd';
 import _ from 'lodash';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Country, State, City }  from 'country-state-city';
+import { Country, State }  from 'country-state-city';
 
 import { MARKET, REGION, QUESTIONS } from './Options';
 
@@ -20,7 +20,6 @@ const Register = () => {
 
     const countryChildren = [];
     const stateChildren = [];
-    const cityChildren = [];
 
     _.forEach(MARKET, (market) => {
         marketChildren.push(<Option value={market.label}> {market.key} </Option>);
@@ -36,10 +35,6 @@ const Register = () => {
 
     _.forEach(State.getAllStates(), (state) => {
         stateChildren.push(<Option value={state.name}> {state.name} </Option>);
-    })
-
-    _.forEach(City.getAllCities(), (city) => {
-        cityChildren.push(<Option value={city.name}> {city.name} </Option>);
     })
 
     _.forEach(QUESTIONS, (question) => {
@@ -305,13 +300,7 @@ const Register = () => {
                         }
                     ]}
                 >
-                    <AutoComplete
-                        size={'middle'}
-                        defaultValue=''
-                        onChange={handleSelectChange}
-                    >
-                        {cityChildren}
-                    </AutoComplete>
+                    <Input type = 'textarea'/>
                 </Form.Item>
                     </Col>
                     <Col span={12}>

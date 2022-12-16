@@ -10,7 +10,6 @@ const addressBaseURL = 'http://localhost:8080/api/admin/customer/address';
 const cartBaseURL = 'http://localhost:8080/api/cart/';
 const orderURL = 'http://localhost:8080/api/order';
 
-// TODO: on this page, Get product and include these values in the order
 const Checkout = () => {
     const navigate = useNavigate();
 
@@ -91,7 +90,6 @@ const Checkout = () => {
 
     if (cart === null) {
         getProductsFromCart();
-        // TODO: we only need the productId and the quantity here
     } else {
         for (let i = 0; i < cart.length; i++) {
             delete cart[i].discount;
@@ -106,14 +104,8 @@ const Checkout = () => {
     const onChangeRadio = (e) => {
         console.log('radio checked', e.target.value);
         setRadioVal(e.target.value);
-        //TODO: if the 2nd radio is checked, create a modal with form?
     };
 
-    const [addressVal, setAddressVal] = useState(0);
-    const onChangeAddress = (e) => {
-        console.log('radio checked', e.target.value);
-        setAddressVal(e.target.value);
-    };
 
     const [shippingModeVal, setShippingModeVal] = useState(0);
     const [priorityVal, setPriorityVal] = useState(4);
@@ -169,8 +161,6 @@ const Checkout = () => {
             console.log(error);
             alert(error);
         });
-
-        // values = Object.assign({'orderPriority': priorityVal}, values)
     }
 
     return (
@@ -185,7 +175,6 @@ const Checkout = () => {
                                     Shipping Address
                                 </Title>
                             </Col>
-                            {/*<Col span={4}/> */}
                             <Col span={8}>
                                 <Title level={3} style={{paddingBottom: '3%'}}>
                                     Ship Mode
@@ -221,10 +210,6 @@ const Checkout = () => {
                                             Region: {regions[primaryIdx]} <br/>
                                         </Card>
 
-                                        {/*<Radio value={2}>*/}
-                                        {/*    <Title level={5}>Add New Address</Title>*/}
-                                        {/*    /!*TODO: add the new address modal here*!/*/}
-                                        {/*</Radio>*/}
                                     </Space>
                                 </Radio.Group>
                             </Col>
@@ -281,32 +266,31 @@ const Checkout = () => {
                                     </Space>
                                 </Radio.Group>
                             </Col>
-
                         </Row>
-
                         <Divider />
                     </Col>
 
-
                     <Col className="gutter-row" span={24}>
                         <Row>
-                            <Col span={6}>
+                            <Col span={24}>
                                 <Title level={3}>
                                     Payment <CreditCardFilled />
                                 </Title>
                             </Col>
-                            <Col span={6}/>
-                            <Col span={12}>
-                                <Title level={3} style={{paddingBottom: '3%'}}>
-                                    Billing Address
-                                </Title>
-                            </Col>
+                            {/*Archived the billing address*/}
+
+                            {/*<Col span={6}/>*/}
+                            {/*<Col span={12}>*/}
+                            {/*    <Title level={3} style={{paddingBottom: '3%'}}>*/}
+                            {/*        Billing Address*/}
+                            {/*    </Title>*/}
+                            {/*</Col>*/}
                         </Row>
 
                         <Row>
-                            <Col span={16}>
+                            <Col span={24}>
                                 <Row>
-                                    <Col span={3} />
+                                    <Col span={9} />
                                     <Form
                                         className='form-inside-card'
                                         form={form}
@@ -383,25 +367,24 @@ const Checkout = () => {
 
                                 </Row>
                             </Col>
-                            <Col span={8}>
-                                <Row>
-                                    <Radio.Group
-                                        onChange={onChangeAddress}
-                                        value={addressVal}
-                                        style={{ textAlign: 'left'}}
-                                    >
-                                        <Space direction='vertical'>
-                                            <Radio value={0}>
-                                                <Title level={5}>Same as shipping address</Title>
-                                            </Radio>
-                                            {/*TODO: if this radio is set, expand a form*/}
-                                            <Radio value={1}>
-                                                <Title level={5}>Use a different billing address</Title>
-                                            </Radio>
-                                        </Space>
-                                    </Radio.Group>
-                                </Row>
-                            </Col>
+                            {/*<Col span={8}>*/}
+                            {/*    <Row>*/}
+                            {/*        <Radio.Group*/}
+                            {/*            onChange={onChangeAddress}*/}
+                            {/*            value={addressVal}*/}
+                            {/*            style={{ textAlign: 'left'}}*/}
+                            {/*        >*/}
+                            {/*            <Space direction='vertical'>*/}
+                            {/*                <Radio value={0}>*/}
+                            {/*                    <Title level={5}>Same as shipping address</Title>*/}
+                            {/*                </Radio>*/}
+                            {/*                <Radio value={1}>*/}
+                            {/*                    <Title level={5}>Use a different billing address</Title>*/}
+                            {/*                </Radio>*/}
+                            {/*            </Space>*/}
+                            {/*        </Radio.Group>*/}
+                            {/*    </Row>*/}
+                            {/*</Col>*/}
 
                         </Row>
                         <Divider />
@@ -423,7 +406,6 @@ const Checkout = () => {
                                 <Button
                                     type='primary'
                                     onClick={handlePlaceOrder}
-                                    // TODO: display the order id and the order date
                                 >
                                     Place Order
                                 </Button>
